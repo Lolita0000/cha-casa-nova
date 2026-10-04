@@ -59,7 +59,12 @@ export function Hero({ activeRoomIds }: HeroProps) {
           </dl>
         </div>
 
-        <FloorPlan activeRoomIds={activeRoomIds} className="w-full max-w-xl justify-self-center" />
+        <figure className="w-full max-w-xl justify-self-center">
+          <FloorPlan activeRoomIds={activeRoomIds} className="w-full" />
+          <figcaption className="mt-3 text-center text-sm text-ink-300">
+            Toque num cômodo para ir direto pra lista dele
+          </figcaption>
+        </figure>
       </Container>
     </header>
   )
