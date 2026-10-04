@@ -1,7 +1,16 @@
+import { rooms } from '@/data/rooms'
+import { gifts } from '@/data/gifts'
+import { groupGiftsByRoom } from '@/data/selectors'
+import { Hero } from '@/features/hero/Hero'
+
+const giftsByRoom = groupGiftsByRoom(rooms, gifts)
+const activeRoomIds = giftsByRoom.map(({ room }) => room.id)
+
 export function App() {
   return (
-    <main className="grid min-h-svh place-items-center bg-ink-800 text-white">
-      <h1 className="font-display text-4xl">Chá de casa nova</h1>
-    </main>
+    <>
+      <Hero activeRoomIds={activeRoomIds} />
+      <main />
+    </>
   )
 }
