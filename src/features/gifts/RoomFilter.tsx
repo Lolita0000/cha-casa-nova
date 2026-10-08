@@ -11,7 +11,7 @@ export function RoomFilter({ options, value, onChange }: RoomFilterProps) {
     <div
       role="group"
       aria-label="Filtrar por cômodo"
-      className="sticky top-0 z-10 -mx-5 bg-ash-50/90 px-5 py-3 backdrop-blur sm:mx-0 sm:px-0"
+      className="sticky top-[env(safe-area-inset-top,0px)] z-10 -mx-5 bg-ash-50/90 px-5 py-3 backdrop-blur sm:mx-0 sm:px-0"
     >
       <ul className="flex [scrollbar-width:none] gap-2 overflow-x-auto">
         {options.map((option) => {

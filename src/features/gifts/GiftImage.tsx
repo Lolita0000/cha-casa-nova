@@ -1,4 +1,5 @@
 import { GiftIcon } from '@/components/icons/icons'
+import { publicAsset } from '@/lib/assets/publicAsset'
 
 interface GiftImageProps {
   src?: string
@@ -9,7 +10,12 @@ interface GiftImageProps {
 export function GiftImage({ src, className = '' }: GiftImageProps) {
   if (src) {
     return (
-      <img src={src} alt="" loading="lazy" className={`bg-ash-100 object-cover ${className}`} />
+      <img
+        src={src.startsWith('http') ? src : publicAsset(src)}
+        alt=""
+        loading="lazy"
+        className={`bg-ash-100 object-cover ${className}`}
+      />
     )
   }
 
