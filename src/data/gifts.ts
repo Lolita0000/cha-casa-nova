@@ -162,6 +162,16 @@ export const gifts: Gift[] = [
       'https://shopee.com.br/Espelho-Portal-Decorativo-160x70cm-Corpo-Inteiro-Grande-Para-Sala-Quarto-Hall-Banheiro-i.1165360419.55561180724?extraParams=%7B%22display_model_id%22%3A420973892754%2C%22model_selection_logic%22%3A3%7D',
   },
   {
+    id: 'bath-towels',
+    kind: 'simple',
+    roomId: 'bathroom',
+    name: 'Jogo de toalhas de banho',
+    description: 'Super Twist, 70 x 140 cm, cinza',
+    priceInCents: 25670,
+    imageUrl: '/gifts/bath-towels.webp',
+    productUrl: 'https://www.amazon.com.br/dp/B0GRVR1C36?th=1',
+  },
+  {
     id: 'bow-bathroom-set',
     kind: 'simple',
     roomId: 'bathroom',
