@@ -8,6 +8,8 @@ import { GiftList } from '@/features/gifts/GiftList'
 import { useGiftDialog } from '@/features/gifts/useGiftDialog'
 import { Hero } from '@/features/hero/Hero'
 import { HowItWorks } from '@/features/how-it-works/HowItWorks'
+import { MaterialsNote } from '@/features/materials/MaterialsNote'
+import { HousePalette } from '@/features/palette/HousePalette'
 
 const giftsByRoom = groupGiftsByRoom(rooms, gifts)
 
@@ -21,6 +23,8 @@ export function App() {
         <HowItWorks />
         <GiftList giftsByRoom={giftsByRoom} onOpen={open} />
         <FreeContribution />
+        <HousePalette />
+        <MaterialsNote />
       </main>
       <Footer />
 
