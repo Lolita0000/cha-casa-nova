@@ -1,16 +1,29 @@
+export interface SiteConfig {
+  coupleNames: readonly [string, string]
+  /** Each detail is only shown once it is filled in. */
+  event: {
+    /** ISO date with timezone offset, e.g. '2026-11-21T15:00:00-03:00'. */
+    startsAt?: string
+    addressLine?: string
+    mapsUrl?: string
+  }
+  pix: {
+    key: string
+    receiverName: string
+    receiverCity: string
+  }
+  whatsappNumber: string
+  openAmountCardUrl?: string
+}
+
 /**
  * Everything personal about the event lives here.
  * Fill in the real values before publishing.
  */
-export const siteConfig = {
-  coupleNames: ['Aninha', 'Gabriel'] as const,
+export const siteConfig: SiteConfig = {
+  coupleNames: ['Aninha', 'Gabriel'],
 
-  event: {
-    /** ISO date with timezone offset. */
-    startsAt: '2026-11-21T15:00:00-03:00',
-    addressLine: 'Endereço a definir',
-    mapsUrl: '',
-  },
+  event: {},
 
   pix: {
     /** Pix key: e-mail, phone (+55...), CPF or random key. */
@@ -30,6 +43,4 @@ export const siteConfig = {
 
   /** Card payment link with an open amount, used by the free contribution section. */
   openAmountCardUrl: '',
-} as const
-
-export type SiteConfig = typeof siteConfig
+}
