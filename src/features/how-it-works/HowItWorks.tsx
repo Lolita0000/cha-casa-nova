@@ -17,7 +17,7 @@ const explanations = [
 
 export function HowItWorks() {
   return (
-    <section aria-labelledby="how-it-works-title" className="bg-concrete-50 py-16 md:py-20">
+    <section aria-labelledby="how-it-works-title" className="bg-ash-50 py-16 md:py-20">
       <Container className="grid gap-10 md:grid-cols-[13rem_1fr]">
         <h2 id="how-it-works-title" className="font-display text-3xl text-ink-800">
           Como funciona
@@ -26,7 +26,7 @@ export function HowItWorks() {
           {explanations.map(({ title, text }) => (
             <div key={title}>
               <h3 className="font-medium text-ink-900">{title}</h3>
-              <p className="mt-2 leading-relaxed text-concrete-600">{text}</p>
+              <p className="mt-2 leading-relaxed text-ash-600">{text}</p>
             </div>
           ))}
         </div>

@@ -3,10 +3,10 @@ export type ButtonSize = 'sm' | 'md'
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-ink-800 text-white hover:bg-ink-700 disabled:bg-concrete-200 disabled:text-concrete-600',
+    'bg-ink-800 text-white hover:bg-ink-700 disabled:bg-ash-200 disabled:text-ash-600',
   secondary:
-    'border border-ink-800 text-ink-800 hover:bg-ink-50 disabled:border-concrete-200 disabled:text-concrete-400',
-  ghost: 'text-ink-700 underline decoration-blush-400 underline-offset-4 hover:text-ink-900',
+    'border border-ink-800 text-ink-800 hover:bg-ash-50 disabled:border-ash-200 disabled:text-ash-400',
+  ghost: 'text-ink-700 underline decoration-rose-400 underline-offset-4 hover:text-ink-900',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {

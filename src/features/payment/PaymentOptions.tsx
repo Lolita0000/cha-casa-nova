@@ -27,7 +27,7 @@ export function PaymentOptions({
         <PixQrCode payload={payload} className="mx-auto w-40 sm:w-36" />
         <div>
           <p className="font-medium text-ink-900">Pix</p>
-          <p className="mt-1 text-sm text-concrete-600">
+          <p className="mt-1 text-sm text-ash-600">
             {amountInCents
               ? `Aponte a câmera ou copie o código. O valor de ${formatCents(amountInCents)} já vem preenchido.`
               : 'Aponte a câmera ou copie o código e digite o valor no app do banco.'}
@@ -42,9 +42,9 @@ export function PaymentOptions({
       </div>
 
       {cardPaymentUrl && (
-        <div className="border-t border-concrete-200 pt-5">
+        <div className="border-t border-ash-200 pt-5">
           <p className="font-medium text-ink-900">Cartão</p>
-          <p className="mt-1 text-sm text-concrete-600">
+          <p className="mt-1 text-sm text-ash-600">
             Abre a página de pagamento segura numa nova aba. Dá pra parcelar.
           </p>
           <a

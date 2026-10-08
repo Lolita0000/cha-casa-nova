@@ -9,13 +9,13 @@ interface SimpleGiftRowProps {
 
 export function SimpleGiftRow({ gift, onGive }: SimpleGiftRowProps) {
   return (
-    <li className="flex items-center gap-4 border-b border-concrete-200 py-5 last:border-b-0">
+    <li className="flex items-center gap-4 border-b border-ash-200 py-5 last:border-b-0">
       {gift.imageUrl && (
         <img
           src={gift.imageUrl}
           alt=""
           loading="lazy"
-          className="size-16 shrink-0 rounded-md bg-concrete-100 object-cover"
+          className="size-16 shrink-0 rounded-md bg-ash-100 object-cover"
         />
       )}
 
@@ -23,7 +23,7 @@ export function SimpleGiftRow({ gift, onGive }: SimpleGiftRowProps) {
         <div className="min-w-0 sm:flex-1">
           <h4 className="font-medium text-ink-900">{gift.name}</h4>
           {gift.description && (
-            <p className="mt-0.5 text-sm text-concrete-600">{gift.description}</p>
+            <p className="mt-0.5 text-sm text-ash-600">{gift.description}</p>
           )}
         </div>
         <p className="font-display text-lg text-ink-800 tabular-nums sm:shrink-0">

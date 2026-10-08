@@ -19,7 +19,7 @@ export function GiveGiftDialog({ gift, onClose }: GiveGiftDialogProps) {
       {gift &&
         (gift.kind === 'simple' ? (
           <>
-            <p className="mb-6 text-concrete-600">
+            <p className="mb-6 text-ash-600">
               Valor do presente:{' '}
               <span className="font-display text-xl text-ink-900">
                 {formatCentsShort(gift.priceInCents)}
@@ -46,7 +46,7 @@ function PooledContribution({ gift }: { gift: PooledGift }) {
 
   return (
     <>
-      <p className="mb-5 text-concrete-600">
+      <p className="mb-5 text-ash-600">
         Estamos juntando aos poucos. Faltam{' '}
         <span className="text-ink-900">{formatCentsShort(remaining)}</span> e qualquer parte ajuda.
       </p>
@@ -56,7 +56,7 @@ function PooledContribution({ gift }: { gift: PooledGift }) {
         onChange={setAmount}
         maxInCents={remaining}
       />
-      <div className="mt-6 border-t border-concrete-200 pt-6">
+      <div className="mt-6 border-t border-ash-200 pt-6">
         <PaymentOptions
           amountInCents={amount}
           description={gift.name}

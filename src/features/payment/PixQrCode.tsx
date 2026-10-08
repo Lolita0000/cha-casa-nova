@@ -27,7 +27,7 @@ export function PixQrCode({ payload, className = '' }: PixQrCodeProps) {
   }, [payload])
 
   return (
-    <div className={`aspect-square bg-concrete-50 ${className}`}>
+    <div className={`aspect-square bg-ash-50 ${className}`}>
       {dataUrl && <img src={dataUrl} alt="QR Code do Pix" className="size-full rounded-md" />}
     </div>
   )

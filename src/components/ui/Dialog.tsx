@@ -44,7 +44,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="-m-2 rounded-md p-2 text-concrete-600 hover:bg-concrete-100 hover:text-ink-900"
+            className="-m-2 rounded-md p-2 text-ash-600 hover:bg-ash-100 hover:text-ink-900"
           >
             <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
               <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.8" fill="none" />

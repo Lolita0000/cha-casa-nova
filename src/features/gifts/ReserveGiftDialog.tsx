@@ -16,7 +16,7 @@ export function ReserveGiftDialog({ gift, onClose }: ReserveGiftDialogProps) {
 
   return (
     <Dialog open={gift !== null} onClose={onClose} title={gift?.name ?? ''}>
-      <div className="space-y-4 text-concrete-600">
+      <div className="space-y-4 text-ash-600">
         <p>Que presentão! Se você quer dar esse item inteiro, avisa a gente antes de comprar.</p>
         <p>
           Assim marcamos o item como reservado aqui no site e ninguém compra um repetido. Se alguém

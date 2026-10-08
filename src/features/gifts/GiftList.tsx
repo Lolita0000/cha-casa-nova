@@ -15,7 +15,7 @@ export function GiftList({ giftsByRoom, onGive, onReserve }: GiftListProps) {
         <h2 id="gift-list-title" className="font-display text-4xl text-ink-800 sm:text-5xl">
           A lista
         </h2>
-        <p className="mt-4 mb-12 max-w-[60ch] text-concrete-600">
+        <p className="mt-4 mb-12 max-w-[60ch] text-ash-600">
           Os valores são uma referência do quanto cada coisa custa. Os itens com barra são os mais
           caros: dá pra ajudar com uma parte ou, se preferir, dar ele inteiro.
         </p>
@@ -31,7 +31,7 @@ export function GiftList({ giftsByRoom, onGive, onReserve }: GiftListProps) {
             />
           ))
         ) : (
-          <p className="rounded-lg border border-dashed border-concrete-400 p-8 text-concrete-600">
+          <p className="rounded-lg border border-dashed border-ash-400 p-8 text-ash-600">
             A lista ainda está sendo montada. Volte daqui a pouquinho.
           </p>
         )}

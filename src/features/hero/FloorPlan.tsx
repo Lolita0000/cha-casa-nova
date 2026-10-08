@@ -52,13 +52,13 @@ export function FloorPlan({ activeRoomIds, className = '' }: FloorPlanProps) {
             y1={0}
             x2={0}
             y2={door.radius}
-            className="stroke-blush-200"
+            className="stroke-rose-200"
             strokeWidth={1.5}
           />
           <path
             d={`M ${door.radius} 0 A ${door.radius} ${door.radius} 0 0 1 0 ${door.radius}`}
             fill="none"
-            className="stroke-blush-200/60"
+            className="stroke-rose-200/60"
             strokeWidth={1}
             strokeDasharray="3 3"
           />
@@ -71,7 +71,7 @@ export function FloorPlan({ activeRoomIds, className = '' }: FloorPlanProps) {
         width={width - 40}
         height={height - 40}
         fill="none"
-        className="stroke-ink-50"
+        className="stroke-ash-50"
         strokeWidth={4}
         aria-hidden="true"
       />
@@ -97,8 +97,8 @@ function AreaShape({ area, interactive = false }: AreaShapeProps) {
         height={area.height}
         className={
           interactive
-            ? 'fill-transparent stroke-ink-100 transition-colors duration-200 group-hover:fill-blush-200/15 group-focus-visible:fill-blush-200/25'
-            : 'fill-ink-50/[0.03] stroke-ink-100'
+            ? 'fill-transparent stroke-ash-100 transition-colors duration-200 group-hover:fill-rose-200/15 group-focus-visible:fill-rose-200/25'
+            : 'fill-ash-50/[0.03] stroke-ash-100'
         }
         strokeWidth={2}
       />
@@ -109,8 +109,8 @@ function AreaShape({ area, interactive = false }: AreaShapeProps) {
         dominantBaseline="central"
         className={
           interactive
-            ? 'fill-ink-50 text-[11px] font-medium tracking-wide transition-colors group-hover:fill-blush-200 group-focus-visible:fill-blush-200'
-            : 'fill-ink-300 text-[10px] italic'
+            ? 'fill-ash-50 text-[11px] font-medium tracking-wide transition-colors group-hover:fill-rose-200 group-focus-visible:fill-rose-200'
+            : 'fill-ash-400 text-[10px] italic'
         }
       >
         {area.label}

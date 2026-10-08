@@ -10,7 +10,7 @@ export function FreeContribution() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <section aria-labelledby="free-contribution-title" className="bg-blush-100 py-16 md:py-20">
+    <section aria-labelledby="free-contribution-title" className="bg-rose-100 py-16 md:py-20">
       <Container className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <div className="max-w-xl">
           <h2

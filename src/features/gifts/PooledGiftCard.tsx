@@ -15,24 +15,24 @@ export function PooledGiftCard({ gift, onContribute, onReserve }: PooledGiftCard
   const funded = isFunded(gift)
 
   return (
-    <li className="my-4 rounded-lg bg-blush-50 p-5 sm:p-6">
+    <li className="my-4 rounded-lg bg-rose-50 p-5 sm:p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h4 className="font-display text-xl text-ink-900">{gift.name}</h4>
         {!gift.reservedBy && (
-          <p className="text-sm text-concrete-600 tabular-nums">
+          <p className="text-sm text-ash-600 tabular-nums">
             {formatCentsShort(gift.raisedInCents)} de {formatCentsShort(gift.goalInCents)}
           </p>
         )}
       </div>
 
-      {gift.description && <p className="mt-1 text-sm text-concrete-600">{gift.description}</p>}
+      {gift.description && <p className="mt-1 text-sm text-ash-600">{gift.description}</p>}
 
       {gift.reservedBy ? (
-        <p className="mt-5 border-l-2 border-blush-400 pl-3 text-ink-800">
+        <p className="mt-5 border-l-2 border-rose-400 pl-3 text-ink-800">
           {gift.reservedBy} vai dar esse pra gente.
         </p>
       ) : funded ? (
-        <p className="mt-5 border-l-2 border-blush-400 pl-3 text-ink-800">
+        <p className="mt-5 border-l-2 border-rose-400 pl-3 text-ink-800">
           Conseguimos! Obrigado a todo mundo que ajudou.
         </p>
       ) : (
