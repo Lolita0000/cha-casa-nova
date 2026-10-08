@@ -1,21 +1,24 @@
 import { buttonClassName } from '@/components/ui/buttonStyles'
 import { Container } from '@/components/ui/Container'
 import { siteConfig } from '@/config/site'
-import { daysUntil, describeDaysLeft, formatEventDate, formatEventTime } from '@/lib/date/event'
+import { daysUntil, describeDaysLeft } from '@/lib/date/event'
 
+import { EventDetails } from './EventDetails'
 import { LivingRoomIllustration } from './LivingRoomIllustration'
 
 export function Hero() {
   const { coupleNames, event } = siteConfig
-  const eventDate = new Date(event.startsAt)
+  const eventDate = event.startsAt ? new Date(event.startsAt) : undefined
 
   return (
     <header className="overflow-hidden rounded-b-[3rem] bg-rose-100 md:rounded-b-[4rem]">
       <Container className="flex items-center justify-between py-6">
         <p className="font-display text-xl text-ink-800">{coupleNames.join(' & ')}</p>
-        <p className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-rose-700">
-          {describeDaysLeft(daysUntil(eventDate))}
-        </p>
+        {eventDate && (
+          <p className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-rose-700">
+            {describeDaysLeft(daysUntil(eventDate))}
+          </p>
+        )}
       </Container>
 
       <Container className="grid items-center gap-12 pt-6 pb-20 lg:grid-cols-[1.15fr_1fr] lg:pt-12 lg:pb-28">
@@ -28,26 +31,7 @@ export function Hero() {
             presenteia com Pix ou cartão, do jeito que for mais fácil.
           </p>
 
-          <ul className="mt-8 flex flex-wrap gap-2 text-sm">
-            <li className="rounded-2xl bg-white px-4 py-2.5">
-              <span className="font-bold text-ink-900">{formatEventDate(eventDate)}</span>
-              <span className="text-ash-600">, às {formatEventTime(eventDate)}</span>
-            </li>
-            <li className="rounded-2xl bg-white px-4 py-2.5 font-bold text-ink-900">
-              {event.mapsUrl ? (
-                <a
-                  href={event.mapsUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline decoration-rose-400 decoration-2 underline-offset-4"
-                >
-                  {event.addressLine}
-                </a>
-              ) : (
-                event.addressLine
-              )}
-            </li>
-          </ul>
+          <EventDetails event={event} />
 
           <a href="#lista" className={buttonClassName({ className: 'mt-10' })}>
             Ver a listinha
