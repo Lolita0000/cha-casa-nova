@@ -14,6 +14,7 @@ export const gifts: Gift[] = [
     name: 'Jogo de panelas',
     description: 'Item de exemplo. Troque pelo que vocês quiserem.',
     priceInCents: 18000,
+    productUrl: 'https://www.exemplo.com.br/jogo-de-panelas',
   },
   {
     id: 'blender',
@@ -38,6 +39,7 @@ export const gifts: Gift[] = [
     goalInCents: 350000,
     raisedInCents: 120000,
     suggestedSharesInCents: [5000, 10000, 20000],
+    productUrl: 'https://www.exemplo.com.br/geladeira',
   },
   {
     id: 'rug',
