@@ -76,3 +76,9 @@ src/
 
 This repo follows git flow: features branch off `develop`, releases are cut into `main` and
 tagged.
+
+## Deploy
+
+Pushing to `main` deploys the site to GitHub Pages through `.github/workflows/deploy.yml`.
+The first time, enable it in the repository settings: **Settings → Pages → Build and deployment →
+Source: GitHub Actions**. The site is then served at `https://<user>.github.io/<repo>/`.
