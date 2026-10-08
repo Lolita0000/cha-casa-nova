@@ -136,6 +136,17 @@ export const gifts: Gift[] = [
       'https://shopee.com.br/Porta-Tempero-Condimento-Inox-12-Potes-Suporte-Girat%C3%B3rio-i.1564303923.58266707473?extraParams=%7B%22display_model_id%22%3A209193401909%2C%22model_selection_logic%22%3A3%7D',
   },
   {
+    id: 'pepper-grinder',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Moedor de pimenta e sal de madeira',
+    description: 'Manual, 21 cm, madeira escura',
+    priceInCents: 3399,
+    imageUrl: '/gifts/pepper-grinder.webp',
+    productUrl:
+      'https://shopee.com.br/Moedor-Pimenta-Sal-Condimento-Tempero-Gr%C3%A3o-Manual-De-Madeira-21-cm-ESCURO-i.329981308.20729683496?extraParams=%7B%22display_model_id%22%3A211534228899%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
     id: 'dishwasher',
     kind: 'pooled',
     roomId: 'kitchen',
