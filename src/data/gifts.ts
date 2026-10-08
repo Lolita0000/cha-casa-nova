@@ -125,6 +125,17 @@ export const gifts: Gift[] = [
     productUrl: 'https://www.amazon.com.br/dp/B085W5PJT6',
   },
   {
+    id: 'spice-rack',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Porta-temperos giratório de inox',
+    description: '12 potes de vidro',
+    priceInCents: 6963,
+    imageUrl: '/gifts/spice-rack.webp',
+    productUrl:
+      'https://shopee.com.br/Porta-Tempero-Condimento-Inox-12-Potes-Suporte-Girat%C3%B3rio-i.1564303923.58266707473?extraParams=%7B%22display_model_id%22%3A209193401909%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
     id: 'dishwasher',
     kind: 'pooled',
     roomId: 'kitchen',
