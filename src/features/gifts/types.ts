@@ -1,6 +1,5 @@
-import type { Gift, PooledGift } from '@/types/gift'
+import type { Gift } from '@/types/gift'
 
-export interface GiftActions {
-  onGive: (gift: Gift) => void
-  onReserve: (gift: PooledGift) => void
-}
+export type GiftDialogTab = 'pix' | 'card' | 'buy'
+
+export type OpenGiftDialog = (gift: Gift, tab?: GiftDialogTab) => void
