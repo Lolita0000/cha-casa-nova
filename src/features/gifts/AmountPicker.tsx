@@ -28,7 +28,7 @@ export function AmountPicker({ options, valueInCents, onChange, maxInCents }: Am
 
   return (
     <fieldset>
-      <legend className="text-sm text-concrete-600">Quanto você quer dar?</legend>
+      <legend className="text-sm font-bold text-ink-800">Quanto você quer dar?</legend>
       <div className="mt-2 flex flex-wrap gap-2">
         {options.map((option) => {
           const isSelected = option === valueInCents
@@ -38,10 +38,10 @@ export function AmountPicker({ options, valueInCents, onChange, maxInCents }: Am
               type="button"
               aria-pressed={isSelected}
               onClick={() => onChange(option)}
-              className={`h-10 rounded-full border px-4 text-sm font-medium tabular-nums transition-colors ${
+              className={`h-11 rounded-full border-2 px-4 text-sm font-bold tabular-nums transition-colors ${
                 isSelected
-                  ? 'border-ink-800 bg-ink-800 text-white'
-                  : 'border-concrete-200 text-ink-800 hover:border-ink-500'
+                  ? 'border-rose-400 bg-rose-200 text-ink-900'
+                  : 'border-ash-200 text-ink-800 hover:border-rose-300'
               }`}
             >
               {formatCentsShort(option)}
@@ -51,11 +51,11 @@ export function AmountPicker({ options, valueInCents, onChange, maxInCents }: Am
 
         <label
           htmlFor={inputId}
-          className={`flex h-10 items-center gap-1 rounded-full border px-4 text-sm focus-within:border-ink-800 ${
-            isCustom ? 'border-ink-800' : 'border-concrete-200'
+          className={`flex h-11 items-center gap-1 rounded-full border-2 px-4 text-sm focus-within:border-rose-400 ${
+            isCustom ? 'border-rose-400 bg-rose-50' : 'border-ash-200'
           }`}
         >
-          <span className="text-concrete-600">R$</span>
+          <span className="text-ash-600">R$</span>
           <input
             id={inputId}
             type="number"
@@ -66,7 +66,7 @@ export function AmountPicker({ options, valueInCents, onChange, maxInCents }: Am
             onChange={handleCustomChange}
             value={customText}
             onFocus={() => customText && onChange(parseCustomAmount(customText))}
-            className="w-24 bg-transparent tabular-nums outline-none placeholder:text-concrete-400"
+            className="w-24 bg-transparent tabular-nums outline-none placeholder:text-ash-400"
           />
         </label>
       </div>

@@ -1,37 +1,36 @@
 import { Container } from '@/components/ui/Container'
 import type { RoomWithGifts } from '@/data/selectors'
 
+import { RoomNav } from './RoomNav'
 import { RoomSection } from './RoomSection'
-import type { GiftActions } from './types'
+import type { OpenGiftDialog } from './types'
 
-interface GiftListProps extends GiftActions {
+interface GiftListProps {
   giftsByRoom: RoomWithGifts[]
+  onOpen: OpenGiftDialog
 }
 
-export function GiftList({ giftsByRoom, onGive, onReserve }: GiftListProps) {
+export function GiftList({ giftsByRoom, onOpen }: GiftListProps) {
   return (
-    <section aria-labelledby="gift-list-title" className="py-20 md:py-28">
+    <section id="lista" aria-labelledby="gift-list-title" className="pt-20 pb-24 md:pt-28">
       <Container>
-        <h2 id="gift-list-title" className="font-display text-4xl text-ink-800 sm:text-5xl">
-          A lista
+        <h2 id="gift-list-title" className="font-display text-5xl text-ink-800 sm:text-6xl">
+          A nossa listinha
         </h2>
-        <p className="mt-4 mb-12 max-w-[60ch] text-concrete-600">
-          Os valores são uma referência do quanto cada coisa custa. Os itens com barra são os mais
-          caros: dá pra ajudar com uma parte ou, se preferir, dar ele inteiro.
+        <p className="mt-4 mb-8 max-w-[58ch] text-lg text-ash-600">
+          Separada por cômodo. Os valores são uma referência do quanto cada coisa custa, e os cards
+          cinza são os itens maiores, que vamos juntando aos poucos.
         </p>
 
         {giftsByRoom.length > 0 ? (
-          giftsByRoom.map(({ room, gifts }) => (
-            <RoomSection
-              key={room.id}
-              room={room}
-              gifts={gifts}
-              onGive={onGive}
-              onReserve={onReserve}
-            />
-          ))
+          <>
+            <RoomNav rooms={giftsByRoom.map(({ room }) => room)} />
+            {giftsByRoom.map(({ room, gifts }) => (
+              <RoomSection key={room.id} room={room} gifts={gifts} onOpen={onOpen} />
+            ))}
+          </>
         ) : (
-          <p className="rounded-lg border border-dashed border-concrete-400 p-8 text-concrete-600">
+          <p className="rounded-[1.75rem] border-2 border-dashed border-rose-300 bg-white p-8 text-ash-600">
             A lista ainda está sendo montada. Volte daqui a pouquinho.
           </p>
         )}

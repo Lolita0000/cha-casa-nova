@@ -1,33 +1,37 @@
 @import 'tailwindcss';
-@import '@fontsource/young-serif/400.css';
-@import '@fontsource-variable/onest/wght.css';
+@import '@fontsource-variable/fraunces/soft.css';
+@import '@fontsource-variable/nunito/wght.css';
 
 @theme {
-  --font-display: 'Young Serif', Georgia, serif;
-  --font-sans: 'Onest Variable', system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-sans: 'Nunito Variable', system-ui, sans-serif;
 
-  /* Navy: the walls of the house, used for structure and text */
-  --color-ink-50: #eef0f5;
-  --color-ink-100: #dde2ec;
-  --color-ink-300: #8e9ab3;
-  --color-ink-500: #4a5a7d;
+  /* Dusty rose: pillows, throws and the pouf */
+  --color-rose-50: #fdf5f4;
+  --color-rose-100: #f8e6e4;
+  --color-rose-200: #f1cfcd;
+  --color-rose-300: #e6b4b4;
+  --color-rose-400: #d69a9e;
+  --color-rose-500: #c27f86;
+  --color-rose-700: #94545e;
+
+  /* Ash gray: the sofa and the walls */
+  --color-ash-50: #f5f4f3;
+  --color-ash-100: #eae9e8;
+  --color-ash-200: #d6d5d5;
+  --color-ash-400: #9d9ea3;
+  --color-ash-500: #7e8087;
+  --color-ash-600: #63656c;
+  --color-ash-700: #4d4f56;
+
+  /* Navy: text and small details */
   --color-ink-700: #2c3a5c;
   --color-ink-800: #1f2b47;
   --color-ink-900: #172038;
 
-  /* Pink: warmth and highlights, used sparingly */
-  --color-blush-50: #fcf2f3;
-  --color-blush-100: #f8e3e6;
-  --color-blush-200: #f0c7cc;
-  --color-blush-400: #dc98a1;
-  --color-blush-600: #a8505e;
-
-  /* Gray: concrete and neutral surfaces */
-  --color-concrete-50: #f6f6f7;
-  --color-concrete-100: #ececee;
-  --color-concrete-200: #dcdcdf;
-  --color-concrete-400: #9d9fa6;
-  --color-concrete-600: #62656e;
+  /* Light wood: furniture legs, frames and baskets */
+  --color-wood-200: #ead9c6;
+  --color-wood-400: #c9a27e;
 }
 
 @layer base {
@@ -37,15 +41,23 @@
   }
 
   body {
-    @apply bg-white font-sans text-ink-800 antialiased;
+    @apply bg-ash-50 font-sans text-ink-800 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-variation-settings: 'SOFT' 100;
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-blush-400;
+    @apply outline-2 outline-offset-2 outline-rose-500;
   }
 
   ::selection {
-    @apply bg-blush-200 text-ink-900;
+    @apply bg-rose-200 text-ink-900;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -62,9 +74,23 @@
   }
 }
 
+/* Knitted stitches, like the pouf and the throw blanket. Sits on top of any background color. */
+@utility knit {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='12' viewBox='0 0 14 12'%3E%3Cpath d='M1.5 1.5Q4 5 7 10.5M12.5 1.5Q10 5 7 10.5' fill='none' stroke='%23fff' stroke-opacity='.38' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-size: 14px 12px;
+}
+
 @keyframes dialog-in {
   from {
     opacity: 0;
-    transform: translateY(8px) scale(0.98);
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+@keyframes glow {
+  50% {
+    box-shadow:
+      0 0 0 10px var(--color-white),
+      0 0 70px 18px color-mix(in oklab, var(--color-rose-200) 90%, transparent);
   }
 }
