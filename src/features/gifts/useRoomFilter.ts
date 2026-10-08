@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 
 import type { RoomWithGifts } from '@/data/selectors'
 
-import { buildRoomFilterOptions, filterRooms, type RoomFilterValue } from './roomFilter'
+import { buildRoomFilterOptions, filterRooms, type RoomFilterValue } from './roomFilterOptions'
 
 export function useRoomFilter(giftsByRoom: RoomWithGifts[]) {
   const [selected, setSelected] = useState<RoomFilterValue>('all')
