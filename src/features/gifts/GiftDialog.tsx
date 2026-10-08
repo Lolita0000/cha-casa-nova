@@ -56,11 +56,12 @@ function GiftDialogContent({ gift, initialTab }: GiftDialogContentProps) {
 
   return (
     <>
-      {gift.kind === 'simple' ? (
+      {gift.kind === 'simple' && gift.priceInCents !== undefined && (
         <p className="-mt-2 mb-6 font-display text-2xl text-rose-700">
           {formatCentsShort(gift.priceInCents)}
         </p>
-      ) : (
+      )}
+      {gift.kind === 'pooled' && (
         <PooledAmount gift={gift} amount={pooledAmount} onAmountChange={setPooledAmount} />
       )}
 
