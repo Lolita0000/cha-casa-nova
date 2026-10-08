@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { RoomWithGifts } from '@/data/selectors'
 import type { Gift } from '@/types/gift'
 
-import { buildRoomFilterOptions, filterRooms } from './roomFilter'
+import { buildRoomFilterOptions, filterRooms } from './roomFilterOptions'
 
 function gift(id: string, roomId: Gift['roomId']): Gift {
   return { id, kind: 'simple', roomId, name: id, priceInCents: 1000 }
