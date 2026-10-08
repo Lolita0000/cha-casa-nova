@@ -22,7 +22,8 @@ interface BaseGift {
  */
 export interface SimpleGift extends BaseGift {
   kind: 'simple'
-  priceInCents: number
+  /** Leave undefined while the price isn't known: guests then choose the amount. */
+  priceInCents?: number
   /** Optional card payment link (Mercado Pago, InfinitePay, etc.) for this exact amount. */
   cardPaymentUrl?: string
 }

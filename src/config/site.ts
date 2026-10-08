@@ -3,7 +3,7 @@
  * Fill in the real values before publishing.
  */
 export const siteConfig = {
-  coupleNames: ['Fulana', 'Ciclano'] as const,
+  coupleNames: ['Aninha', 'Gabriel'] as const,
 
   event: {
     /** ISO date with timezone offset. */
@@ -14,9 +14,13 @@ export const siteConfig = {
 
   pix: {
     /** Pix key: e-mail, phone (+55...), CPF or random key. */
-    key: 'chave-pix@exemplo.com',
-    /** Receiver name as registered at the bank, max 25 characters, no accents. */
-    receiverName: 'FULANA DE TAL',
+    key: '0b5b23e3-dec3-44aa-9af5-3ad5b2fe82b7',
+    /**
+     * Receiver name, max 25 characters, no accents. The payer's bank shows the
+     * name registered with the key (Ana Luiza Rodrigues Machado, PicPay), so an
+     * abbreviation here is fine.
+     */
+    receiverName: 'ANA LUIZA R MACHADO',
     /** Receiver city, max 15 characters, no accents. */
     receiverCity: 'BRASILIA',
   },

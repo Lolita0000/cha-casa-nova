@@ -11,6 +11,10 @@ interface GiftListProps {
 }
 
 export function GiftList({ giftsByRoom, onOpen }: GiftListProps) {
+  const hasPooledGifts = giftsByRoom.some(({ gifts }) =>
+    gifts.some((gift) => gift.kind === 'pooled'),
+  )
+
   return (
     <section id="lista" aria-labelledby="gift-list-title" className="pt-20 pb-24 md:pt-28">
       <Container>
@@ -18,8 +22,8 @@ export function GiftList({ giftsByRoom, onOpen }: GiftListProps) {
           A nossa listinha
         </h2>
         <p className="mt-4 mb-8 max-w-[58ch] text-lg text-ash-600">
-          Separada por cômodo. Os valores são uma referência do quanto cada coisa custa, e os cards
-          cinza são os itens maiores, que vamos juntando aos poucos.
+          Separada por cômodo. Os valores são uma referência do quanto cada coisa custa.
+          {hasPooledGifts && ' Os cards cinza são os itens maiores, que vamos juntando aos poucos.'}
         </p>
 
         {giftsByRoom.length > 0 ? (

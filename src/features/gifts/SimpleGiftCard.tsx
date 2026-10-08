@@ -20,9 +20,13 @@ export function SimpleGiftCard({ gift, onOpen }: SimpleGiftCardProps) {
         {gift.description && <p className="mt-1 text-sm text-ash-600">{gift.description}</p>}
 
         <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-          <p className="font-display text-2xl text-ink-800 tabular-nums">
-            {formatCentsShort(gift.priceInCents)}
-          </p>
+          {gift.priceInCents ? (
+            <p className="font-display text-2xl text-ink-800 tabular-nums">
+              {formatCentsShort(gift.priceInCents)}
+            </p>
+          ) : (
+            <p className="text-sm font-semibold text-ash-500">Valor a definir</p>
+          )}
           <button
             type="button"
             onClick={() => onOpen(gift)}
