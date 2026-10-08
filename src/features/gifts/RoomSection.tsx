@@ -2,32 +2,32 @@ import type { RoomWithGifts } from '@/data/selectors'
 
 import { PooledGiftCard } from './PooledGiftCard'
 import { getRoomAnchor } from './roomAnchor'
-import { SimpleGiftRow } from './SimpleGiftRow'
-import type { GiftActions } from './types'
+import { SimpleGiftCard } from './SimpleGiftCard'
+import type { OpenGiftDialog } from './types'
 
-type RoomSectionProps = RoomWithGifts & GiftActions
+type RoomSectionProps = RoomWithGifts & { onOpen: OpenGiftDialog }
 
-export function RoomSection({ room, gifts, onGive, onReserve }: RoomSectionProps) {
+export function RoomSection({ room, gifts, onOpen }: RoomSectionProps) {
   const headingId = `${getRoomAnchor(room.id)}-title`
+  const count = gifts.length
 
   return (
-    <section
-      id={getRoomAnchor(room.id)}
-      aria-labelledby={headingId}
-      className="scroll-mt-6 border-t border-ink-800 py-10 md:grid md:grid-cols-[13rem_1fr] md:gap-10"
-    >
-      <div className="mb-4 md:mb-0">
-        <h3 id={headingId} className="font-display text-3xl text-ink-800 md:sticky md:top-8">
+    <section id={getRoomAnchor(room.id)} aria-labelledby={headingId} className="scroll-mt-24 pt-14">
+      <div className="mb-6 flex items-baseline gap-3">
+        <h3 id={headingId} className="font-display text-3xl text-ink-800 sm:text-4xl">
           {room.name}
         </h3>
+        <span className="text-sm font-semibold text-ash-500">
+          {count} {count === 1 ? 'presente' : 'presentes'}
+        </span>
       </div>
 
-      <ul>
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {gifts.map((gift) =>
           gift.kind === 'simple' ? (
-            <SimpleGiftRow key={gift.id} gift={gift} onGive={onGive} />
+            <SimpleGiftCard key={gift.id} gift={gift} onOpen={onOpen} />
           ) : (
-            <PooledGiftCard key={gift.id} gift={gift} onContribute={onGive} onReserve={onReserve} />
+            <PooledGiftCard key={gift.id} gift={gift} onOpen={onOpen} />
           ),
         )}
       </ul>

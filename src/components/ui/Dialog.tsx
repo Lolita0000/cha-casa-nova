@@ -33,18 +33,18 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
       aria-labelledby={titleId}
       onClose={onClose}
       onClick={handleBackdropClick}
-      className="m-auto w-[min(32rem,calc(100%-2rem))] rounded-xl bg-white p-0 text-ink-800 shadow-[0_24px_60px_-20px] shadow-ink-900/50 backdrop:bg-ink-900/60 open:animate-[dialog-in_180ms_ease-out]"
+      className="m-auto max-h-[calc(100svh-2rem)] w-[min(34rem,calc(100%-2rem))] rounded-[2rem] bg-white p-0 text-ink-800 shadow-[0_30px_80px_-30px] shadow-ink-900/40 backdrop:bg-ash-700/50 backdrop:backdrop-blur-[2px] open:animate-[dialog-in_200ms_ease-out]"
     >
       <div className="p-6 sm:p-8">
         <div className="flex items-start justify-between gap-6">
-          <h2 id={titleId} className="font-display text-2xl leading-tight text-ink-900">
+          <h2 id={titleId} className="font-display text-3xl leading-tight text-ink-900">
             {title}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="-m-2 rounded-md p-2 text-concrete-600 hover:bg-concrete-100 hover:text-ink-900"
+            className="-m-1 grid size-10 shrink-0 place-items-center rounded-full bg-ash-100 text-ash-600 hover:bg-rose-100 hover:text-ink-900"
           >
             <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
               <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.8" fill="none" />

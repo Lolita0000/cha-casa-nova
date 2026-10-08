@@ -12,6 +12,8 @@ interface BaseGift {
   name: string
   description?: string
   imageUrl?: string
+  /** Store page for guests who prefer to buy the item themselves. */
+  productUrl?: string
 }
 
 /**

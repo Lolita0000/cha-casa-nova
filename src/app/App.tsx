@@ -1,33 +1,38 @@
 import { Footer } from '@/components/layout/Footer'
-import { rooms } from '@/data/rooms'
 import { gifts } from '@/data/gifts'
+import { rooms } from '@/data/rooms'
 import { groupGiftsByRoom } from '@/data/selectors'
 import { FreeContribution } from '@/features/free-contribution/FreeContribution'
+import { GiftDialog } from '@/features/gifts/GiftDialog'
 import { GiftList } from '@/features/gifts/GiftList'
-import { GiveGiftDialog } from '@/features/gifts/GiveGiftDialog'
-import { ReserveGiftDialog } from '@/features/gifts/ReserveGiftDialog'
-import { useGiftDialogs } from '@/features/gifts/useGiftDialogs'
+import { useGiftDialog } from '@/features/gifts/useGiftDialog'
 import { Hero } from '@/features/hero/Hero'
 import { HowItWorks } from '@/features/how-it-works/HowItWorks'
+import { MaterialsNote } from '@/features/materials/MaterialsNote'
+import { HousePalette } from '@/features/palette/HousePalette'
 
 const giftsByRoom = groupGiftsByRoom(rooms, gifts)
-const activeRoomIds = giftsByRoom.map(({ room }) => room.id)
 
 export function App() {
-  const { giftToGive, giftToReserve, openGive, openReserve, close } = useGiftDialogs()
+  const { state, open, close } = useGiftDialog()
 
   return (
     <>
-      <Hero activeRoomIds={activeRoomIds} />
+      <Hero />
       <main>
         <HowItWorks />
-        <GiftList giftsByRoom={giftsByRoom} onGive={openGive} onReserve={openReserve} />
+        <GiftList giftsByRoom={giftsByRoom} onOpen={open} />
         <FreeContribution />
+        <HousePalette />
+        <MaterialsNote />
       </main>
       <Footer />
 
-      <GiveGiftDialog gift={giftToGive} onClose={close} />
-      <ReserveGiftDialog gift={giftToReserve} onClose={close} />
+      <GiftDialog
+        gift={state?.gift ?? null}
+        initialTab={state?.initialTab ?? 'pix'}
+        onClose={close}
+      />
     </>
   )
 }

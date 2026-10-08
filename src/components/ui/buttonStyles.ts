@@ -1,17 +1,16 @@
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
+export type ButtonVariant = 'primary' | 'soft' | 'outline' | 'link'
 export type ButtonSize = 'sm' | 'md'
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    'bg-ink-800 text-white hover:bg-ink-700 disabled:bg-concrete-200 disabled:text-concrete-600',
-  secondary:
-    'border border-ink-800 text-ink-800 hover:bg-ink-50 disabled:border-concrete-200 disabled:text-concrete-400',
-  ghost: 'text-ink-700 underline decoration-blush-400 underline-offset-4 hover:text-ink-900',
+  primary: 'bg-ink-800 text-white hover:bg-ink-700 disabled:bg-ash-200 disabled:text-ash-600',
+  soft: 'bg-rose-200 text-ink-900 hover:bg-rose-300',
+  outline: 'border-2 border-ink-800 text-ink-800 hover:bg-white',
+  link: 'text-ink-800 underline decoration-rose-400 decoration-2 underline-offset-4 hover:decoration-rose-500',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'h-9 px-3.5 text-sm',
-  md: 'h-11 px-5 text-[0.95rem]',
+  sm: 'h-10 px-4 text-sm',
+  md: 'h-12 px-6',
 }
 
 export interface ButtonStyleOptions {
@@ -27,7 +26,7 @@ export function buttonClassName({
   className = '',
 }: ButtonStyleOptions = {}) {
   const base =
-    'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors disabled:cursor-not-allowed'
-  const sizing = variant === 'ghost' ? '' : sizeClasses[size]
+    'inline-flex items-center justify-center gap-2 rounded-full font-bold transition-colors disabled:cursor-not-allowed'
+  const sizing = variant === 'link' ? 'font-semibold' : sizeClasses[size]
   return `${base} ${sizing} ${variantClasses[variant]} ${className}`
 }
