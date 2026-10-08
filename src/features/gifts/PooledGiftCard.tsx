@@ -42,7 +42,7 @@ export function PooledGiftCard({ gift, onContribute, onReserve }: PooledGiftCard
             <Button size="sm" onClick={() => onContribute(gift)}>
               Contribuir com uma parte
             </Button>
-            <Button variant="ghost" onClick={() => onReserve(gift)}>
+            <Button variant="link" onClick={() => onReserve(gift)}>
               Quero dar ele inteiro
             </Button>
           </div>

@@ -32,7 +32,7 @@ export function PaymentOptions({
               ? `Aponte a câmera ou copie o código. O valor de ${formatCents(amountInCents)} já vem preenchido.`
               : 'Aponte a câmera ou copie o código e digite o valor no app do banco.'}
           </p>
-          <Button size="sm" variant="secondary" onClick={() => copy(payload)} className="mt-3">
+          <Button size="sm" variant="outline" onClick={() => copy(payload)} className="mt-3">
             {hasCopied ? 'Código copiado' : 'Copiar código Pix'}
           </Button>
           <p className="sr-only" aria-live="polite">
