@@ -1,9 +1,13 @@
+import { useRef } from 'react'
+
 import { Container } from '@/components/ui/Container'
 import type { RoomWithGifts } from '@/data/selectors'
 
-import { RoomNav } from './RoomNav'
+import { RoomFilter } from './RoomFilter'
+import type { RoomFilterValue } from './roomFilter'
 import { RoomSection } from './RoomSection'
 import type { OpenGiftDialog } from './types'
+import { useRoomFilter } from './useRoomFilter'
 
 interface GiftListProps {
   giftsByRoom: RoomWithGifts[]
@@ -11,9 +15,19 @@ interface GiftListProps {
 }
 
 export function GiftList({ giftsByRoom, onOpen }: GiftListProps) {
+  const listStartRef = useRef<HTMLDivElement>(null)
+  const { options, selected, setSelected, visibleRooms } = useRoomFilter(giftsByRoom)
+
   const hasPooledGifts = giftsByRoom.some(({ gifts }) =>
     gifts.some((gift) => gift.kind === 'pooled'),
   )
+
+  function handleFilterChange(value: RoomFilterValue) {
+    setSelected(value)
+    // When the guest is scrolled deep into the list, bring them back to the start of it.
+    const top = listStartRef.current?.getBoundingClientRect().top ?? 0
+    if (top < 0) listStartRef.current?.scrollIntoView({ block: 'start' })
+  }
 
   return (
     <section id="lista" aria-labelledby="gift-list-title" className="pt-20 pb-24 md:pt-28">
@@ -28,8 +42,9 @@ export function GiftList({ giftsByRoom, onOpen }: GiftListProps) {
 
         {giftsByRoom.length > 0 ? (
           <>
-            <RoomNav rooms={giftsByRoom.map(({ room }) => room)} />
-            {giftsByRoom.map(({ room, gifts }) => (
+            <div ref={listStartRef} className="scroll-mt-4" />
+            <RoomFilter options={options} value={selected} onChange={handleFilterChange} />
+            {visibleRooms.map(({ room, gifts }) => (
               <RoomSection key={room.id} room={room} gifts={gifts} onOpen={onOpen} />
             ))}
           </>
