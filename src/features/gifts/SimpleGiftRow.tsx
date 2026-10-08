@@ -19,14 +19,17 @@ export function SimpleGiftRow({ gift, onGive }: SimpleGiftRowProps) {
         />
       )}
 
-      <div className="min-w-0 flex-1">
-        <h4 className="font-medium text-ink-900">{gift.name}</h4>
-        {gift.description && <p className="mt-0.5 text-sm text-concrete-600">{gift.description}</p>}
+      <div className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+        <div className="min-w-0 sm:flex-1">
+          <h4 className="font-medium text-ink-900">{gift.name}</h4>
+          {gift.description && (
+            <p className="mt-0.5 text-sm text-concrete-600">{gift.description}</p>
+          )}
+        </div>
+        <p className="font-display text-lg text-ink-800 tabular-nums sm:shrink-0">
+          {formatCentsShort(gift.priceInCents)}
+        </p>
       </div>
-
-      <p className="shrink-0 font-display text-lg text-ink-800 tabular-nums">
-        {formatCentsShort(gift.priceInCents)}
-      </p>
 
       <Button size="sm" onClick={() => onGive(gift)} aria-label={`Presentear: ${gift.name}`}>
         Presentear
