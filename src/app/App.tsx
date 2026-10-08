@@ -10,14 +10,13 @@ import { Hero } from '@/features/hero/Hero'
 import { HowItWorks } from '@/features/how-it-works/HowItWorks'
 
 const giftsByRoom = groupGiftsByRoom(rooms, gifts)
-const activeRoomIds = giftsByRoom.map(({ room }) => room.id)
 
 export function App() {
   const { state, open, close } = useGiftDialog()
 
   return (
     <>
-      <Hero activeRoomIds={activeRoomIds} />
+      <Hero />
       <main>
         <HowItWorks />
         <GiftList giftsByRoom={giftsByRoom} onOpen={open} />

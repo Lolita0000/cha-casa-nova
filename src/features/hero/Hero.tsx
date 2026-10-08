@@ -1,70 +1,64 @@
+import { buttonClassName } from '@/components/ui/buttonStyles'
 import { Container } from '@/components/ui/Container'
 import { siteConfig } from '@/config/site'
 import { daysUntil, describeDaysLeft, formatEventDate, formatEventTime } from '@/lib/date/event'
-import type { RoomId } from '@/types/gift'
 
-import { FloorPlan } from './FloorPlan'
+import { LivingRoomIllustration } from './LivingRoomIllustration'
 
-interface HeroProps {
-  activeRoomIds: RoomId[]
-}
-
-export function Hero({ activeRoomIds }: HeroProps) {
+export function Hero() {
   const { coupleNames, event } = siteConfig
   const eventDate = new Date(event.startsAt)
 
   return (
-    <header className="bg-ink-800 text-ash-50">
-      <Container className="flex items-center justify-between py-6 text-sm">
-        <p className="font-display text-lg text-white">{coupleNames.join(' & ')}</p>
-        <p className="rounded-full border border-ink-700 px-3 py-1 text-ash-100">
+    <header className="overflow-hidden rounded-b-[3rem] bg-rose-100 md:rounded-b-[4rem]">
+      <Container className="flex items-center justify-between py-6">
+        <p className="font-display text-xl text-ink-800">{coupleNames.join(' & ')}</p>
+        <p className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-rose-700">
           {describeDaysLeft(daysUntil(eventDate))}
         </p>
       </Container>
 
-      <Container className="grid items-center gap-12 pt-8 pb-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:pt-14 lg:pb-28">
+      <Container className="grid items-center gap-12 pt-6 pb-20 lg:grid-cols-[1.15fr_1fr] lg:pt-12 lg:pb-28">
         <div>
-          <h1 className="max-w-[14ch] font-display text-[2.6rem] leading-[1.08] text-white sm:text-6xl">
-            Ajuda a gente a mobiliar a casa nova?
+          <h1 className="max-w-[13ch] font-display text-[2.75rem] leading-[1.05] text-ink-900 sm:text-[4.25rem]">
+            Vem ajudar a gente a montar o nosso cantinho?
           </h1>
-          <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-ash-100">
-            Montamos a lista cômodo por cômodo. Escolha um presente na planta ou mais abaixo e
-            contribua com Pix ou cartão, do jeito que for mais fácil pra você.
+          <p className="mt-6 max-w-[44ch] text-lg leading-relaxed text-ink-700">
+            Fizemos uma listinha com o que ainda falta na casa nova. Você escolhe um item e
+            presenteia com Pix ou cartão, do jeito que for mais fácil.
           </p>
 
-          <dl className="mt-10 grid max-w-md grid-cols-2 gap-x-6 gap-y-4 border-t border-ink-700 pt-6 text-sm">
-            <div>
-              <dt className="text-ash-400">Quando</dt>
-              <dd className="mt-1 text-white first-letter:uppercase">
-                {formatEventDate(eventDate)}, às {formatEventTime(eventDate)}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-ash-400">Onde</dt>
-              <dd className="mt-1 text-white">
-                {event.mapsUrl ? (
-                  <a
-                    href={event.mapsUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline decoration-rose-400 underline-offset-4 hover:text-rose-200"
-                  >
-                    {event.addressLine}
-                  </a>
-                ) : (
-                  event.addressLine
-                )}
-              </dd>
-            </div>
-          </dl>
+          <ul className="mt-8 flex flex-wrap gap-2 text-sm">
+            <li className="rounded-2xl bg-white px-4 py-2.5">
+              <span className="font-bold text-ink-900">{formatEventDate(eventDate)}</span>
+              <span className="text-ash-600">, às {formatEventTime(eventDate)}</span>
+            </li>
+            <li className="rounded-2xl bg-white px-4 py-2.5 font-bold text-ink-900">
+              {event.mapsUrl ? (
+                <a
+                  href={event.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline decoration-rose-400 decoration-2 underline-offset-4"
+                >
+                  {event.addressLine}
+                </a>
+              ) : (
+                event.addressLine
+              )}
+            </li>
+          </ul>
+
+          <a href="#lista" className={buttonClassName({ className: 'mt-10' })}>
+            Ver a listinha
+          </a>
         </div>
 
-        <figure className="w-full max-w-xl justify-self-center">
-          <FloorPlan activeRoomIds={activeRoomIds} className="w-full" />
-          <figcaption className="mt-3 text-center text-sm text-ash-400">
-            Toque num cômodo para ir direto pra lista dele
-          </figcaption>
-        </figure>
+        <div className="mx-auto w-full max-w-md px-4">
+          <div className="animate-[glow_2.4s_ease-in-out_1] rounded-full shadow-[0_0_0_10px_var(--color-white),0_0_50px_10px_var(--color-rose-200)]">
+            <LivingRoomIllustration className="block w-full rounded-full" />
+          </div>
+        </div>
       </Container>
     </header>
   )

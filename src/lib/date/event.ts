@@ -14,7 +14,8 @@ const timeFormatter = new Intl.DateTimeFormat('pt-BR', {
 })
 
 export function formatEventDate(date: Date): string {
-  return longDateFormatter.format(date)
+  const text = longDateFormatter.format(date)
+  return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
 export function formatEventTime(date: Date): string {
