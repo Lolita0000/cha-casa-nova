@@ -4,7 +4,7 @@ import { Container } from '@/components/ui/Container'
 import type { RoomWithGifts } from '@/data/selectors'
 
 import { RoomFilter } from './RoomFilter'
-import type { RoomFilterValue } from './roomFilter'
+import type { RoomFilterValue } from './roomFilterOptions'
 import { RoomSection } from './RoomSection'
 import type { OpenGiftDialog } from './types'
 import { useRoomFilter } from './useRoomFilter'

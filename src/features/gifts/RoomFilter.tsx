@@ -1,4 +1,4 @@
-import type { RoomFilterOption, RoomFilterValue } from './roomFilter'
+import type { RoomFilterOption, RoomFilterValue } from './roomFilterOptions'
 
 interface RoomFilterProps {
   options: RoomFilterOption[]
