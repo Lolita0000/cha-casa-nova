@@ -34,6 +34,8 @@ Everything personal lives in two files:
 - **`src/config/site.ts`**: couple names, event date and address, Pix key, receiver name and
   city, WhatsApp number and an optional open-amount card payment link.
 - **`src/data/gifts.ts`**: the gift list. The current entries are examples.
+- **`src/data/palette.ts`** and **`src/data/materials.ts`**: the house colors and the materials
+  shown in the food-safe note.
 
 Amounts are always stored in cents (`18000` = R$ 180,00).
 
@@ -44,8 +46,10 @@ Amounts are always stored in cents (`18000` = R$ 180,00).
 - `pooled`: expensive items funded in parts. `raisedInCents` drives the progress bar. Set
   `reservedBy` when a guest says they'll buy it outright, and it will show as taken.
 
-Rooms are defined in `src/data/rooms.ts`, and their shapes on the hero floor plan in
-`src/features/hero/floorPlanLayout.ts`.
+Every gift can also have `productUrl` and `imageUrl`. The product link shows up in the
+"Comprar o item" tab, next to a WhatsApp shortcut so the guest can ask you to mark it as reserved.
+
+Rooms are defined in `src/data/rooms.ts`.
 
 ## How Pix works here
 
@@ -61,7 +65,8 @@ src/
   components/     Shared UI (Button, Dialog, Container...) and layout
   config/         Site configuration
   data/           Rooms, gifts and selectors
-  features/       Page sections: hero, how-it-works, gifts, payment, free-contribution
+  features/       Page sections: hero, how-it-works, gifts, payment, free-contribution,
+                  palette, materials
   hooks/          Reusable hooks
   lib/            Framework-free helpers (pix, formatting, dates, whatsapp)
   types/          Domain types
