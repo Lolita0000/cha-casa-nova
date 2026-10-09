@@ -1,9 +1,19 @@
-export type RoomId = 'kitchen' | 'living-room' | 'bedroom' | 'bathroom' | 'laundry'
+export type RoomId =
+  | 'kitchen'
+  | 'living-room'
+  | 'bedroom'
+  | 'bathroom'
+  | 'laundry'
+  | 'renovation'
+  | 'aninha'
+  | 'gabriel'
 
 export interface Room {
   id: RoomId
   /** Label shown to guests (pt-BR). */
   name: string
+  /** Keeps the tab visible before it has gifts, showing this message instead. */
+  emptyMessage?: string
 }
 
 interface BaseGift {
@@ -40,6 +50,8 @@ export interface PooledGift extends BaseGift {
   suggestedSharesInCents: number[]
   /** Name of the guest who chose to buy it outright, if any. */
   reservedBy?: string
+  /** Set to false for things that can't be bought in a store, like a renovation. */
+  allowFullPurchase?: boolean
 }
 
 export type Gift = SimpleGift | PooledGift

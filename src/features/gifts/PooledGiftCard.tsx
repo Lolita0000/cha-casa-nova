@@ -74,16 +74,18 @@ export function PooledGiftCard({ gift, onContribute }: PooledGiftCardProps) {
                 >
                   Contribuir com uma parte
                 </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    add({ giftId: gift.id, amountInCents: defaultAmountFor(gift) })
-                    open()
-                  }}
-                  className="text-sm font-bold underline decoration-rose-300 decoration-2 underline-offset-4 hover:text-rose-100"
-                >
-                  Quero dar ele inteiro
-                </button>
+                {gift.allowFullPurchase !== false && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      add({ giftId: gift.id, amountInCents: defaultAmountFor(gift) })
+                      open()
+                    }}
+                    className="text-sm font-bold underline decoration-rose-300 decoration-2 underline-offset-4 hover:text-rose-100"
+                  >
+                    Quero dar ele inteiro
+                  </button>
+                )}
               </div>
             )}
           </>
