@@ -433,6 +433,17 @@ export const gifts: Gift[] = [
       'https://shopee.com.br/Espelho-Portal-Decorativo-160x70cm-Corpo-Inteiro-Grande-Para-Sala-Quarto-Hall-Banheiro-i.1165360419.55561180724?extraParams=%7B%22display_model_id%22%3A420973892754%2C%22model_selection_logic%22%3A3%7D',
   },
   {
+    id: 'pillow-top',
+    kind: 'simple',
+    roomId: 'bedroom',
+    name: 'Pillow top casal Luuna',
+    description: 'Essential, microfibra, capa hipoalergênica e lavável',
+    priceInCents: 44555,
+    imageUrl: '/gifts/pillow-top.webp',
+    productUrl:
+      'https://www.mercadolivre.com.br/pillow-top-casal-luuna-essential-microfibra-down-alternative-ultra-soft-capa-hipoalergenica-lavavel/p/MLB26797878?pdp_filters=item_id%3AMLB3442619235',
+  },
+  {
     id: 'bath-towels',
     kind: 'simple',
     roomId: 'bathroom',
