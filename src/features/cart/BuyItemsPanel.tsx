@@ -21,7 +21,7 @@ export function BuyItemsPanel({ items }: BuyItemsPanelProps) {
       <ul className="mt-4 divide-y divide-ash-100">
         {items.map(({ gift }) => (
           <li key={gift.id} className="flex items-center justify-between gap-3 py-3">
-            <span className="min-w-0 truncate font-semibold text-ink-900">{gift.name}</span>
+            <span className="line-clamp-2 min-w-0 font-semibold text-ink-900">{gift.name}</span>
             {gift.productUrl ? (
               <a
                 href={gift.productUrl}

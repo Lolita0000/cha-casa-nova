@@ -16,7 +16,7 @@ export function CartItemRow({ item: { gift, amountInCents }, onRemove }: CartIte
     <li className="flex items-center gap-3 py-3">
       <GiftImage src={gift.imageUrl} className="size-14 shrink-0 rounded-2xl" compact />
       <div className="min-w-0 flex-1">
-        <p className="truncate font-bold text-ink-900">{gift.name}</p>
+        <p className="line-clamp-2 leading-snug font-bold text-ink-900">{gift.name}</p>
         {isShare && <p className="text-xs text-ash-600">Uma parte do presente</p>}
       </div>
       <p className="shrink-0 font-semibold text-ink-800 tabular-nums">

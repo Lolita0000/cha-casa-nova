@@ -27,8 +27,8 @@ export function Hero() {
             Vem ajudar a gente a montar o nosso cantinho?
           </h1>
           <p className="mt-6 max-w-[44ch] text-lg leading-relaxed text-ink-700">
-            Fizemos uma listinha com o que ainda falta na casa nova. Você escolhe um item e
-            presenteia com Pix ou cartão, do jeito que for mais fácil.
+            Fizemos uma listinha com o que ainda falta na casa nova. Você coloca no carrinho o que
+            quiser dar e presenteia com Pix, do jeito que for mais fácil.
           </p>
 
           <EventDetails event={event} />
