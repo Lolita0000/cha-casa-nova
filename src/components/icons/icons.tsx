@@ -37,3 +37,28 @@ export function ExternalIcon(props: IconProps) {
     </svg>
   )
 }
+
+export function BagIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="M5.5 8.5h13l-1 11a1.5 1.5 0 0 1-1.5 1.4H8a1.5 1.5 0 0 1-1.5-1.4l-1-11Z" />
+      <path d="M9 10.5V7a3 3 0 0 1 6 0v3.5" />
+    </svg>
+  )
+}
+
+export function CloseIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  )
+}
+
+export function CheckIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} strokeWidth={2.2} {...props}>
+      <path d="m5 12.5 4.5 4.5L19 7.5" />
+    </svg>
+  )
+}
