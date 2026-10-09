@@ -256,6 +256,61 @@ export const gifts: Gift[] = [
       'https://www.mercadolivre.com.br/escorredor-de-louca-tramontina-plurale-em-aco-inox-e-polipropileno-com-porta-talheres-grafite/p/MLB48955532?pdp_filters=item_id%3AMLB7580248052',
   },
   {
+    id: 'square-glass-bottles',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Kit 3 garrafas quadradas de vidro',
+    description: '1,1 L cada, tampa de metal',
+    priceInCents: 7790,
+    imageUrl: '/gifts/square-glass-bottles.webp',
+    productUrl:
+      'https://shopee.com.br/Garrafa-Quadrada-Flash-1-2-ou-3-unid-Vidro-%C3%81gua-Suco-1.100mL-Geladeira-Livre-BPA-i.987474974.22294714183?extraParams=%7B%22display_model_id%22%3A199188103025%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'swing-top-bottles',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Kit 3 garrafas de vidro com tampa hermética',
+    description: '1 L cada, transparentes',
+    priceInCents: 4699,
+    imageUrl: '/gifts/swing-top-bottles.webp',
+    productUrl:
+      'https://shopee.com.br/Kit-3-Garrafa-De-Vidro-%C3%81gua-Suco-Refrigerante-1l-Transparente-i.451432371.44078547823?extraParams=%7B%22display_model_id%22%3A360518939986%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'glass-pitcher-1l',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Jarra de vidro com tampa de inox',
+    description: 'Borossilicato, 1 L',
+    priceInCents: 2790,
+    imageUrl: '/gifts/glass-pitcher-1l.webp',
+    productUrl:
+      'https://shopee.com.br/Jarra-De-Vidro-Com-Tampa-Inox-Borossilicato-1-Litro-Suco-%C3%81gua-i.411617617.42532487108?extraParams=%7B%22display_model_id%22%3A118792946045%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'glass-pitcher-1-9l',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Jarra de vidro com filtro de inox',
+    description: 'Borossilicato, 1,9 L',
+    priceInCents: 3910,
+    imageUrl: '/gifts/glass-pitcher-1-9l.webp',
+    productUrl:
+      'https://shopee.com.br/Jarra-de-Vidro-Borossilicato-1-9L-com-Tampa-Filtro-Inox-para-Cozinha-e-Mesa-Posta-i.1344056234.42331936361?extraParams=%7B%22display_model_id%22%3A391100954881%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'porcelain-kettle',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Chaleira elétrica de porcelana',
+    description: 'Tuut Elegance, branca com dourado, 127 V',
+    priceInCents: 35055,
+    imageUrl: '/gifts/porcelain-kettle.webp',
+    productUrl:
+      'https://shopee.com.br/Chaleira-El%C3%A9trica-Porcelana-Elegance-Branco-com-Dourado-Tuut-127v-i.1009996356.22399189229?extraParams=%7B%22display_model_id%22%3A238795688192%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
     id: 'dishwasher',
     kind: 'pooled',
     roomId: 'kitchen',
@@ -301,6 +356,28 @@ export const gifts: Gift[] = [
     priceInCents: 25670,
     imageUrl: '/gifts/bath-towels.webp',
     productUrl: 'https://www.amazon.com.br/dp/B0GRVR1C36?th=1',
+  },
+  {
+    id: 'teka-towels-gray',
+    kind: 'simple',
+    roomId: 'bathroom',
+    name: 'Jogo de toalhas Teka Lumière',
+    description: '5 peças, algodão, cinza e branco',
+    priceInCents: 22049,
+    imageUrl: '/gifts/teka-towels-gray.webp',
+    productUrl:
+      'https://www.teka.com.br/jogo-de-toalha-05-pecas-100-algodao--lumire-823180000040510/p',
+  },
+  {
+    id: 'teka-towels-blue',
+    kind: 'simple',
+    roomId: 'bathroom',
+    name: 'Jogo de toalhas Teka Lumière',
+    description: '5 peças, algodão, azul',
+    priceInCents: 22049,
+    imageUrl: '/gifts/teka-towels-blue.webp',
+    productUrl:
+      'https://www.teka.com.br/jogo-de-toalha-05-pecas-100-algodao--lumire-823180000040510/p',
   },
   {
     id: 'bow-bathroom-set',
@@ -359,5 +436,38 @@ export const gifts: Gift[] = [
     suggestedSharesInCents: [5000, 10000, 20000],
     imageUrl: '/gifts/dance-pole.webp',
     productUrl: 'https://gaiapole.com.br/produtos/pole-retratil-inox/?variant=1492867912',
+  },
+  {
+    id: 'toilet',
+    kind: 'simple',
+    roomId: 'renovation',
+    name: 'Vaso sanitário monobloco',
+    description: 'Tubrax Diamante, cerâmica',
+    priceInCents: 65955,
+    imageUrl: '/gifts/toilet.webp',
+    productUrl:
+      'https://shopee.com.br/Vaso-Sanit%C3%A1rio-Monobloco-Cer%C3%A2mica-Modelo-Diamante-VAB0005-Tubrax-i.497552438.21098023117?extraParams=%7B%22display_model_id%22%3A119867452776%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'makita-tool-kit',
+    kind: 'simple',
+    roomId: 'gabriel',
+    name: 'Kit Makita 200 peças',
+    description: 'Brocas, bits e ferramentas na maleta',
+    priceInCents: 78042,
+    imageUrl: '/gifts/makita-tool-kit.webp',
+    productUrl:
+      'https://www.mercadolivre.com.br/jogo-makita-200-pecas-kit-brocas-maleta-ferramentas-d-37194/up/MLBU1169028076?pdp_filters=item_id%3AMLB4656731314',
+  },
+  {
+    id: 'makita-drill',
+    kind: 'simple',
+    roomId: 'gabriel',
+    name: 'Parafusadeira e furadeira de impacto Makita',
+    description: 'HP333, 12 V, com 2 baterias',
+    priceInCents: 57311,
+    imageUrl: '/gifts/makita-drill.webp',
+    productUrl:
+      'https://www.mercadolivre.com.br/parafusadeira-furadeira-impacto-makita-hp333-12v-2-baterias/up/MLBU5112746543?pdp_filters=item_id%3AMLB5205063617',
   },
 ]
