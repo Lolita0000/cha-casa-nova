@@ -442,6 +442,48 @@ export const gifts: Gift[] = [
       'https://loja.electrolux.com.br/lava-louca-electrolux-14-servicos-inox-com-programa-lava---seca-50-min--ls14e-/p',
   },
   {
+    id: 'boucle-round-pillows',
+    kind: 'simple',
+    roomId: 'living-room',
+    name: 'Kit 2 almofadas redondas bouclê',
+    description: '45 cm, cor rose',
+    priceInCents: 7999,
+    imageUrl: '/gifts/boucle-round-pillows.webp',
+    productUrl:
+      'https://shopee.com.br/Kit-2-Almofadas-Cheias-Redondas-Boucle-Bola-45x45-Com-Enchimento-Premium-Para-Sof%C3%A1-Sala-Decorativa-i.407946992.58263125593?extraParams=%7B%22display_model_id%22%3A119730415239%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'daisy-pillow',
+    kind: 'simple',
+    roomId: 'living-room',
+    name: 'Almofada flor margarida',
+    description: 'Pelúcia, 38 cm, branca com miolo rosa bebê',
+    imageUrl: '/gifts/daisy-pillow.webp',
+    productUrl:
+      'https://shopee.com.br/ALMOFADA-FLOR-DE-PELUCIA-MARGARIDA-6-P%C3%89TALAS-DE-38-CM-PELUCIA-DECORA%C3%87AO-DIA-DAS-MAES-i.753167899.22898121956?extraParams=%7B%22display_model_id%22%3A109872213874%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'boho-bow-pillows',
+    kind: 'simple',
+    roomId: 'living-room',
+    name: 'Kit 3 almofadas boho com laço',
+    description: 'Tons de bege',
+    priceInCents: 8541,
+    productUrl:
+      'https://shopee.com.br/Kit-3-Almofadas-Cheias-Estilo-Boho-Chic-com-La%C3%A7o-%E2%80%93-Exclusivo-Sofa-Cama-Posta-i.710952480.15661585729?extraParams=%7B%22display_model_id%22%3A115746919970%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'heart-plush-pillow',
+    kind: 'simple',
+    roomId: 'living-room',
+    name: 'Almofada de coração de pelúcia',
+    description: 'Pelo curto, rosa bebê',
+    priceInCents: 3990,
+    imageUrl: '/gifts/heart-plush-pillow.webp',
+    productUrl:
+      'https://shopee.com.br/Almofadas-Decorativas-De-Pel%C3%BAcia-Pelo-Curto-Luxo-Cora%C3%A7%C3%A3o-Para-Sof%C3%A1-i.284932680.8415067562?extraParams=%7B%22display_model_id%22%3A24322503379%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
     id: 'robot-vacuum',
     kind: 'pooled',
     roomId: 'living-room',
