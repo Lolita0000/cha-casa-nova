@@ -2,18 +2,22 @@ import { HeartIcon } from '@/components/icons/icons'
 import { buttonClassName } from '@/components/ui/buttonStyles'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { getProgress, isFunded } from '@/data/selectors'
-import { formatCentsShort } from '@/lib/format/currency'
+import { defaultAmountFor } from '@/features/cart/cart'
+import { useCart } from '@/features/cart/useCart'
+import { formatCents, formatCentsShort } from '@/lib/format/currency'
 import type { PooledGift } from '@/types/gift'
 
 import { GiftImage } from './GiftImage'
-import type { OpenGiftDialog } from './types'
+import type { OpenContribution } from './types'
 
 interface PooledGiftCardProps {
   gift: PooledGift
-  onOpen: OpenGiftDialog
+  onContribute: OpenContribution
 }
 
-export function PooledGiftCard({ gift, onOpen }: PooledGiftCardProps) {
+export function PooledGiftCard({ gift, onContribute }: PooledGiftCardProps) {
+  const { add, remove, open, amountFor } = useCart()
+  const amountInCart = amountFor(gift.id)
   const progress = getProgress(gift)
   const funded = isFunded(gift)
   const isDone = Boolean(gift.reservedBy) || funded
@@ -47,22 +51,41 @@ export function PooledGiftCard({ gift, onOpen }: PooledGiftCardProps) {
             </div>
             <ProgressBar value={progress} label={`Arrecadado para ${gift.name}`} className="mt-2" />
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
-              <button
-                type="button"
-                onClick={() => onOpen(gift, 'pix')}
-                className={buttonClassName({ variant: 'soft', size: 'sm' })}
-              >
-                Contribuir com uma parte
-              </button>
-              <button
-                type="button"
-                onClick={() => onOpen(gift, 'buy')}
-                className="text-sm font-bold underline decoration-rose-300 decoration-2 underline-offset-4 hover:text-rose-100"
-              >
-                Quero comprar ele inteiro
-              </button>
-            </div>
+            {amountInCart !== undefined ? (
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+                <p className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold">
+                  <HeartIcon className="size-4 text-rose-300" />
+                  {formatCents(amountInCart)} no seu carrinho
+                </p>
+                <button
+                  type="button"
+                  onClick={() => remove(gift.id)}
+                  className="text-sm font-bold underline decoration-rose-300 decoration-2 underline-offset-4 hover:text-rose-100"
+                >
+                  Remover
+                </button>
+              </div>
+            ) : (
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+                <button
+                  type="button"
+                  onClick={() => onContribute(gift)}
+                  className={buttonClassName({ variant: 'soft', size: 'sm' })}
+                >
+                  Contribuir com uma parte
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    add({ giftId: gift.id, amountInCents: defaultAmountFor(gift) })
+                    open()
+                  }}
+                  className="text-sm font-bold underline decoration-rose-300 decoration-2 underline-offset-4 hover:text-rose-100"
+                >
+                  Quero dar ele inteiro
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

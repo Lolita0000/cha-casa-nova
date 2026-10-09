@@ -46,8 +46,14 @@ Amounts are always stored in cents (`18000` = R$ 180,00).
 - `pooled`: expensive items funded in parts. `raisedInCents` drives the progress bar. Set
   `reservedBy` when a guest says they'll buy it outright, and it will show as taken.
 
-Every gift can also have `productUrl` and `imageUrl`. The product link shows up in the
-"Comprar o item" tab, next to a WhatsApp shortcut so the guest can ask you to mark it as reserved.
+Every gift can also have `productUrl` and `imageUrl`.
+
+### Cart
+
+Guests add gifts to a cart (kept in their browser's local storage). The cart shows the total and
+generates a single Pix code for it, plus a "Comprar os itens" tab with each product link and a
+WhatsApp shortcut so the guest can ask you to mark those items as reserved. Shared gifts ask for
+an amount before going into the cart.
 
 Rooms are defined in `src/data/rooms.ts`.
 
@@ -66,7 +72,7 @@ src/
   config/         Site configuration
   data/           Rooms, gifts and selectors
   features/       Page sections: hero, how-it-works, gifts, payment, free-contribution,
-                  palette, materials
+                  palette, materials, cart
   hooks/          Reusable hooks
   lib/            Framework-free helpers (pix, formatting, dates, whatsapp)
   types/          Domain types

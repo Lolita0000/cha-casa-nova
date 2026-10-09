@@ -3,11 +3,11 @@ import type { RoomWithGifts } from '@/data/selectors'
 import { PooledGiftCard } from './PooledGiftCard'
 import { getRoomAnchor } from './roomAnchor'
 import { SimpleGiftCard } from './SimpleGiftCard'
-import type { OpenGiftDialog } from './types'
+import type { OpenContribution } from './types'
 
-type RoomSectionProps = RoomWithGifts & { onOpen: OpenGiftDialog }
+type RoomSectionProps = RoomWithGifts & { onContribute: OpenContribution }
 
-export function RoomSection({ room, gifts, onOpen }: RoomSectionProps) {
+export function RoomSection({ room, gifts, onContribute }: RoomSectionProps) {
   const headingId = `${getRoomAnchor(room.id)}-title`
   const count = gifts.length
 
@@ -25,9 +25,9 @@ export function RoomSection({ room, gifts, onOpen }: RoomSectionProps) {
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {gifts.map((gift) =>
           gift.kind === 'simple' ? (
-            <SimpleGiftCard key={gift.id} gift={gift} onOpen={onOpen} />
+            <SimpleGiftCard key={gift.id} gift={gift} onContribute={onContribute} />
           ) : (
-            <PooledGiftCard key={gift.id} gift={gift} onOpen={onOpen} />
+            <PooledGiftCard key={gift.id} gift={gift} onContribute={onContribute} />
           ),
         )}
       </ul>

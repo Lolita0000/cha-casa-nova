@@ -94,3 +94,9 @@
       0 0 70px 18px color-mix(in oklab, var(--color-rose-200) 90%, transparent);
   }
 }
+
+@keyframes cart-bump {
+  40% {
+    transform: scale(1.18);
+  }
+}
