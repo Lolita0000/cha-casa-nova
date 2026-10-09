@@ -24,7 +24,6 @@ export function HousePalette() {
                 aria-hidden="true"
               />
               <p className="mt-4 font-bold text-ink-900">{color.name}</p>
-              <p className="mt-0.5 text-sm text-ash-600">{color.usage}</p>
             </li>
           ))}
         </ul>
