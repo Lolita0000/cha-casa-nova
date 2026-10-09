@@ -6,15 +6,15 @@ import type { RoomWithGifts } from '@/data/selectors'
 import { RoomFilter } from './RoomFilter'
 import type { RoomFilterValue } from './roomFilterOptions'
 import { RoomSection } from './RoomSection'
-import type { OpenGiftDialog } from './types'
+import type { OpenContribution } from './types'
 import { useRoomFilter } from './useRoomFilter'
 
 interface GiftListProps {
   giftsByRoom: RoomWithGifts[]
-  onOpen: OpenGiftDialog
+  onContribute: OpenContribution
 }
 
-export function GiftList({ giftsByRoom, onOpen }: GiftListProps) {
+export function GiftList({ giftsByRoom, onContribute }: GiftListProps) {
   const listStartRef = useRef<HTMLDivElement>(null)
   const { options, selected, setSelected, visibleRooms } = useRoomFilter(giftsByRoom)
 
@@ -45,7 +45,7 @@ export function GiftList({ giftsByRoom, onOpen }: GiftListProps) {
             <div ref={listStartRef} className="scroll-mt-4" />
             <RoomFilter options={options} value={selected} onChange={handleFilterChange} />
             {visibleRooms.map(({ room, gifts }) => (
-              <RoomSection key={room.id} room={room} gifts={gifts} onOpen={onOpen} />
+              <RoomSection key={room.id} room={room} gifts={gifts} onContribute={onContribute} />
             ))}
           </>
         ) : (

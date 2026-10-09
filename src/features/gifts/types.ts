@@ -1,5 +1,4 @@
 import type { Gift } from '@/types/gift'
 
-export type GiftDialogTab = 'pix' | 'card' | 'buy'
-
-export type OpenGiftDialog = (gift: Gift, tab?: GiftDialogTab) => void
+/** Opens the amount picker for gifts guests contribute to in parts. */
+export type OpenContribution = (gift: Gift) => void

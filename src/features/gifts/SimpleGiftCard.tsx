@@ -1,16 +1,16 @@
-import { buttonClassName } from '@/components/ui/buttonStyles'
 import { formatCentsShort } from '@/lib/format/currency'
 import type { SimpleGift } from '@/types/gift'
 
+import { CartToggleButton } from './CartToggleButton'
 import { GiftImage } from './GiftImage'
-import type { OpenGiftDialog } from './types'
+import type { OpenContribution } from './types'
 
 interface SimpleGiftCardProps {
   gift: SimpleGift
-  onOpen: OpenGiftDialog
+  onContribute: OpenContribution
 }
 
-export function SimpleGiftCard({ gift, onOpen }: SimpleGiftCardProps) {
+export function SimpleGiftCard({ gift, onContribute }: SimpleGiftCardProps) {
   return (
     <li className="flex flex-col rounded-[1.75rem] bg-white p-2.5">
       <GiftImage src={gift.imageUrl} className="aspect-square w-full rounded-[1.35rem]" />
@@ -27,14 +27,7 @@ export function SimpleGiftCard({ gift, onOpen }: SimpleGiftCardProps) {
           ) : (
             <p className="text-sm font-semibold text-ash-500">Valor a definir</p>
           )}
-          <button
-            type="button"
-            onClick={() => onOpen(gift)}
-            aria-label={`Presentear: ${gift.name}`}
-            className={buttonClassName({ variant: 'soft', size: 'sm' })}
-          >
-            Presentear
-          </button>
+          <CartToggleButton gift={gift} onContribute={onContribute} />
         </div>
       </div>
     </li>

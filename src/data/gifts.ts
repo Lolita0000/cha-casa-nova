@@ -147,6 +147,57 @@ export const gifts: Gift[] = [
       'https://shopee.com.br/Moedor-Pimenta-Sal-Condimento-Tempero-Gr%C3%A3o-Manual-De-Madeira-21-cm-ESCURO-i.329981308.20729683496?extraParams=%7B%22display_model_id%22%3A211534228899%2C%22model_selection_logic%22%3A3%7D',
   },
   {
+    id: 'hand-blender',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Mixer 3 em 1 Oster',
+    description: '750 W, inox e preto, 220 V',
+    priceInCents: 21841,
+    imageUrl: '/gifts/hand-blender.webp',
+    productUrl:
+      'https://www.magazineluiza.com.br/mixer-3-em-1-oster-750w-inox-e-preto-power-omix570-velocidade-ajustavel/p/240244300/ep/mixr/',
+  },
+  {
+    id: 'stand-mixer',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Batedeira planetária Britânia rosa',
+    description: '900 W, tigela de 5 L, 220 V',
+    priceInCents: 34260,
+    imageUrl: '/gifts/stand-mixer.webp',
+    productUrl:
+      'https://www.mercadolivre.com.br/batedeira-planetaria-britania-rosa-900w-tigela-de-5l-bbpe02a/up/MLBU5221110112?pdp_filters=item_id%3AMLB7652004436',
+  },
+  {
+    id: 'stainless-utensil-set',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Kit 10 utensílios de inox',
+    description: 'Concha, escumadeira, pegador de massa e salada e mais',
+    priceInCents: 5998,
+    productUrl:
+      'https://shopee.com.br/Kit-Utensilio-Para-Cozinha-100-Inox-Colher-Concha-Escumadeira-Pegador-Massa-Salada-Mini-concha-i.1472422873.29493993164?extraParams=%7B%22display_model_id%22%3A244139429599%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'teak-cutting-board',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Tábua Tramontina Cubus de teca',
+    description: 'Madeira invertida, 45 x 34 cm',
+    priceInCents: 23740,
+    productUrl:
+      'https://www.tramontina.com.br/tabua-cubus-para-churrasco-tramontina-retangular-em-madeira-invertida-teca-com-acabamento-em-oleo-mineral-45x34-cm./13460351.html',
+  },
+  {
+    id: 'bbq-board',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Tábua de churrasco Tramontina',
+    description: 'Madeira, modelo 22399',
+    priceInCents: 10326,
+    productUrl: 'https://www.amazon.com.br/dp/B07GS3MLJX?psc=1',
+  },
+  {
     id: 'dishwasher',
     kind: 'pooled',
     roomId: 'kitchen',

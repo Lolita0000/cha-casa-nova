@@ -33,7 +33,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
       aria-labelledby={titleId}
       onClose={onClose}
       onClick={handleBackdropClick}
-      className="m-auto max-h-[calc(100svh-2rem)] w-[min(34rem,calc(100%-2rem))] rounded-[2rem] bg-white p-0 text-ink-800 shadow-[0_30px_80px_-30px] shadow-ink-900/40 backdrop:bg-ash-700/50 backdrop:backdrop-blur-[2px] open:animate-[dialog-in_200ms_ease-out]"
+      className="m-auto max-h-[calc(100svh-2rem)] w-[min(34rem,calc(100%-2rem))] overflow-y-auto overscroll-contain rounded-[2rem] bg-white p-0 text-ink-800 shadow-[0_30px_80px_-30px] shadow-ink-900/40 backdrop:bg-ash-700/50 backdrop:backdrop-blur-[2px] open:animate-[dialog-in_200ms_ease-out]"
     >
       <div className="p-6 sm:p-8">
         <div className="flex items-start justify-between gap-6">

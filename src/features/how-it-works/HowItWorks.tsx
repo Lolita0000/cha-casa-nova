@@ -8,7 +8,7 @@ const explanations = [
   },
   {
     title: 'Itens do dia a dia',
-    text: 'Escolha o item e mande o valor dele por Pix ou cartão. Pode escolher o mesmo item que outra pessoa, sem problema nenhum.',
+    text: 'Coloque no carrinho os presentes que quiser e pague tudo de uma vez por Pix. Pode escolher o mesmo item que outra pessoa, sem problema nenhum.',
   },
   {
     title: 'Itens maiores',
@@ -41,9 +41,9 @@ export function HowItWorks() {
             <h3 className="font-display text-2xl text-ink-900">Prefere comprar o item?</h3>
             <p className="mt-1 leading-relaxed text-ash-600">
               Caso você queira comprar o item e não mandar o Pix, nos avise que deixaremos o item
-              como reservado. Em cada presente tem a aba{' '}
-              <strong className="text-ink-800">Comprar o item</strong>, com o link do produto e um
-              atalho pra falar com a gente.
+              como reservado. No carrinho tem a aba{' '}
+              <strong className="text-ink-800">Comprar os itens</strong>, com o link de cada produto
+              e um atalho pra falar com a gente.
             </p>
           </div>
         </aside>

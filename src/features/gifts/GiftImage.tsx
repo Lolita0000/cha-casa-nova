@@ -4,10 +4,12 @@ import { publicAsset } from '@/lib/assets/publicAsset'
 interface GiftImageProps {
   src?: string
   className?: string
+  /** Smaller placeholder icon for thumbnails. */
+  compact?: boolean
 }
 
 /** Product photo, or a knitted placeholder while the real photo isn't set. */
-export function GiftImage({ src, className = '' }: GiftImageProps) {
+export function GiftImage({ src, className = '', compact = false }: GiftImageProps) {
   if (src) {
     return (
       <img
@@ -21,8 +23,10 @@ export function GiftImage({ src, className = '' }: GiftImageProps) {
 
   return (
     <div className={`grid place-items-center bg-rose-200 knit ${className}`}>
-      <span className="grid size-14 place-items-center rounded-full bg-white/80 text-rose-500">
-        <GiftIcon className="size-7" />
+      <span
+        className={`grid place-items-center rounded-full bg-white/80 text-rose-500 ${compact ? 'size-8' : 'size-14'}`}
+      >
+        <GiftIcon className={compact ? 'size-4' : 'size-7'} />
       </span>
     </div>
   )
