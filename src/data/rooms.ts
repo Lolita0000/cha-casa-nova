@@ -7,4 +7,11 @@ export const rooms: Room[] = [
   { id: 'bedroom', name: 'Quarto' },
   { id: 'bathroom', name: 'Banheiro' },
   { id: 'laundry', name: 'Lavanderia' },
+  { id: 'renovation', name: 'Reforma' },
+  { id: 'aninha', name: 'Aninha' },
+  {
+    id: 'gabriel',
+    name: 'Gabriel',
+    emptyMessage: 'O Gabriel ainda está escolhendo os presentes dele.',
+  },
 ]
