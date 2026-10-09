@@ -62,3 +62,11 @@ export function CheckIcon(props: IconProps) {
     </svg>
   )
 }
+
+export function ChevronIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} strokeWidth={2.2} {...props}>
+      <path d="m9 5 7 7-7 7" />
+    </svg>
+  )
+}
