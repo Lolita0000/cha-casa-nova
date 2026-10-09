@@ -81,6 +81,39 @@ export const gifts: Gift[] = [
       'https://shopee.com.br/4-Pratos-em-Porcelana-Cora%C3%A7%C3%A3o-Beads-Vermelho-Wolff-i.669735484.22797489110?extraParams=%7B%22display_model_id%22%3A239403897197%2C%22model_selection_logic%22%3A3%7D',
   },
   {
+    id: 'butterfly-dinner-set',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Jogo de jantar New Butterfly',
+    description: 'Cristal com fio de ouro, 16 peças',
+    priceInCents: 33383,
+    imageUrl: '/gifts/butterfly-dinner-set.webp',
+    productUrl:
+      'https://shopee.com.br/Jogo-de-Jantar-16-pe%C3%A7as-New-Butterfly-Fio-de-Ouro-Cristal-i.869809385.56454752318?extraParams=%7B%22display_model_id%22%3A395439900840%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'crystal-cheese-dome',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Queijeira de cristal',
+    description: 'Com tampa e pé, pra queijos e doces',
+    priceInCents: 5990,
+    imageUrl: '/gifts/crystal-cheese-dome.webp',
+    productUrl:
+      'https://shopee.com.br/Queijeira-de-Cristal-Luxo-Para-Queijos-Doce-Sobremesas-Decora%C3%A7%C3%A3o-i.328731077.45715898535?extraParams=%7B%22display_model_id%22%3A421356065249%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'bow-cups',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Kit 4 xícaras de vidro com laço rosa',
+    description: 'Com pires, 110 ml',
+    priceInCents: 16996,
+    imageUrl: '/gifts/bow-cups.webp',
+    productUrl:
+      'https://shopee.com.br/Kit-4-X%C3%ADcara-com-Pires-de-Vidro-com-Detalhe-de-La%C3%A7o-Rosa-110ml-i.938827735.50962448480?extraParams=%7B%22display_model_id%22%3A371079655422%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
     id: 'ceramic-serving-dish',
     kind: 'simple',
     roomId: 'kitchen',
@@ -601,5 +634,18 @@ export const gifts: Gift[] = [
     imageUrl: '/gifts/makita-drill.webp',
     productUrl:
       'https://www.mercadolivre.com.br/parafusadeira-furadeira-impacto-makita-hp333-12v-2-baterias/up/MLBU5112746543?pdp_filters=item_id%3AMLB5205063617',
+  },
+  {
+    id: 'telescope',
+    kind: 'pooled',
+    roomId: 'gabriel',
+    name: 'Telescópio refrator Svbony SV520',
+    description: 'Conjunto completo, 90 mm, f/8,9',
+    goalInCents: 199900,
+    raisedInCents: 0,
+    suggestedSharesInCents: [5000, 10000, 20000],
+    imageUrl: '/gifts/telescope.webp',
+    productUrl:
+      'https://fotonastro.com.br/produto/svbony-sv520-telescopio-refrator-conjunto-completo-90mm-f-8-9/',
   },
 ]
