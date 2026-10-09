@@ -487,6 +487,19 @@ export const gifts: Gift[] = [
       'https://shopee.com.br/Varal-Sanfonado-Refor%C3%A7ado-Mega-Forte-110-cm-Parede-Retr%C3%A1til-Alum%C3%ADnio-8-varetas-Bitenfer-Varais-i.1125965727.20999236260?extraParams=%7B%22display_model_id%22%3A139644735914%2C%22model_selection_logic%22%3A3%7D',
   },
   {
+    id: 'washer-dryer',
+    kind: 'pooled',
+    roomId: 'laundry',
+    name: 'Lava e seca Samsung',
+    description: 'Smart AI Control WD13FG, inox, 13 kg',
+    goalInCents: 413726,
+    raisedInCents: 0,
+    suggestedSharesInCents: [5000, 10000, 20000],
+    imageUrl: '/gifts/washer-dryer.webp',
+    productUrl:
+      'https://www.magazineluiza.com.br/lava-e-seca-smart-samsung-ai-control-wd13fg-inox-13kg/p/hh9bfdg8d1/ed/ela1/',
+  },
+  {
     id: 'vinyl-flooring',
     kind: 'pooled',
     roomId: 'renovation',
