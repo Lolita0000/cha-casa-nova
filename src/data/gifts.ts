@@ -374,6 +374,28 @@ export const gifts: Gift[] = [
       'https://shopee.com.br/Chaleira-El%C3%A9trica-Porcelana-Elegance-Branco-com-Dourado-Tuut-127v-i.1009996356.22399189229?extraParams=%7B%22display_model_id%22%3A238795688192%2C%22model_selection_logic%22%3A3%7D',
   },
   {
+    id: 'gold-thermos',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Garrafa térmica dourada',
+    description: '1 L, cor branca (modelo Princesa)',
+    priceInCents: 15191,
+    imageUrl: '/gifts/gold-thermos.webp',
+    productUrl:
+      'https://shopee.com.br/Garrafa-T%C3%A9rmica-Luxo-1-Litro-Dourada-Caf%C3%A9-Ch%C3%A1-Elegante-i.380123531.22099692317?extraParams=%7B%22display_model_id%22%3A228810866849%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
+    id: 'khadija-thermos',
+    kind: 'simple',
+    roomId: 'kitchen',
+    name: 'Garrafa térmica Khadija',
+    description: 'Tuut, 1 L, bege e dourado',
+    priceInCents: 9215,
+    imageUrl: '/gifts/khadija-thermos.webp',
+    productUrl:
+      'https://shopee.com.br/Garrafa-T%C3%A9rmica-Khadija-1L-Bege-E-Dourado-Conserva-Temperatura-Design-Sofisticado-Tuut-i.469356888.58264212735?extraParams=%7B%22display_model_id%22%3A239446408498%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
     id: 'dishwasher',
     kind: 'pooled',
     roomId: 'kitchen',
