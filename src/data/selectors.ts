@@ -5,11 +5,11 @@ export interface RoomWithGifts {
   gifts: Gift[]
 }
 
-/** Groups gifts by room, keeping room order and skipping empty rooms. */
+/** Groups gifts by room, keeping room order. Empty rooms are skipped unless they have an empty message. */
 export function groupGiftsByRoom(rooms: Room[], gifts: Gift[]): RoomWithGifts[] {
   return rooms
     .map((room) => ({ room, gifts: gifts.filter((gift) => gift.roomId === room.id) }))
-    .filter(({ gifts }) => gifts.length > 0)
+    .filter(({ room, gifts }) => gifts.length > 0 || Boolean(room.emptyMessage))
 }
 
 export function getProgress(gift: PooledGift): number {
