@@ -469,6 +469,7 @@ export const gifts: Gift[] = [
     name: 'Kit 3 almofadas boho com laço',
     description: 'Tons de bege',
     priceInCents: 8541,
+    imageUrl: '/gifts/boho-bow-pillows.webp',
     productUrl:
       'https://shopee.com.br/Kit-3-Almofadas-Cheias-Estilo-Boho-Chic-com-La%C3%A7o-%E2%80%93-Exclusivo-Sofa-Cama-Posta-i.710952480.15661585729?extraParams=%7B%22display_model_id%22%3A115746919970%2C%22model_selection_logic%22%3A3%7D',
   },
