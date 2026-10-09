@@ -17,20 +17,28 @@ export function RoomSection({ room, gifts, onContribute }: RoomSectionProps) {
         <h3 id={headingId} className="font-display text-3xl text-ink-800 sm:text-4xl">
           {room.name}
         </h3>
-        <span className="text-sm font-semibold text-ash-500">
-          {count} {count === 1 ? 'presente' : 'presentes'}
-        </span>
+        {count > 0 && (
+          <span className="text-sm font-semibold text-ash-500">
+            {count} {count === 1 ? 'presente' : 'presentes'}
+          </span>
+        )}
       </div>
 
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {gifts.map((gift) =>
-          gift.kind === 'simple' ? (
-            <SimpleGiftCard key={gift.id} gift={gift} onContribute={onContribute} />
-          ) : (
-            <PooledGiftCard key={gift.id} gift={gift} onContribute={onContribute} />
-          ),
-        )}
-      </ul>
+      {count === 0 ? (
+        <p className="rounded-[1.75rem] border-2 border-dashed border-rose-300 bg-white p-8 text-ash-600">
+          {room.emptyMessage}
+        </p>
+      ) : (
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {gifts.map((gift) =>
+            gift.kind === 'simple' ? (
+              <SimpleGiftCard key={gift.id} gift={gift} onContribute={onContribute} />
+            ) : (
+              <PooledGiftCard key={gift.id} gift={gift} onContribute={onContribute} />
+            ),
+          )}
+        </ul>
+      )}
     </section>
   )
 }
