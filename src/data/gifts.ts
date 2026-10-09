@@ -380,6 +380,17 @@ export const gifts: Gift[] = [
       'https://www.teka.com.br/jogo-de-toalha-05-pecas-100-algodao--lumire-823180000040510/p',
   },
   {
+    id: 'electric-shower',
+    kind: 'simple',
+    roomId: 'bathroom',
+    name: 'Chuveiro Lorenzetti Acqua Duo',
+    description: 'Preto e cromo, 7800 W, 220 V',
+    priceInCents: 56673,
+    imageUrl: '/gifts/electric-shower.webp',
+    productUrl:
+      'https://shopee.com.br/Chuveiro-Lorenzetti-Acqua-Duo-Preto-e-Cromo-7800w-220v-i.805449066.19322361603?extraParams=%7B%22display_model_id%22%3A181170831508%2C%22model_selection_logic%22%3A3%7D',
+  },
+  {
     id: 'bow-bathroom-set',
     kind: 'simple',
     roomId: 'bathroom',
@@ -436,6 +447,18 @@ export const gifts: Gift[] = [
     suggestedSharesInCents: [5000, 10000, 20000],
     imageUrl: '/gifts/dance-pole.webp',
     productUrl: 'https://gaiapole.com.br/produtos/pole-retratil-inox/?variant=1492867912',
+  },
+  {
+    id: 'apartment-painting',
+    kind: 'pooled',
+    roomId: 'renovation',
+    name: 'Pintura do apartamento',
+    description: 'Valor aproximado pra pintar o apartamento todo. Contribua com o quanto quiser.',
+    goalInCents: 200000,
+    raisedInCents: 0,
+    suggestedSharesInCents: [5000, 10000, 20000],
+    imageUrl: '/gifts/apartment-painting.webp',
+    allowFullPurchase: false,
   },
   {
     id: 'toilet',
