@@ -2,10 +2,16 @@ export interface SiteConfig {
   coupleNames: readonly [string, string]
   /** Each detail is only shown once it is filled in. */
   event: {
-    /** ISO date with timezone offset, e.g. '2026-11-21T15:00:00-03:00'. */
-    startsAt?: string
+    /** Party day, 'YYYY-MM-DD'. */
+    date?: string
+    /** Start time, 'HH:mm'. Leave empty until it is decided. */
+    time?: string
     addressLine?: string
+    /** Second address line, e.g. the building name. */
+    addressDetail?: string
     mapsUrl?: string
+    /** Guests confirm presence up to this many days before the party. */
+    rsvpDaysBefore: number
   }
   pix: {
     key: string
@@ -23,7 +29,13 @@ export interface SiteConfig {
 export const siteConfig: SiteConfig = {
   coupleNames: ['Aninha', 'Gabriel'],
 
-  event: {},
+  event: {
+    date: '2026-11-21',
+    addressLine: 'QN 508, Samambaia, Brasília - DF, 72312-200',
+    addressDetail: 'Residencial Sienna',
+    mapsUrl: 'https://maps.app.goo.gl/N5FMducxH5i5w4Q56',
+    rsvpDaysBefore: 7,
+  },
 
   pix: {
     /** Pix key: e-mail, phone (+55...), CPF or random key. */

@@ -7,15 +7,38 @@ import { Tabs, type TabItem } from '@/components/ui/Tabs'
 import { siteConfig } from '@/config/site'
 import { CardPayment } from '@/features/payment/CardPayment'
 import { PixPayment } from '@/features/payment/PixPayment'
+import { GiftConfirmation } from '@/features/registry/GiftConfirmation'
+import { useGiftStatus } from '@/features/registry/useGiftStatus'
 
 type FreeTab = 'pix' | 'card'
+
+/** Free contributions are stored like any other gift, under this id. */
+const FREE_CONTRIBUTION = { giftId: 'pixzinho', giftName: 'Pixzinho pra casa' }
 
 export function FreeContribution() {
   const [isOpen, setIsOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<FreeTab>('pix')
+  const [isConfirming, setIsConfirming] = useState(false)
+  const { refresh } = useGiftStatus()
+
+  function close() {
+    setIsOpen(false)
+    setIsConfirming(false)
+  }
 
   const tabs: TabItem<FreeTab>[] = [
-    { id: 'pix', label: 'Pix', content: <PixPayment description="Cha de casa nova" /> },
+    {
+      id: 'pix',
+      label: 'Pix',
+      content: (
+        <>
+          <PixPayment description="Cha de casa nova" />
+          <Button variant="soft" onClick={() => setIsConfirming(true)} className="mt-5 w-full">
+            Já fiz o Pix
+          </Button>
+        </>
+      ),
+    },
     ...(siteConfig.openAmountCardUrl
       ? [
           {
@@ -49,8 +72,21 @@ export function FreeContribution() {
         </div>
       </Container>
 
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} title="Um pixzinho pra casa">
-        {tabs.length > 1 ? (
+      <Dialog
+        open={isOpen}
+        onClose={close}
+        title={isConfirming ? 'Confirmar pixzinho' : 'Um pixzinho pra casa'}
+      >
+        {isConfirming ? (
+          <GiftConfirmation
+            items={[]}
+            defaultMethod="pix"
+            allowPurchase={false}
+            customAmountFor={FREE_CONTRIBUTION}
+            onBack={() => setIsConfirming(false)}
+            onConfirmed={refresh}
+          />
+        ) : tabs.length > 1 ? (
           <Tabs
             label="Forma de pagamento"
             tabs={tabs}

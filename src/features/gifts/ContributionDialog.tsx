@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Dialog } from '@/components/ui/Dialog'
 import { useCart } from '@/features/cart/useCart'
+import { useLiveGift } from '@/features/registry/useLiveGift'
 import { formatCents, formatCentsShort } from '@/lib/format/currency'
 import type { Gift } from '@/types/gift'
 
@@ -28,7 +29,8 @@ interface ContributionFormProps {
   onDone: () => void
 }
 
-function ContributionForm({ gift, onDone }: ContributionFormProps) {
+function ContributionForm({ gift: listedGift, onDone }: ContributionFormProps) {
+  const gift = useLiveGift(listedGift)
   const { add } = useCart()
   const remaining =
     gift.kind === 'pooled' ? Math.max(gift.goalInCents - gift.raisedInCents, 0) : undefined

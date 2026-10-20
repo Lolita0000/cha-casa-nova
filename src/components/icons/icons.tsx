@@ -70,3 +70,21 @@ export function ChevronIcon(props: IconProps) {
     </svg>
   )
 }
+
+export function PinIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" />
+      <circle cx="12" cy="10" r="2.4" />
+    </svg>
+  )
+}
+
+export function CalendarIcon(props: IconProps) {
+  return (
+    <svg {...baseProps} {...props}>
+      <rect x="4" y="5.5" width="16" height="14.5" rx="2.5" />
+      <path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" />
+    </svg>
+  )
+}
