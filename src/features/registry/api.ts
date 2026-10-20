@@ -6,6 +6,8 @@ import type {
   GiftRecordStatus,
   GiftRegistration,
   GiftMethod,
+  Rsvp,
+  RsvpRegistration,
 } from './types'
 
 export class BackendUnavailableError extends Error {
@@ -100,5 +102,43 @@ export async function updateRecordStatus(id: string, status: GiftRecordStatus): 
 
 export async function deleteRecord(id: string): Promise<void> {
   const { error } = await requireClient().from('gift_records').delete().eq('id', id)
+  if (error) throw new Error(error.message)
+}
+
+export async function registerRsvp(registration: RsvpRegistration): Promise<string> {
+  const { data, error } = await requireClient().rpc('register_rsvp', {
+    p_guest_names: registration.guestNames,
+    p_attending: registration.attending,
+    p_message: registration.message ?? null,
+  })
+  if (error) throw new Error(error.message)
+  return data as string
+}
+
+interface RsvpRow {
+  id: string
+  created_at: string
+  guest_names: string[]
+  attending: boolean
+  message: string | null
+}
+
+export async function fetchRsvps(): Promise<Rsvp[]> {
+  const { data, error } = await requireClient()
+    .from('rsvps')
+    .select('id, created_at, guest_names, attending, message')
+    .order('created_at', { ascending: false })
+  if (error) throw new Error(error.message)
+  return ((data ?? []) as RsvpRow[]).map((row) => ({
+    id: row.id,
+    createdAt: row.created_at,
+    guestNames: row.guest_names,
+    attending: row.attending,
+    message: row.message,
+  }))
+}
+
+export async function deleteRsvp(id: string): Promise<void> {
+  const { error } = await requireClient().from('rsvps').delete().eq('id', id)
   if (error) throw new Error(error.message)
 }

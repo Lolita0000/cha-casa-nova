@@ -7,6 +7,10 @@ import { siteConfig } from '@/config/site'
 import { formatCents, reaisToCents } from '@/lib/format/currency'
 import { isBackendConfigured } from '@/lib/supabase/client'
 import { buildWhatsAppUrl } from '@/lib/whatsapp'
+import { rsvpDeadline } from '@/config/event'
+import { RsvpForm } from '@/features/rsvp/RsvpForm'
+import { useRsvp } from '@/features/rsvp/useRsvp'
+import { formatShortDate, isOnOrBefore } from '@/lib/date/event'
 
 import { registerGift } from './api'
 import { cleanGiverNames, joinNames, validateGiverNames } from './giverNames'
@@ -96,31 +100,10 @@ export function GiftConfirmation({
 
   if (step.name === 'done') {
     return (
-      <div className="text-center">
-        <span className="mx-auto grid size-14 place-items-center rounded-full bg-rose-100 text-rose-500">
-          <HeartIcon className="size-7" />
-        </span>
-        <p className="mt-4 font-display text-2xl text-ink-900">
-          Obrigado, {joinNames(step.names)}!
-        </p>
-        <p className="mt-2 text-ash-600">
-          {step.method === 'pix'
-            ? 'Seu Pix ficou registrado aqui na lista.'
-            : 'Esses itens ficaram marcados como reservados.'}{' '}
-          Agora é só avisar a gente.
-        </p>
-        <a
-          href={buildWhatsAppUrl(
-            siteConfig.whatsappNumber,
-            buildNotifyMessage(step.method, step.names, step.items),
-          )}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonClassName({ className: 'mt-6 w-full' })}
-        >
-          Avisar {coupleNames} no WhatsApp
-        </a>
-      </div>
+      <>
+        <GiftThanks names={step.names} method={step.method} items={step.items} />
+        <RsvpPrompt names={step.names} />
+      </>
     )
   }
 
@@ -243,5 +226,75 @@ function MethodOption({ checked, onSelect, title, detail }: MethodOptionProps) {
         <span className="block text-sm text-ash-600">{detail}</span>
       </span>
     </label>
+  )
+}
+
+interface GiftThanksProps {
+  names: string[]
+  method: GiftMethod
+  items: GiftRecordItemInput[]
+}
+
+function GiftThanks({ names, method, items }: GiftThanksProps) {
+  return (
+    <div className="text-center">
+      <span className="mx-auto grid size-14 place-items-center rounded-full bg-rose-100 text-rose-500">
+        <HeartIcon className="size-7" />
+      </span>
+      <p className="mt-4 font-display text-2xl text-ink-900">Obrigado, {joinNames(names)}!</p>
+      <p className="mt-2 text-ash-600">
+        {method === 'pix'
+          ? 'Seu Pix ficou registrado aqui na lista.'
+          : 'Esses itens ficaram marcados como reservados.'}{' '}
+        Agora é só avisar a gente.
+      </p>
+      <a
+        href={buildWhatsAppUrl(siteConfig.whatsappNumber, buildNotifyMessage(method, names, items))}
+        target="_blank"
+        rel="noreferrer"
+        className={buttonClassName({ className: 'mt-6 w-full' })}
+      >
+        Avisar {coupleNames} no WhatsApp
+      </a>
+    </div>
+  )
+}
+
+/** Right after a gift is the easiest moment to also confirm presence. */
+function RsvpPrompt({ names }: { names: string[] }) {
+  const { confirmed } = useRsvp()
+  const [isOpen, setIsOpen] = useState(false)
+
+  if (rsvpDeadline && !isOnOrBefore(rsvpDeadline)) return null
+
+  if (isOpen) {
+    return (
+      <div className="mt-8 border-t-2 border-ash-100 pt-6">
+        <p className="mb-5 font-display text-2xl text-ink-900">Confirmar presença</p>
+        <RsvpForm initialNames={names} />
+      </div>
+    )
+  }
+
+  if (confirmed) {
+    return (
+      <p className="mt-6 text-center text-sm text-ash-600">
+        Sua presença já está confirmada, não precisa confirmar de novo.
+      </p>
+    )
+  }
+
+  return (
+    <div className="mt-8 rounded-3xl bg-rose-50 p-5 text-left">
+      <p className="font-bold text-ink-900">E aí, vai estar na festa?</p>
+      <p className="mt-1 text-sm text-ash-600">
+        {rsvpDeadline
+          ? `Confirme sua presença até ${formatShortDate(rsvpDeadline)}, pra gente passar seu nome pro porteiro.`
+          : 'Confirme sua presença pra gente passar seu nome pro porteiro.'}
+      </p>
+      <Button variant="soft" size="sm" onClick={() => setIsOpen(true)} className="mt-4">
+        Confirmar presença
+      </Button>
+    </div>
   )
 }

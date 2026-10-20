@@ -14,6 +14,9 @@ import { HowItWorks } from '@/features/how-it-works/HowItWorks'
 import { MaterialsNote } from '@/features/materials/MaterialsNote'
 import { HousePalette } from '@/features/palette/HousePalette'
 import { GiftStatusProvider } from '@/features/registry/GiftStatusProvider'
+import { RsvpDialog } from '@/features/rsvp/RsvpDialog'
+import { RsvpProvider } from '@/features/rsvp/RsvpProvider'
+import { RsvpSection } from '@/features/rsvp/RsvpSection'
 
 const giftsByRoom = groupGiftsByRoom(rooms, gifts)
 
@@ -21,22 +24,26 @@ export function App() {
   const contribution = useContributionDialog()
 
   return (
-    <GiftStatusProvider>
-      <CartProvider gifts={gifts}>
-        <Hero />
-        <main>
-          <HowItWorks />
-          <GiftList giftsByRoom={giftsByRoom} onContribute={contribution.open} />
-          <FreeContribution />
-          <HousePalette />
-          <MaterialsNote />
-        </main>
-        <Footer />
+    <RsvpProvider>
+      <GiftStatusProvider>
+        <CartProvider gifts={gifts}>
+          <Hero />
+          <main>
+            <RsvpSection />
+            <HowItWorks />
+            <GiftList giftsByRoom={giftsByRoom} onContribute={contribution.open} />
+            <FreeContribution />
+            <HousePalette />
+            <MaterialsNote />
+          </main>
+          <Footer />
 
-        <ContributionDialog gift={contribution.gift} onClose={contribution.close} />
-        <CartDialog />
-        <CartButton />
-      </CartProvider>
-    </GiftStatusProvider>
+          <ContributionDialog gift={contribution.gift} onClose={contribution.close} />
+          <CartDialog />
+          <CartButton />
+          <RsvpDialog />
+        </CartProvider>
+      </GiftStatusProvider>
+    </RsvpProvider>
   )
 }

@@ -1,22 +1,25 @@
 import { buttonClassName } from '@/components/ui/buttonStyles'
 import { Container } from '@/components/ui/Container'
+import { rsvpDeadline } from '@/config/event'
 import { siteConfig } from '@/config/site'
-import { daysUntil, describeDaysLeft } from '@/lib/date/event'
+import { useRsvp } from '@/features/rsvp/useRsvp'
+import { daysUntil, describeDaysLeft, formatShortDate, isOnOrBefore } from '@/lib/date/event'
 
 import { EventDetails } from './EventDetails'
 import { LivingRoomIllustration } from './LivingRoomIllustration'
 
 export function Hero() {
   const { coupleNames, event } = siteConfig
-  const eventDate = event.startsAt ? new Date(event.startsAt) : undefined
+  const { confirmed, open: openRsvp } = useRsvp()
+  const isRsvpOpen = !rsvpDeadline || isOnOrBefore(rsvpDeadline)
 
   return (
     <header className="overflow-hidden rounded-b-[3rem] bg-rose-100 md:rounded-b-[4rem]">
       <Container className="flex items-center justify-between py-6">
         <p className="font-display text-xl text-ink-800">{coupleNames.join(' & ')}</p>
-        {eventDate && (
-          <p className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-rose-700">
-            {describeDaysLeft(daysUntil(eventDate))}
+        {event.date && (
+          <p className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-rose-700 tabular-nums">
+            {describeDaysLeft(daysUntil(event.date))}
           </p>
         )}
       </Container>
@@ -33,9 +36,23 @@ export function Hero() {
 
           <EventDetails event={event} />
 
-          <a href="#lista" className={buttonClassName({ className: 'mt-10' })}>
-            Ver a listinha
-          </a>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            {isRsvpOpen && (
+              <button type="button" onClick={openRsvp} className={buttonClassName()}>
+                {confirmed ? 'Presença confirmada' : 'Confirmar presença'}
+              </button>
+            )}
+            <a href="#lista" className={buttonClassName({ variant: 'outline' })}>
+              Ver a listinha
+            </a>
+          </div>
+          {rsvpDeadline && isRsvpOpen && (
+            <p className="mt-4 max-w-[46ch] text-sm text-ink-700">
+              {confirmed
+                ? 'Você já confirmou por aqui, não precisa confirmar de novo.'
+                : `Confirme até ${formatShortDate(rsvpDeadline)}, pra gente passar seu nome pro porteiro. Se já confirmou, não precisa confirmar de novo.`}
+            </p>
+          )}
         </div>
 
         <div className="mx-auto w-full max-w-md px-4">

@@ -10,24 +10,14 @@ import {
   summarizeByGift,
   type RecordFilters,
 } from './adminStats'
+import { downloadCsv } from './download'
 import { GiftSummaryList } from './GiftSummaryList'
 import { RecordCard } from './RecordCard'
 import { useGiftRecords } from './useGiftRecords'
 
 type DashboardTab = 'records' | 'gifts'
 
-function downloadCsv(content: string) {
-  // The BOM makes Excel read the accents correctly.
-  const blob = new Blob(['﻿', content], { type: 'text/csv;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `presentes-${new Date().toISOString().slice(0, 10)}.csv`
-  link.click()
-  URL.revokeObjectURL(url)
-}
-
-export function AdminDashboard() {
+export function GiftsDashboard() {
   const { records, isLoading, error, reload, setStatus, remove } = useGiftRecords()
   const [tab, setTab] = useState<DashboardTab>('records')
   const [filters, setFilters] = useState<RecordFilters>({ status: 'all', method: 'all', query: '' })
@@ -91,7 +81,7 @@ export function AdminDashboard() {
         </button>
         <button
           type="button"
-          onClick={() => downloadCsv(recordsToCsv(records))}
+          onClick={() => downloadCsv(recordsToCsv(records), 'presentes')}
           disabled={records.length === 0}
           className="h-10 rounded-full border-2 border-ash-200 bg-white px-4 text-sm font-bold text-ink-800 hover:border-rose-300 disabled:opacity-60"
         >

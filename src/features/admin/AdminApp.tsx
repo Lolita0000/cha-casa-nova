@@ -1,10 +1,14 @@
+import { useState } from 'react'
+
 import { Container } from '@/components/ui/Container'
+import { Tabs, type TabItem } from '@/components/ui/Tabs'
 import { siteConfig } from '@/config/site'
 import { joinNames } from '@/features/registry/giverNames'
-import { isBackendConfigured } from '@/lib/supabase/client'
 import { publicAsset } from '@/lib/assets/publicAsset'
+import { isBackendConfigured } from '@/lib/supabase/client'
 
-import { AdminDashboard } from './AdminDashboard'
+import { GiftsDashboard } from './GiftsDashboard'
+import { GuestListPanel } from './GuestListPanel'
 import { LoginForm } from './LoginForm'
 import { useAdminSession } from './useAdminSession'
 
@@ -14,7 +18,7 @@ export function AdminApp() {
       <header className="bg-rose-100">
         <Container className="flex flex-wrap items-center justify-between gap-3 py-5">
           <div>
-            <p className="font-display text-2xl text-ink-900">Painel dos presentes</p>
+            <p className="font-display text-2xl text-ink-900">Painel do chá</p>
             <p className="text-sm text-ink-700">{joinNames([...siteConfig.coupleNames])}</p>
           </div>
           <a
@@ -75,14 +79,25 @@ function AdminContent() {
   return (
     <>
       <div className="mb-8 flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="font-display text-4xl text-ink-900">Quem deu o quê</h1>
+        <h1 className="font-display text-4xl text-ink-900">Presentes e presença</h1>
         <p className="flex items-center gap-3 text-sm text-ash-600">
           {session.email} {signOutButton}
         </p>
       </div>
-      <AdminDashboard />
+      <AdminSections />
     </>
   )
+}
+
+type Section = 'gifts' | 'guests'
+
+function AdminSections() {
+  const [section, setSection] = useState<Section>('gifts')
+  const sections: TabItem<Section>[] = [
+    { id: 'gifts', label: 'Presentes', content: <GiftsDashboard /> },
+    { id: 'guests', label: 'Lista de presença', content: <GuestListPanel /> },
+  ]
+  return <Tabs label="Seções do painel" tabs={sections} activeId={section} onChange={setSection} />
 }
 
 function SetupNeeded() {
