@@ -1,28 +1,65 @@
 import { useState } from 'react'
 
-import { buttonClassName } from '@/components/ui/buttonStyles'
+import { Button } from '@/components/ui/Button'
 import { Dialog } from '@/components/ui/Dialog'
 import { Tabs, type TabItem } from '@/components/ui/Tabs'
 import { siteConfig } from '@/config/site'
 import { CardPayment } from '@/features/payment/CardPayment'
 import { PixPayment } from '@/features/payment/PixPayment'
+import { GiftConfirmation } from '@/features/registry/GiftConfirmation'
+import { buildPixDescription } from '@/features/registry/messages'
+import type { GiftMethod, GiftRecordItemInput } from '@/features/registry/types'
+import { useGiftStatus } from '@/features/registry/useGiftStatus'
 import { formatCents } from '@/lib/format/currency'
-import { buildWhatsAppUrl } from '@/lib/whatsapp'
 
 import type { CartItem } from './cart'
 import { BuyItemsPanel } from './BuyItemsPanel'
 import { CartItemRow } from './CartItemRow'
-import { buildPixDescription, buildPixSentMessage } from './messages'
 import { useCart } from './useCart'
 
 type CheckoutTab = 'pix' | 'card' | 'buy'
 
+type Step =
+  { name: 'checkout' } | { name: 'confirm'; method: GiftMethod; items: GiftRecordItemInput[] }
+
+function toRecordItems(items: CartItem[]): GiftRecordItemInput[] {
+  return items.map(({ gift, amountInCents }) => ({
+    giftId: gift.id,
+    giftName: gift.name,
+    amountInCents,
+  }))
+}
+
 export function CartDialog() {
   const { items, totalInCents, isOpen, close, remove, clear } = useCart()
+  const { refresh } = useGiftStatus()
+  const [step, setStep] = useState<Step>({ name: 'checkout' })
+
+  function handleClose() {
+    close()
+    setStep({ name: 'checkout' })
+  }
+
+  function startConfirmation(method: GiftMethod) {
+    // Snapshot the cart: it is cleared once the gift is registered.
+    setStep({ name: 'confirm', method, items: toRecordItems(items) })
+  }
+
+  const title = step.name === 'confirm' ? 'Confirmar presente' : 'Seu carrinho'
 
   return (
-    <Dialog open={isOpen} onClose={close} title="Seu carrinho">
-      {items.length === 0 ? (
+    <Dialog open={isOpen} onClose={handleClose} title={title}>
+      {step.name === 'confirm' ? (
+        <GiftConfirmation
+          items={step.items}
+          defaultMethod={step.method}
+          onBack={() => setStep({ name: 'checkout' })}
+          onConfirmed={() => {
+            clear()
+            refresh()
+          }}
+        />
+      ) : items.length === 0 ? (
         <p className="text-ash-600">
           Seu carrinho está vazio. Escolha os presentes na lista e eles aparecem aqui.
         </p>
@@ -42,7 +79,7 @@ export function CartDialog() {
           </div>
 
           <div className="mt-6">
-            <Checkout items={items} totalInCents={totalInCents} />
+            <Checkout items={items} totalInCents={totalInCents} onConfirm={startConfirmation} />
           </div>
 
           <button
@@ -61,9 +98,10 @@ export function CartDialog() {
 interface CheckoutProps {
   items: CartItem[]
   totalInCents: number
+  onConfirm: (method: GiftMethod) => void
 }
 
-function Checkout({ items, totalInCents }: CheckoutProps) {
+function Checkout({ items, totalInCents, onConfirm }: CheckoutProps) {
   const [activeTab, setActiveTab] = useState<CheckoutTab>('pix')
   const cardUrl = siteConfig.openAmountCardUrl || undefined
 
@@ -73,25 +111,24 @@ function Checkout({ items, totalInCents }: CheckoutProps) {
       label: 'Pix',
       content: (
         <>
-          <PixPayment amountInCents={totalInCents} description={buildPixDescription(items)} />
-          <a
-            href={buildWhatsAppUrl(
-              siteConfig.whatsappNumber,
-              buildPixSentMessage(items, totalInCents),
-            )}
-            target="_blank"
-            rel="noreferrer"
-            className={buttonClassName({ variant: 'soft', className: 'mt-5 w-full' })}
-          >
-            Já mandei, avisar vocês
-          </a>
+          <PixPayment
+            amountInCents={totalInCents}
+            description={buildPixDescription(items.map(({ gift }) => ({ giftName: gift.name })))}
+          />
+          <Button variant="soft" onClick={() => onConfirm('pix')} className="mt-5 w-full">
+            Já fiz o Pix
+          </Button>
         </>
       ),
     },
     ...(cardUrl
       ? [{ id: 'card' as const, label: 'Cartão', content: <CardPayment url={cardUrl} /> }]
       : []),
-    { id: 'buy', label: 'Comprar os itens', content: <BuyItemsPanel items={items} /> },
+    {
+      id: 'buy',
+      label: 'Comprar os itens',
+      content: <BuyItemsPanel items={items} onConfirm={() => onConfirm('purchase')} />,
+    },
   ]
 
   return (
