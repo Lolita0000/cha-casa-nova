@@ -14,4 +14,6 @@ run -d "$db" -f supabase/tests/supabase-stub.sql
 for migration in supabase/migrations/*.sql; do
   run -d "$db" -f "$migration"
 done
-run -d "$db" -f supabase/tests/gift_records.test.sql
+for test in supabase/tests/*.test.sql; do
+  run -d "$db" -f "$test"
+done
