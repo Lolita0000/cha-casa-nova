@@ -65,8 +65,8 @@ select pg_temp.raises($$select public.register_gift(array['Ana'], 'pix', '[{"gif
   'rejects negative amounts');
 select pg_temp.raises($$select public.register_gift(array['Ana'], 'pix', '[{"gift_id":"a","gift_name":"A","amount_cents":10.5}]')$$,
   'rejects fractional cents');
-select pg_temp.raises($$select public.register_gift(array['Ana'], 'pix', '[{"gift_id":"a","gift_name":"A","amount_cents":1}]', repeat('x', 501))$$,
-  'rejects messages longer than 500 letters');
+select pg_temp.raises($$select public.register_gift(array['Ana'], 'pix', '[{"gift_id":"a","gift_name":"A","amount_cents":1}]', repeat('x', 2001))$$,
+  'rejects letters longer than 2000 letters');
 
 select pg_temp.raises($$select * from public.gift_records$$, 'anon cannot read records');
 select pg_temp.raises($$insert into public.gift_records (giver_names, method, total_cents) values (array['x'], 'pix', 1)$$,

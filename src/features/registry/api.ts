@@ -36,6 +36,14 @@ export async function registerGift(registration: GiftRegistration): Promise<stri
   return data as string
 }
 
+export async function addGiftLetter(recordId: string, message: string): Promise<void> {
+  const { error } = await requireClient().rpc('add_gift_letter', {
+    p_record_id: recordId,
+    p_message: message,
+  })
+  if (error) throw new Error(error.message)
+}
+
 interface PublicStatusRow {
   gift_id: string
   pix_cents: number
