@@ -52,9 +52,13 @@ Every gift can also have `productUrl` and `imageUrl`.
 ### Cart
 
 Guests add gifts to a cart (kept in their browser's local storage). The cart shows the total and
-generates a single Pix code for it, plus a "Comprar os itens" tab with each product link and a
-WhatsApp shortcut so the guest can ask you to mark those items as reserved. Shared gifts ask for
-an amount before going into the cart.
+generates a single Pix code for it, plus a "Comprar os itens" tab with each product link. Shared
+gifts ask for an amount before going into the cart.
+
+When guests confirm a gift they sign it with one or more names and can write a letter to the
+couple. Everything is stored in the database and shows up in the admin panel (Presentes and
+Cartinhas tabs), so nothing goes through WhatsApp. WhatsApp only appears as a fallback when the
+database isn't configured.
 
 Rooms are defined in `src/data/rooms.ts`.
 
@@ -67,7 +71,7 @@ guest already confirmed.
 ## Database and admin panel
 
 Gifts and presence confirmations are stored in [Supabase](https://supabase.com) (free plan).
-Guests only call two database functions, `register_gift` and `register_rsvp`; reading the data
+Guests only call database functions (`register_gift`, `add_gift_letter` and `register_rsvp`); reading the data
 requires signing in as an admin. The admin panel lives at `#/admin`, e.g.
 `https://<user>.github.io/<repo>/#/admin`.
 
