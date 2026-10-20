@@ -12,9 +12,10 @@ import { RsvpForm } from '@/features/rsvp/RsvpForm'
 import { useRsvp } from '@/features/rsvp/useRsvp'
 import { formatShortDate, isOnOrBefore } from '@/lib/date/event'
 
-import { registerGift } from './api'
+import { addGiftLetter, registerGift } from './api'
 import { cleanGiverNames, joinNames, validateGiverNames } from './giverNames'
 import { buildNotifyMessage } from './messages'
+import { LetterField } from './LetterField'
 import { NameListInput } from './NameListInput'
 import { loadRememberedNames, rememberNames } from './rememberedNames'
 import type { GiftMethod, GiftRecordItemInput } from './types'
@@ -32,7 +33,14 @@ interface GiftConfirmationProps {
 
 type Step =
   | { name: 'form' }
-  | { name: 'done'; names: string[]; method: GiftMethod; items: GiftRecordItemInput[] }
+  | {
+      name: 'done'
+      names: string[]
+      method: GiftMethod
+      items: GiftRecordItemInput[]
+      recordId: string | null
+      hasLetter: boolean
+    }
 
 const coupleNames = joinNames([...siteConfig.coupleNames])
 
@@ -56,7 +64,6 @@ export function GiftConfirmation({
   const [amountError, setAmountError] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const messageId = useId()
   const amountId = useId()
 
   function resolveItems(): GiftRecordItemInput[] | null {
@@ -81,11 +88,18 @@ export function GiftConfirmation({
     setIsSubmitting(true)
     setSubmitError(null)
     try {
-      if (isBackendConfigured) {
-        await registerGift({ giverNames, method, items: finalItems, message })
-      }
+      const recordId = isBackendConfigured
+        ? await registerGift({ giverNames, method, items: finalItems, message })
+        : null
       rememberNames(giverNames)
-      setStep({ name: 'done', names: giverNames, method, items: finalItems })
+      setStep({
+        name: 'done',
+        names: giverNames,
+        method,
+        items: finalItems,
+        recordId,
+        hasLetter: message.trim().length > 0,
+      })
       onConfirmed?.()
     } catch (error) {
       setSubmitError(
@@ -101,7 +115,13 @@ export function GiftConfirmation({
   if (step.name === 'done') {
     return (
       <>
-        <GiftThanks names={step.names} method={step.method} items={step.items} />
+        <GiftThanks
+          names={step.names}
+          method={step.method}
+          items={step.items}
+          recordId={step.recordId}
+          hasLetter={step.hasLetter}
+        />
         <RsvpPrompt names={step.names} />
       </>
     )
@@ -158,19 +178,7 @@ export function GiftConfirmation({
 
       <NameListInput names={names} onChange={setNames} error={namesError} />
 
-      <div>
-        <label htmlFor={messageId} className="font-bold text-ink-900">
-          Quer deixar um recadinho? <span className="font-normal text-ash-500">(opcional)</span>
-        </label>
-        <textarea
-          id={messageId}
-          rows={3}
-          maxLength={500}
-          value={message}
-          onChange={(event) => setMessage(event.target.value)}
-          className="mt-2 w-full resize-none rounded-2xl border-2 border-ash-200 bg-white px-4 py-3 text-ink-900 outline-none focus:border-rose-400"
-        />
-      </div>
+      <LetterField value={message} onChange={setMessage} />
 
       {submitError && (
         <p role="alert" className="rounded-2xl bg-rose-50 p-4 text-sm font-semibold text-rose-700">
@@ -233,9 +241,11 @@ interface GiftThanksProps {
   names: string[]
   method: GiftMethod
   items: GiftRecordItemInput[]
+  recordId: string | null
+  hasLetter: boolean
 }
 
-function GiftThanks({ names, method, items }: GiftThanksProps) {
+function GiftThanks({ names, method, items, recordId, hasLetter }: GiftThanksProps) {
   return (
     <div className="text-center">
       <span className="mx-auto grid size-14 place-items-center rounded-full bg-rose-100 text-rose-500">
@@ -244,18 +254,80 @@ function GiftThanks({ names, method, items }: GiftThanksProps) {
       <p className="mt-4 font-display text-2xl text-ink-900">Obrigado, {joinNames(names)}!</p>
       <p className="mt-2 text-ash-600">
         {method === 'pix'
-          ? 'Seu Pix ficou registrado aqui na lista.'
-          : 'Esses itens ficaram marcados como reservados.'}{' '}
-        Agora é só avisar a gente.
+          ? `Seu Pix ficou registrado e ${coupleNames} já ficam sabendo por aqui.`
+          : `Esses itens ficaram reservados e ${coupleNames} já ficam sabendo por aqui.`}
+        {hasLetter && ' Sua cartinha foi entregue também.'}
       </p>
-      <a
-        href={buildWhatsAppUrl(siteConfig.whatsappNumber, buildNotifyMessage(method, names, items))}
-        target="_blank"
-        rel="noreferrer"
-        className={buttonClassName({ className: 'mt-6 w-full' })}
-      >
-        Avisar {coupleNames} no WhatsApp
-      </a>
+
+      {recordId && !hasLetter && <LaterLetter recordId={recordId} />}
+
+      {!isBackendConfigured && (
+        // Without the database nothing reaches the couple, so WhatsApp is the fallback.
+        <a
+          href={buildWhatsAppUrl(
+            siteConfig.whatsappNumber,
+            buildNotifyMessage(method, names, items),
+          )}
+          target="_blank"
+          rel="noreferrer"
+          className={buttonClassName({ className: 'mt-6 w-full' })}
+        >
+          Avisar {coupleNames} no WhatsApp
+        </a>
+      )}
+    </div>
+  )
+}
+
+/** For guests who skipped the letter: they can still write it here. */
+function LaterLetter({ recordId }: { recordId: string }) {
+  const [state, setState] = useState<'closed' | 'writing' | 'sending' | 'sent'>('closed')
+  const [letter, setLetter] = useState('')
+  const [error, setError] = useState<string | null>(null)
+
+  async function send() {
+    if (!letter.trim()) {
+      setError('Escreva a cartinha antes de enviar.')
+      return
+    }
+    setState('sending')
+    setError(null)
+    try {
+      await addGiftLetter(recordId, letter)
+      setState('sent')
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'Não conseguimos enviar agora.')
+      setState('writing')
+    }
+  }
+
+  if (state === 'sent') {
+    return (
+      <p className="mt-6 rounded-2xl bg-rose-50 p-4 font-semibold text-ink-800">
+        Cartinha entregue!
+      </p>
+    )
+  }
+
+  if (state === 'closed') {
+    return (
+      <Button variant="outline" onClick={() => setState('writing')} className="mt-6 w-full">
+        Escrever uma cartinha
+      </Button>
+    )
+  }
+
+  return (
+    <div className="mt-6 space-y-3 text-left">
+      <LetterField value={letter} onChange={setLetter} autoFocus />
+      {error && (
+        <p role="alert" className="text-sm font-semibold text-rose-700">
+          {error}
+        </p>
+      )}
+      <Button onClick={() => void send()} disabled={state === 'sending'} className="w-full">
+        {state === 'sending' ? 'Enviando...' : 'Enviar cartinha'}
+      </Button>
     </div>
   )
 }

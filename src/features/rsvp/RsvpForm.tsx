@@ -165,7 +165,7 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
         <textarea
           id={messageId}
           rows={2}
-          maxLength={500}
+          maxLength={2000}
           value={message}
           onChange={(event) => setMessage(event.target.value)}
           className="mt-2 w-full resize-none rounded-2xl border-2 border-ash-200 bg-white px-4 py-3 text-ink-900 outline-none focus:border-rose-400"
