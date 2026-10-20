@@ -4,6 +4,7 @@ import { ProgressBar } from '@/components/ui/ProgressBar'
 import { getProgress, isFunded } from '@/data/selectors'
 import { defaultAmountFor } from '@/features/cart/cart'
 import { useCart } from '@/features/cart/useCart'
+import { useLiveGift } from '@/features/registry/useLiveGift'
 import { formatCents, formatCentsShort } from '@/lib/format/currency'
 import type { PooledGift } from '@/types/gift'
 
@@ -15,12 +16,13 @@ interface PooledGiftCardProps {
   onContribute: OpenContribution
 }
 
-export function PooledGiftCard({ gift, onContribute }: PooledGiftCardProps) {
+export function PooledGiftCard({ gift: listedGift, onContribute }: PooledGiftCardProps) {
+  const gift = useLiveGift(listedGift)
   const { add, remove, open, amountFor } = useCart()
   const amountInCart = amountFor(gift.id)
   const progress = getProgress(gift)
   const funded = isFunded(gift)
-  const isDone = Boolean(gift.reservedBy) || funded
+  const isDone = Boolean(gift.reservedBy) || gift.purchasedByGuest || funded
 
   return (
     <li className="grid gap-2.5 rounded-[1.75rem] bg-ash-600 p-2.5 text-white sm:col-span-2 sm:grid-cols-[2fr_3fr]">
@@ -39,7 +41,9 @@ export function PooledGiftCard({ gift, onContribute }: PooledGiftCardProps) {
             <HeartIcon className="size-5 shrink-0 text-rose-300" />
             {gift.reservedBy
               ? `Reservado! ${gift.reservedBy} vai dar esse pra gente.`
-              : 'Conseguimos! Obrigado a todo mundo que ajudou.'}
+              : gift.purchasedByGuest
+                ? 'Reservado! Alguém já vai dar esse pra gente.'
+                : 'Conseguimos! Obrigado a todo mundo que ajudou.'}
           </p>
         ) : (
           <>

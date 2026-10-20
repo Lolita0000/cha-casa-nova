@@ -13,6 +13,7 @@ import { Hero } from '@/features/hero/Hero'
 import { HowItWorks } from '@/features/how-it-works/HowItWorks'
 import { MaterialsNote } from '@/features/materials/MaterialsNote'
 import { HousePalette } from '@/features/palette/HousePalette'
+import { GiftStatusProvider } from '@/features/registry/GiftStatusProvider'
 
 const giftsByRoom = groupGiftsByRoom(rooms, gifts)
 
@@ -20,20 +21,22 @@ export function App() {
   const contribution = useContributionDialog()
 
   return (
-    <CartProvider gifts={gifts}>
-      <Hero />
-      <main>
-        <HowItWorks />
-        <GiftList giftsByRoom={giftsByRoom} onContribute={contribution.open} />
-        <FreeContribution />
-        <HousePalette />
-        <MaterialsNote />
-      </main>
-      <Footer />
+    <GiftStatusProvider>
+      <CartProvider gifts={gifts}>
+        <Hero />
+        <main>
+          <HowItWorks />
+          <GiftList giftsByRoom={giftsByRoom} onContribute={contribution.open} />
+          <FreeContribution />
+          <HousePalette />
+          <MaterialsNote />
+        </main>
+        <Footer />
 
-      <ContributionDialog gift={contribution.gift} onClose={contribution.close} />
-      <CartDialog />
-      <CartButton />
-    </CartProvider>
+        <ContributionDialog gift={contribution.gift} onClose={contribution.close} />
+        <CartDialog />
+        <CartButton />
+      </CartProvider>
+    </GiftStatusProvider>
   )
 }
