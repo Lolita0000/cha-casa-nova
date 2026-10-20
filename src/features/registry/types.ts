@@ -35,3 +35,17 @@ export interface GiftPublicStatus {
   pixInCents: number
   purchaseCount: number
 }
+
+export interface RsvpRegistration {
+  guestNames: string[]
+  attending: boolean
+  message?: string
+}
+
+export interface Rsvp {
+  id: string
+  createdAt: string
+  guestNames: string[]
+  attending: boolean
+  message: string | null
+}

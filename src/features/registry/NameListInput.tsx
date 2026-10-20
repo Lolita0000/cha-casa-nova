@@ -8,10 +8,22 @@ interface NameListInputProps {
   names: string[]
   onChange: (names: string[]) => void
   error?: string | null
+  legend?: string
+  hint?: string
+  firstPlaceholder?: string
+  otherPlaceholder?: string
 }
 
 /** One field per person, so a couple or a whole family can sign the gift. */
-export function NameListInput({ names, onChange, error }: NameListInputProps) {
+export function NameListInput({
+  names,
+  onChange,
+  error,
+  legend = 'Quem está presenteando?',
+  hint = 'Se for um casal ou uma família, coloque um nome em cada campo.',
+  firstPlaceholder = 'Seu nome',
+  otherPlaceholder = 'Outro nome',
+}: NameListInputProps) {
   const baseId = useId()
 
   function update(index: number, value: string) {
@@ -24,10 +36,8 @@ export function NameListInput({ names, onChange, error }: NameListInputProps) {
 
   return (
     <fieldset>
-      <legend className="font-bold text-ink-900">Quem está presenteando?</legend>
-      <p className="mt-1 text-sm text-ash-600">
-        Se for um casal ou uma família, coloque um nome em cada campo.
-      </p>
+      <legend className="font-bold text-ink-900">{legend}</legend>
+      <p className="mt-1 text-sm text-ash-600">{hint}</p>
 
       <ul className="mt-3 space-y-2">
         {names.map((name, index) => (
@@ -40,7 +50,7 @@ export function NameListInput({ names, onChange, error }: NameListInputProps) {
               value={name}
               maxLength={MAX_NAME_LENGTH}
               autoComplete={index === 0 ? 'name' : 'off'}
-              placeholder={index === 0 ? 'Seu nome' : 'Outro nome'}
+              placeholder={index === 0 ? firstPlaceholder : otherPlaceholder}
               onChange={(event) => update(index, event.target.value)}
               aria-invalid={Boolean(error) || undefined}
               className="h-12 min-w-0 flex-1 rounded-2xl border-2 border-ash-200 bg-white px-4 text-ink-900 outline-none placeholder:text-ash-400 focus:border-rose-400"
