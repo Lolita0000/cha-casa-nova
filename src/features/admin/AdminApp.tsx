@@ -9,6 +9,7 @@ import { isBackendConfigured } from '@/lib/supabase/client'
 
 import { GiftsDashboard } from './GiftsDashboard'
 import { GuestListPanel } from './GuestListPanel'
+import { LettersPanel } from './LettersPanel'
 import { LoginForm } from './LoginForm'
 import { useAdminSession } from './useAdminSession'
 
@@ -79,7 +80,7 @@ function AdminContent() {
   return (
     <>
       <div className="mb-8 flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="font-display text-4xl text-ink-900">Presentes e presença</h1>
+        <h1 className="font-display text-4xl text-ink-900">Presentes, cartinhas e presença</h1>
         <p className="flex items-center gap-3 text-sm text-ash-600">
           {session.email} {signOutButton}
         </p>
@@ -89,12 +90,13 @@ function AdminContent() {
   )
 }
 
-type Section = 'gifts' | 'guests'
+type Section = 'gifts' | 'letters' | 'guests'
 
 function AdminSections() {
   const [section, setSection] = useState<Section>('gifts')
   const sections: TabItem<Section>[] = [
     { id: 'gifts', label: 'Presentes', content: <GiftsDashboard /> },
+    { id: 'letters', label: 'Cartinhas', content: <LettersPanel /> },
     { id: 'guests', label: 'Lista de presença', content: <GuestListPanel /> },
   ]
   return <Tabs label="Seções do painel" tabs={sections} activeId={section} onChange={setSection} />
