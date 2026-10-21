@@ -3,11 +3,14 @@ import { useCallback, useEffect, useState } from 'react'
 import { deleteRsvp, fetchRsvps } from '@/features/registry/api'
 import type { Rsvp } from '@/features/registry/types'
 
+import { useAdminKey } from './adminKeyContext'
+
 function errorMessage(caught: unknown, fallback: string): string {
   return caught instanceof Error && caught.message ? caught.message : fallback
 }
 
 export function useRsvps() {
+  const key = useAdminKey()
   const [rsvps, setRsvps] = useState<Rsvp[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -16,7 +19,7 @@ export function useRsvps() {
   useEffect(() => {
     let isCurrent = true
     const load = () =>
-      fetchRsvps()
+      fetchRsvps(key)
         .then((next) => {
           if (!isCurrent) return
           setRsvps(next)
@@ -36,7 +39,7 @@ export function useRsvps() {
       isCurrent = false
       window.removeEventListener('focus', onFocus)
     }
-  }, [version])
+  }, [key, version])
 
   const reload = useCallback(() => {
     setIsLoading(true)
@@ -47,13 +50,13 @@ export function useRsvps() {
     async (id: string) => {
       setRsvps((current) => current.filter((rsvp) => rsvp.id !== id))
       try {
-        await deleteRsvp(id)
+        await deleteRsvp(key, id)
       } catch (caught) {
         setError(errorMessage(caught, 'Não foi possível apagar.'))
         reload()
       }
     },
-    [reload],
+    [key, reload],
   )
 
   return { rsvps, isLoading, error, reload, remove }
