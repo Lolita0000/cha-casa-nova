@@ -9,7 +9,7 @@ import { registerRsvp } from '@/features/registry/api'
 import { cleanGiverNames, joinNames, validateGiverNames } from '@/features/registry/giverNames'
 import { NameListInput } from '@/features/registry/NameListInput'
 import { loadRememberedNames, rememberNames } from '@/features/registry/rememberedNames'
-import { formatEventDate, formatShortDate, isOnOrBefore } from '@/lib/date/event'
+import { describeEventTime, formatEventDate, formatShortDate, isOnOrBefore } from '@/lib/date/event'
 import { isBackendConfigured } from '@/lib/supabase/client'
 import { buildWhatsAppUrl } from '@/lib/whatsapp'
 
@@ -58,7 +58,11 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
             <p className="mt-2 text-ash-600">
               {joinNames(confirmed.guestNames)}, vamos deixar o nome de vocês com o porteiro.
               {siteConfig.event.date &&
-                ` Te esperamos ${formatEventDate(siteConfig.event.date).toLowerCase()}.`}
+                ` Te esperamos ${formatEventDate(siteConfig.event.date).toLowerCase()}${
+                  siteConfig.event.time
+                    ? `, ${describeEventTime(siteConfig.event.time).toLowerCase()}`
+                    : ''
+                }.`}
             </p>
             {siteConfig.event.mapsUrl && (
               <a

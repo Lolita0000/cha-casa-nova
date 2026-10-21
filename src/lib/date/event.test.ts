@@ -7,6 +7,7 @@ import {
   formatEventDate,
   formatEventTime,
   formatShortDate,
+  describeEventTime,
   isOnOrBefore,
   todayInSaoPaulo,
 } from './event'
@@ -20,6 +21,8 @@ describe('event dates', () => {
   it('formats times the Brazilian way', () => {
     expect(formatEventTime('15:00')).toBe('15h')
     expect(formatEventTime('19:30')).toBe('19h30')
+    expect(describeEventTime('12:00')).toBe('Ao meio-dia (12h)')
+    expect(describeEventTime('15:00')).toBe('Às 15h')
   })
 
   it('uses Brasília to decide what day it is', () => {

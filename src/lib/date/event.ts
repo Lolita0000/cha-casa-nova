@@ -44,6 +44,14 @@ export function formatEventTime(time: string): string {
   return minutes === '00' ? `${Number(hours)}h` : `${Number(hours)}h${minutes}`
 }
 
+/** "Ao meio-dia (12h)", "Às 15h": reads naturally after the date. */
+export function describeEventTime(time: string): string {
+  const formatted = formatEventTime(time)
+  if (formatted === '12h') return 'Ao meio-dia (12h)'
+  if (formatted === '0h') return 'À meia-noite'
+  return `Às ${formatted}`
+}
+
 /** Today's date in Brasília, whatever the guest's device time zone. */
 export function todayInSaoPaulo(now: Date = new Date()): IsoDate {
   return isoDayFormatter.format(now)
