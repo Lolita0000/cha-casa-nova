@@ -63,7 +63,7 @@ export function FreeContribution() {
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-ink-800">
               Não tem problema nenhum! Se preferir, manda um pixzinho do valor que quiser. A gente
-              junta com o resto e usa no que estiver faltando na casa.
+              junta e usa no que estiver faltando na casa.
             </p>
           </div>
           <Button onClick={() => setIsOpen(true)} className="shrink-0 self-start md:self-auto">
