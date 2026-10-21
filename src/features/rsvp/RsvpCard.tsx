@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/Button'
 import { rsvpDeadline } from '@/config/event'
 import { joinNames } from '@/features/registry/giverNames'
 import { formatShortDate, isOnOrBefore } from '@/lib/date/event'
+import { byCount } from '@/lib/text/plural'
 
 import { useRsvp } from './useRsvp'
 
@@ -42,7 +43,17 @@ export function RsvpCard({ className = '' }: RsvpCardProps) {
           <div className="rounded-3xl bg-white/10 p-5">
             <p className="flex items-center gap-2 font-bold">
               <CheckIcon className="size-5 text-rose-300" />
-              {confirmed.attending ? 'Presença confirmada' : 'Você avisou que não vem'}
+              {confirmed.attending
+                ? byCount(
+                    confirmed.guestNames.length,
+                    'Presença confirmada',
+                    'Presenças confirmadas',
+                  )
+                : byCount(
+                    confirmed.guestNames.length,
+                    'Você avisou que não vem',
+                    'Vocês avisaram que não vêm',
+                  )}
             </p>
             <p className="mt-1 text-sm text-ash-100">{joinNames(confirmed.guestNames)}</p>
             {isOpenForRsvp && (
