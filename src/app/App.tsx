@@ -13,6 +13,7 @@ import { Hero } from '@/features/hero/Hero'
 import { HowItWorks } from '@/features/how-it-works/HowItWorks'
 import { MaterialsNote } from '@/features/materials/MaterialsNote'
 import { HousePalette } from '@/features/palette/HousePalette'
+import { CardPaymentReturn } from '@/features/payment/CardPaymentReturn'
 import { GiftStatusProvider } from '@/features/registry/GiftStatusProvider'
 import { RsvpDialog } from '@/features/rsvp/RsvpDialog'
 import { RsvpProvider } from '@/features/rsvp/RsvpProvider'
@@ -40,6 +41,7 @@ export function App() {
           <CartDialog />
           <CartButton />
           <RsvpDialog />
+          <CardPaymentReturn />
         </CartProvider>
       </GiftStatusProvider>
     </RsvpProvider>

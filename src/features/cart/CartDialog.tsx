@@ -3,9 +3,9 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Dialog } from '@/components/ui/Dialog'
 import { Tabs, type TabItem } from '@/components/ui/Tabs'
-import { siteConfig } from '@/config/site'
-import { CardPayment } from '@/features/payment/CardPayment'
+import { CardCheckout } from '@/features/payment/CardCheckout'
 import { PixPayment } from '@/features/payment/PixPayment'
+import { isCardPaymentEnabled } from '@/features/payment/startCardCheckout'
 import { GiftConfirmation } from '@/features/registry/GiftConfirmation'
 import { buildPixDescription } from '@/features/registry/messages'
 import type { GiftMethod, GiftRecordItemInput } from '@/features/registry/types'
@@ -103,7 +103,6 @@ interface CheckoutProps {
 
 function Checkout({ items, totalInCents, onConfirm }: CheckoutProps) {
   const [activeTab, setActiveTab] = useState<CheckoutTab>('pix')
-  const cardUrl = siteConfig.openAmountCardUrl || undefined
 
   const tabs: TabItem<CheckoutTab>[] = [
     {
@@ -121,8 +120,14 @@ function Checkout({ items, totalInCents, onConfirm }: CheckoutProps) {
         </>
       ),
     },
-    ...(cardUrl
-      ? [{ id: 'card' as const, label: 'Cartão', content: <CardPayment url={cardUrl} /> }]
+    ...(isCardPaymentEnabled
+      ? [
+          {
+            id: 'card' as const,
+            label: 'Cartão',
+            content: <CardCheckout items={toRecordItems(items)} fromCart />,
+          },
+        ]
       : []),
     {
       id: 'buy',
