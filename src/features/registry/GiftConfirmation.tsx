@@ -6,6 +6,7 @@ import { buttonClassName } from '@/components/ui/buttonStyles'
 import { siteConfig } from '@/config/site'
 import { formatCents, reaisToCents } from '@/lib/format/currency'
 import { isBackendConfigured } from '@/lib/supabase/client'
+import { byCount } from '@/lib/text/plural'
 import { buildWhatsAppUrl } from '@/lib/whatsapp'
 import { rsvpDeadline } from '@/config/event'
 import { RsvpForm } from '@/features/rsvp/RsvpForm'
@@ -57,10 +58,17 @@ const SUBMIT_LABELS: Record<GiftMethod, string> = {
   purchase: 'Confirmar que vou comprar',
 }
 
-const THANKS_TEXT: Record<GiftMethod, string> = {
-  pix: `Seu Pix ficou registrado e ${coupleNames} já ficam sabendo por aqui.`,
-  card: `Seu presente no cartão ficou registrado e ${coupleNames} já ficam sabendo por aqui.`,
-  purchase: `Esses itens ficaram reservados e ${coupleNames} já ficam sabendo por aqui.`,
+function thanksText(method: GiftMethod, count: number): string {
+  const yours = byCount(count, 'Seu', 'O')
+  const ofYou = byCount(count, '', ' de vocês')
+  switch (method) {
+    case 'pix':
+      return `${yours} Pix${ofYou} ficou registrado e ${coupleNames} já ficam sabendo por aqui.`
+    case 'card':
+      return `${yours} presente no cartão${ofYou} ficou registrado e ${coupleNames} já ficam sabendo por aqui.`
+    case 'purchase':
+      return `Esses itens ficaram reservados e ${coupleNames} já ficam sabendo por aqui.`
+  }
 }
 
 /** What is being registered, so the guest sees the amount that will count towards each gift. */
@@ -355,8 +363,13 @@ function GiftThanks({ names, method, items, recordId, hasLetter }: GiftThanksPro
       </span>
       <p className="mt-4 font-display text-2xl text-ink-900">Obrigado, {joinNames(names)}!</p>
       <p className="mt-2 text-ash-600">
-        {THANKS_TEXT[method]}
-        {hasLetter && ' Sua cartinha foi entregue também.'}
+        {thanksText(method, names.length)}
+        {hasLetter &&
+          byCount(
+            names.length,
+            ' Sua cartinha foi entregue também.',
+            ' A cartinha de vocês foi entregue também.',
+          )}
       </p>
 
       {recordId && !hasLetter && <LaterLetter recordId={recordId} />}
@@ -451,18 +464,29 @@ function RsvpPrompt({ names }: { names: string[] }) {
   if (confirmed) {
     return (
       <p className="mt-6 text-center text-sm text-ash-600">
-        Sua presença já está confirmada, não precisa confirmar de novo.
+        {byCount(
+          confirmed.guestNames.length,
+          'Sua presença já está confirmada, não precisa confirmar de novo.',
+          'A presença de vocês já está confirmada, não precisa confirmar de novo.',
+        )}
       </p>
     )
   }
 
+  const count = names.length
+  const deadline = rsvpDeadline ? ` até ${formatShortDate(rsvpDeadline)}` : ''
+
   return (
     <div className="mt-8 rounded-3xl bg-rose-50 p-5 text-left">
-      <p className="font-bold text-ink-900">E aí, vai estar na festa?</p>
+      <p className="font-bold text-ink-900">
+        {byCount(count, 'E aí, vai estar na festa?', 'E aí, vão estar na festa?')}
+      </p>
       <p className="mt-1 text-sm text-ash-600">
-        {rsvpDeadline
-          ? `Confirme sua presença até ${formatShortDate(rsvpDeadline)}, pra gente passar seu nome pro porteiro.`
-          : 'Confirme sua presença pra gente passar seu nome pro porteiro.'}
+        {byCount(
+          count,
+          `Confirme sua presença${deadline}, pra gente passar seu nome pro porteiro.`,
+          `Confirmem a presença${deadline}, pra gente passar o nome de vocês pro porteiro.`,
+        )}
       </p>
       <Button variant="soft" size="sm" onClick={() => setIsOpen(true)} className="mt-4">
         Confirmar presença
