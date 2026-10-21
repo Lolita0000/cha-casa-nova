@@ -33,8 +33,7 @@ export function ReceiptField({ file, onChange, error, onError }: ReceiptFieldPro
         Comprovante <span className="font-normal text-ash-500">(opcional)</span>
       </p>
       <p className="mt-1 text-sm text-ash-600">
-        Manda o print ou o PDF do Pix. Assim a gente confere rapidinho e a barrinha do presente já
-        sobe com o seu valor.
+        Manda o print ou o PDF do Pix, assim a gente confere rapidinho.
       </p>
 
       {file ? (
