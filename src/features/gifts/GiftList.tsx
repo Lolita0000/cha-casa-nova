@@ -1,13 +1,16 @@
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 
 import { Container } from '@/components/ui/Container'
 import type { RoomWithGifts } from '@/data/selectors'
 
+import { GiftGrid } from './GiftGrid'
 import { RoomFilter } from './RoomFilter'
 import type { RoomFilterValue } from './roomFilterOptions'
 import { RoomSection } from './RoomSection'
 import type { OpenContribution } from './types'
 import { useRoomFilter } from './useRoomFilter'
+
+const ALL_PREVIEW = { phone: 6, wide: 9 }
 
 interface GiftListProps {
   giftsByRoom: RoomWithGifts[]
@@ -18,6 +21,7 @@ export function GiftList({ giftsByRoom, onContribute }: GiftListProps) {
   const listStartRef = useRef<HTMLDivElement>(null)
   const { options, selected, setSelected, visibleRooms } = useRoomFilter(giftsByRoom)
 
+  const allGifts = useMemo(() => giftsByRoom.flatMap(({ gifts }) => gifts), [giftsByRoom])
   const hasPooledGifts = giftsByRoom.some(({ gifts }) =>
     gifts.some((gift) => gift.kind === 'pooled'),
   )
@@ -45,9 +49,21 @@ export function GiftList({ giftsByRoom, onContribute }: GiftListProps) {
           <>
             <div ref={listStartRef} className="scroll-mt-4" />
             <RoomFilter options={options} value={selected} onChange={handleFilterChange} />
-            {visibleRooms.map(({ room, gifts }) => (
-              <RoomSection key={room.id} room={room} gifts={gifts} onContribute={onContribute} />
-            ))}
+            {selected === 'all' ? (
+              // Everything in one grid: room names only show up once a room is picked.
+              <div className="pt-10">
+                <GiftGrid
+                  key="all"
+                  gifts={allGifts}
+                  onContribute={onContribute}
+                  preview={ALL_PREVIEW}
+                />
+              </div>
+            ) : (
+              visibleRooms.map(({ room, gifts }) => (
+                <RoomSection key={room.id} room={room} gifts={gifts} onContribute={onContribute} />
+              ))
+            )}
           </>
         ) : (
           <p className="rounded-[1.75rem] border-2 border-dashed border-rose-300 bg-white p-8 text-ash-600">
