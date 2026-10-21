@@ -87,8 +87,10 @@ guest already confirmed.
 
 Gifts and presence confirmations are stored in [Supabase](https://supabase.com) (free plan).
 Guests only call database functions (`register_gift`, `add_gift_letter` and `register_rsvp`) and
-upload receipts; reading the data requires signing in as an admin. The admin panel lives at `#/admin`, e.g.
-`https://<user>.github.io/<repo>/#/admin`.
+upload receipts. The admin panel has no login: it opens with a private link that carries a secret
+key, `https://<user>.github.io/<repo>/#/admin?chave=<key>`. The database keeps only a hash of the
+key and every admin function checks it. The device remembers the key, so `#/admin` alone works
+there afterwards.
 
 Without the Supabase variables the invitation still works, it just doesn't store anything.
 
@@ -96,8 +98,8 @@ Without the Supabase variables the invitation still works, it just doesn't store
 
 1. Create a project at supabase.com.
 2. In **SQL Editor**, run every file in `supabase/migrations`, in name order.
-3. In **Authentication > Users > Add user**, create your admin user (email and password, with
-   "Auto Confirm User" checked). Then run `supabase/make-admin.sql` with that email.
+3. Pick a long random key and run `supabase/make-admin-link.sql` with it. Keep the admin link
+   private.
 4. Optional but recommended: in **Authentication > Sign In / Providers**, turn off
    "Allow new users to sign up".
 5. In **Project Settings > API**, copy the project URL and the anon (or publishable) key.

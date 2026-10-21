@@ -3,11 +3,14 @@ import { useCallback, useEffect, useState } from 'react'
 import { deleteRecord, fetchRecords, updateRecordStatus } from '@/features/registry/api'
 import type { GiftRecord, GiftRecordStatus } from '@/features/registry/types'
 
+import { useAdminKey } from './adminKeyContext'
+
 function errorMessage(caught: unknown, fallback: string): string {
   return caught instanceof Error && caught.message ? caught.message : fallback
 }
 
 export function useGiftRecords() {
+  const key = useAdminKey()
   const [records, setRecords] = useState<GiftRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -16,7 +19,7 @@ export function useGiftRecords() {
   useEffect(() => {
     let isCurrent = true
     const load = () =>
-      fetchRecords()
+      fetchRecords(key)
         .then((next) => {
           if (!isCurrent) return
           setRecords(next)
@@ -37,7 +40,7 @@ export function useGiftRecords() {
       isCurrent = false
       window.removeEventListener('focus', onFocus)
     }
-  }, [version])
+  }, [key, version])
 
   const reload = useCallback(() => {
     setIsLoading(true)
@@ -50,26 +53,26 @@ export function useGiftRecords() {
         current.map((record) => (record.id === id ? { ...record, status } : record)),
       )
       try {
-        await updateRecordStatus(id, status)
+        await updateRecordStatus(key, id, status)
       } catch (caught) {
         setError(errorMessage(caught, 'Não foi possível salvar.'))
         reload()
       }
     },
-    [reload],
+    [key, reload],
   )
 
   const remove = useCallback(
     async (id: string) => {
       setRecords((current) => current.filter((record) => record.id !== id))
       try {
-        await deleteRecord(id)
+        await deleteRecord(key, id)
       } catch (caught) {
         setError(errorMessage(caught, 'Não foi possível apagar.'))
         reload()
       }
     },
-    [reload],
+    [key, reload],
   )
 
   return { records, isLoading, error, reload, setStatus, remove }
