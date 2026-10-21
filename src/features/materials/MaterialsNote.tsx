@@ -8,7 +8,7 @@ export function MaterialsNote() {
         <div className="grid gap-10 rounded-[2.5rem] bg-white p-6 sm:p-12 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
           <div>
             <h2 id="materials-title" className="font-display text-4xl text-ink-800 sm:text-5xl">
-              Um pedidinho com carinho
+              Um pedido com carinho
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-ash-600">
               Se você for comprar algum item fora da lista pra cozinha, pedimos com todo carinho que

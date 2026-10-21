@@ -31,9 +31,51 @@ export async function registerGift(registration: GiftRegistration): Promise<stri
       amount_cents: item.amountInCents,
     })),
     p_message: registration.message ?? null,
+    p_receipt_path: registration.receiptPath ?? null,
+    p_receipt_url: registration.receiptUrl ?? null,
   })
   if (error) throw new Error(error.message)
   return data as string
+}
+
+const RECEIPTS_BUCKET = 'receipts'
+const RECEIPT_EXTENSIONS: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/heic': 'heic',
+  'image/heif': 'heif',
+  'application/pdf': 'pdf',
+}
+export const MAX_RECEIPT_BYTES = 5 * 1024 * 1024
+export const RECEIPT_ACCEPT = Object.keys(RECEIPT_EXTENSIONS).join(',')
+
+/** Checks a receipt before uploading it. Returns the problem, or null when it is fine. */
+export function validateReceipt(file: File): string | null {
+  if (!RECEIPT_EXTENSIONS[file.type]) return 'Envie uma foto ou um PDF do comprovante.'
+  if (file.size > MAX_RECEIPT_BYTES) return 'O arquivo passou de 5 MB. Tente um print da tela.'
+  return null
+}
+
+/** Uploads a Pix receipt under a random name and returns its path. */
+export async function uploadReceipt(file: File): Promise<string> {
+  const problem = validateReceipt(file)
+  if (problem) throw new Error(problem)
+  const path = `${crypto.randomUUID()}.${RECEIPT_EXTENSIONS[file.type]}`
+  const { error } = await requireClient()
+    .storage.from(RECEIPTS_BUCKET)
+    .upload(path, file, { contentType: file.type, upsert: false })
+  if (error) throw new Error(error.message)
+  return path
+}
+
+/** Short lived link so an admin can open a receipt. */
+export async function getReceiptLink(path: string): Promise<string> {
+  const { data, error } = await requireClient()
+    .storage.from(RECEIPTS_BUCKET)
+    .createSignedUrl(path, 60 * 10)
+  if (error) throw new Error(error.message)
+  return data.signedUrl
 }
 
 export async function addGiftLetter(recordId: string, message: string): Promise<void> {
@@ -46,7 +88,7 @@ export async function addGiftLetter(recordId: string, message: string): Promise<
 
 interface PublicStatusRow {
   gift_id: string
-  pix_cents: number
+  contributed_cents: number
   purchase_count: number
 }
 
@@ -56,7 +98,10 @@ export async function fetchPublicStatus(): Promise<Map<string, GiftPublicStatus>
   return new Map(
     ((data ?? []) as PublicStatusRow[]).map((row) => [
       row.gift_id,
-      { pixInCents: Number(row.pix_cents), purchaseCount: Number(row.purchase_count) },
+      {
+        contributedInCents: Number(row.contributed_cents),
+        purchaseCount: Number(row.purchase_count),
+      },
     ]),
   )
 }
@@ -69,6 +114,8 @@ interface RecordRow {
   method: GiftMethod
   total_cents: number
   status: GiftRecordStatus
+  receipt_path: string | null
+  receipt_url: string | null
   gift_record_items: { id: number; gift_id: string; gift_name: string; amount_cents: number }[]
 }
 
@@ -81,6 +128,8 @@ function toRecord(row: RecordRow): GiftRecord {
     method: row.method,
     totalInCents: row.total_cents,
     status: row.status,
+    receiptPath: row.receipt_path,
+    receiptUrl: row.receipt_url,
     items: row.gift_record_items
       .map((item) => ({
         id: item.id,
@@ -96,7 +145,7 @@ export async function fetchRecords(): Promise<GiftRecord[]> {
   const { data, error } = await requireClient()
     .from('gift_records')
     .select(
-      'id, created_at, giver_names, message, method, total_cents, status, gift_record_items (id, gift_id, gift_name, amount_cents)',
+      'id, created_at, giver_names, message, method, total_cents, status, receipt_path, receipt_url, gift_record_items (id, gift_id, gift_name, amount_cents)',
     )
     .order('created_at', { ascending: false })
   if (error) throw new Error(error.message)

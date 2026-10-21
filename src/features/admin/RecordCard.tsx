@@ -4,7 +4,8 @@ import { joinNames } from '@/features/registry/giverNames'
 import type { GiftRecord, GiftRecordStatus } from '@/features/registry/types'
 import { formatCents } from '@/lib/format/currency'
 
-import { methodLabel, statusLabel } from './adminStats'
+import { givesMoney, methodLabel, statusLabel } from './adminStats'
+import { ReceiptLink } from './ReceiptLink'
 
 const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
   day: '2-digit',
@@ -28,7 +29,7 @@ interface RecordCardProps {
 
 export function RecordCard({ record, onStatusChange, onDelete }: RecordCardProps) {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
-  const isPix = record.method === 'pix'
+  const isMoney = givesMoney(record.method)
 
   return (
     <li
@@ -43,7 +44,7 @@ export function RecordCard({ record, onStatusChange, onDelete }: RecordCardProps
         </div>
         <div className="flex flex-wrap gap-2">
           <span
-            className={`rounded-full px-3 py-1 text-xs font-bold ${isPix ? 'bg-ink-800 text-white' : 'bg-ash-600 text-white'}`}
+            className={`rounded-full px-3 py-1 text-xs font-bold ${isMoney ? 'bg-ink-800 text-white' : 'bg-ash-600 text-white'}`}
           >
             {methodLabel(record.method)}
           </span>
@@ -59,7 +60,7 @@ export function RecordCard({ record, onStatusChange, onDelete }: RecordCardProps
         {record.items.map((item) => (
           <li key={item.id} className="flex justify-between gap-3 py-2 text-sm">
             <span className="min-w-0 text-ink-800">{item.giftName}</span>
-            {isPix && (
+            {isMoney && (
               <span className="shrink-0 font-semibold text-ink-900 tabular-nums">
                 {formatCents(item.amountInCents)}
               </span>
@@ -68,11 +69,15 @@ export function RecordCard({ record, onStatusChange, onDelete }: RecordCardProps
         ))}
       </ul>
 
-      {isPix && (
+      {isMoney && (
         <p className="mt-3 flex justify-between font-bold text-ink-900">
-          <span>Total do Pix</span>
+          <span>Total {record.method === 'card' ? 'no cartão' : 'do Pix'}</span>
           <span className="tabular-nums">{formatCents(record.totalInCents)}</span>
         </p>
+      )}
+
+      {(record.receiptPath || record.receiptUrl) && (
+        <ReceiptLink path={record.receiptPath} url={record.receiptUrl} />
       )}
 
       {record.message && (
@@ -84,7 +89,7 @@ export function RecordCard({ record, onStatusChange, onDelete }: RecordCardProps
       <div className="mt-5 flex flex-wrap items-center gap-2">
         {record.status !== 'confirmed' && (
           <ActionButton onClick={() => onStatusChange(record.id, 'confirmed')} primary>
-            {isPix ? 'Confirmar que recebi' : 'Confirmar'}
+            {isMoney ? 'Confirmar que recebi' : 'Confirmar'}
           </ActionButton>
         )}
         {record.status !== 'pending' && (

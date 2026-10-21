@@ -1,27 +1,20 @@
 import { buttonClassName } from '@/components/ui/buttonStyles'
 import { Container } from '@/components/ui/Container'
-import { rsvpDeadline } from '@/config/event'
 import { siteConfig } from '@/config/site'
-import { useRsvp } from '@/features/rsvp/useRsvp'
-import { daysUntil, describeDaysLeft, formatShortDate, isOnOrBefore } from '@/lib/date/event'
+import { RsvpCard } from '@/features/rsvp/RsvpCard'
 
+import { Countdown } from './Countdown'
 import { EventDetails } from './EventDetails'
 import { LivingRoomIllustration } from './LivingRoomIllustration'
 
 export function Hero() {
   const { coupleNames, event } = siteConfig
-  const { confirmed, open: openRsvp } = useRsvp()
-  const isRsvpOpen = !rsvpDeadline || isOnOrBefore(rsvpDeadline)
 
   return (
     <header className="overflow-hidden rounded-b-[3rem] bg-rose-100 md:rounded-b-[4rem]">
       <Container className="flex items-center justify-between py-6">
         <p className="font-display text-xl text-ink-800">{coupleNames.join(' & ')}</p>
-        {event.date && (
-          <p className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-rose-700 tabular-nums">
-            {describeDaysLeft(daysUntil(event.date))}
-          </p>
-        )}
+        {event.date && <Countdown date={event.date} />}
       </Container>
 
       <Container className="grid items-center gap-12 pt-6 pb-20 lg:grid-cols-[1.15fr_1fr] lg:pt-12 lg:pb-28">
@@ -31,28 +24,16 @@ export function Hero() {
           </h1>
           <p className="mt-6 max-w-[44ch] text-lg leading-relaxed text-ink-700">
             Fizemos uma listinha com o que ainda falta na casa nova. Você coloca no carrinho o que
-            quiser dar e presenteia com Pix, do jeito que for mais fácil.
+            quiser dar e presenteia com Pix, cartão ou do jeito que for mais fácil!
           </p>
 
           <EventDetails event={event} />
 
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            {isRsvpOpen && (
-              <button type="button" onClick={openRsvp} className={buttonClassName()}>
-                {confirmed ? 'Presença confirmada' : 'Confirmar presença'}
-              </button>
-            )}
-            <a href="#lista" className={buttonClassName({ variant: 'outline' })}>
-              Ver a listinha
-            </a>
-          </div>
-          {rsvpDeadline && isRsvpOpen && (
-            <p className="mt-4 max-w-[46ch] text-sm text-ink-700">
-              {confirmed
-                ? 'Você já confirmou por aqui, não precisa confirmar de novo.'
-                : `Confirme até ${formatShortDate(rsvpDeadline)}, pra gente passar seu nome pro porteiro. Se já confirmou, não precisa confirmar de novo.`}
-            </p>
-          )}
+          <a href="#lista" className={buttonClassName({ className: 'mt-10' })}>
+            Ver a listinha
+          </a>
+
+          <RsvpCard className="mt-8" />
         </div>
 
         <div className="mx-auto w-full max-w-md px-4">

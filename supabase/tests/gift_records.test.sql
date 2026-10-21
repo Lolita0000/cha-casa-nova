@@ -73,7 +73,7 @@ select pg_temp.raises($$insert into public.gift_records (giver_names, method, to
   'anon cannot insert records directly');
 
 select pg_temp.assert(
-  (select pix_cents from public.gift_public_status() where gift_id = 'dishwasher') = 10000
+  (select contributed_cents from public.gift_public_status() where gift_id = 'dishwasher') = 10000
   and (select purchase_count from public.gift_public_status() where gift_id = 'dishwasher') = 1,
   'public status sums pix amounts and counts purchases'
 );

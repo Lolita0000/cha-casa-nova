@@ -11,6 +11,6 @@ export type LiveGift<T extends Gift = Gift> = T & {
 export function applyPublicStatus<T extends Gift>(gift: T, status: GiftPublicStatus): LiveGift<T> {
   const purchasedByGuest = status.purchaseCount > 0
   const raised =
-    gift.kind === 'pooled' ? { raisedInCents: gift.raisedInCents + status.pixInCents } : {}
+    gift.kind === 'pooled' ? { raisedInCents: gift.raisedInCents + status.contributedInCents } : {}
   return { ...gift, ...raised, purchasedByGuest } as LiveGift<T>
 }

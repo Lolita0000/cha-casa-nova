@@ -14,6 +14,8 @@ function record(overrides: Partial<GiftRecord>): GiftRecord {
     totalInCents: 0,
     status: 'pending',
     items: [],
+    receiptPath: null,
+    receiptUrl: null,
     ...overrides,
   }
 }
@@ -55,8 +57,8 @@ const records: GiftRecord[] = [
 describe('summarize', () => {
   it('totals pix, purchases and pending records, ignoring cancelled ones', () => {
     expect(summarize(records)).toEqual({
-      pixDeclaredInCents: 37670,
-      pixConfirmedInCents: 35670,
+      moneyDeclaredInCents: 37670,
+      moneyConfirmedInCents: 35670,
       purchaseCount: 1,
       recordCount: 3,
       pendingCount: 2,
@@ -70,15 +72,15 @@ describe('summarizeByGift', () => {
     expect(dishwasher).toEqual({
       giftId: 'dishwasher',
       giftName: 'Lava-louças',
-      pixInCents: 10000,
-      pixGivers: ['Tia Rosa e Tio Beto'],
+      moneyInCents: 10000,
+      moneyGivers: ['Tia Rosa e Tio Beto'],
       purchasers: ['Família Souza'],
     })
   })
 
   it('leaves cancelled records out', () => {
     const towels = summarizeByGift(records).find((gift) => gift.giftId === 'towels')
-    expect(towels?.pixInCents).toBe(25670)
+    expect(towels?.moneyInCents).toBe(25670)
   })
 })
 

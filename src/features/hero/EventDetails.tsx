@@ -13,8 +13,8 @@ export function EventDetails({ event }: EventDetailsProps) {
   return (
     <ul className="mt-8 grid gap-2 sm:grid-cols-[auto_1fr]">
       {event.date && (
-        <li className="flex items-start gap-3 rounded-2xl bg-white px-4 py-3">
-          <CalendarIcon className="mt-0.5 size-5 shrink-0 text-rose-500" />
+        <li className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3">
+          <CalendarIcon className="size-5 shrink-0 text-rose-500" />
           <span>
             <span className="block font-bold text-ink-900">{formatEventDate(event.date)}</span>
             <span className="block text-sm text-ash-600">
