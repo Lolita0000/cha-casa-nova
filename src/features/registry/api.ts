@@ -69,13 +69,9 @@ export async function uploadReceipt(file: File): Promise<string> {
   return path
 }
 
-/** Short lived link so an admin can open a receipt. */
-export async function getReceiptLink(path: string): Promise<string> {
-  const { data, error } = await requireClient()
-    .storage.from(RECEIPTS_BUCKET)
-    .createSignedUrl(path, 60 * 10)
-  if (error) throw new Error(error.message)
-  return data.signedUrl
+/** Receipts are named with random UUIDs that only the admin functions reveal. */
+export function getReceiptLink(path: string): string {
+  return requireClient().storage.from(RECEIPTS_BUCKET).getPublicUrl(path).data.publicUrl
 }
 
 export async function addGiftLetter(recordId: string, message: string): Promise<void> {
@@ -141,24 +137,33 @@ function toRecord(row: RecordRow): GiftRecord {
   }
 }
 
-export async function fetchRecords(): Promise<GiftRecord[]> {
-  const { data, error } = await requireClient()
-    .from('gift_records')
-    .select(
-      'id, created_at, giver_names, message, method, total_cents, status, receipt_path, receipt_url, gift_record_items (id, gift_id, gift_name, amount_cents)',
-    )
-    .order('created_at', { ascending: false })
+export async function checkAdminKey(key: string): Promise<boolean> {
+  const { data, error } = await requireClient().rpc('admin_check', { p_key: key })
+  if (error) throw new Error(error.message)
+  return data === true
+}
+
+export async function fetchRecords(key: string): Promise<GiftRecord[]> {
+  const { data, error } = await requireClient().rpc('admin_records', { p_key: key })
   if (error) throw new Error(error.message)
   return ((data ?? []) as RecordRow[]).map(toRecord)
 }
 
-export async function updateRecordStatus(id: string, status: GiftRecordStatus): Promise<void> {
-  const { error } = await requireClient().from('gift_records').update({ status }).eq('id', id)
+export async function updateRecordStatus(
+  key: string,
+  id: string,
+  status: GiftRecordStatus,
+): Promise<void> {
+  const { error } = await requireClient().rpc('admin_set_record_status', {
+    p_key: key,
+    p_id: id,
+    p_status: status,
+  })
   if (error) throw new Error(error.message)
 }
 
-export async function deleteRecord(id: string): Promise<void> {
-  const { error } = await requireClient().from('gift_records').delete().eq('id', id)
+export async function deleteRecord(key: string, id: string): Promise<void> {
+  const { error } = await requireClient().rpc('admin_delete_record', { p_key: key, p_id: id })
   if (error) throw new Error(error.message)
 }
 
@@ -180,11 +185,8 @@ interface RsvpRow {
   message: string | null
 }
 
-export async function fetchRsvps(): Promise<Rsvp[]> {
-  const { data, error } = await requireClient()
-    .from('rsvps')
-    .select('id, created_at, guest_names, attending, message')
-    .order('created_at', { ascending: false })
+export async function fetchRsvps(key: string): Promise<Rsvp[]> {
+  const { data, error } = await requireClient().rpc('admin_rsvps', { p_key: key })
   if (error) throw new Error(error.message)
   return ((data ?? []) as RsvpRow[]).map((row) => ({
     id: row.id,
@@ -195,7 +197,7 @@ export async function fetchRsvps(): Promise<Rsvp[]> {
   }))
 }
 
-export async function deleteRsvp(id: string): Promise<void> {
-  const { error } = await requireClient().from('rsvps').delete().eq('id', id)
+export async function deleteRsvp(key: string, id: string): Promise<void> {
+  const { error } = await requireClient().rpc('admin_delete_rsvp', { p_key: key, p_id: id })
   if (error) throw new Error(error.message)
 }
