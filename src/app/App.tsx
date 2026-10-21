@@ -16,7 +16,6 @@ import { HousePalette } from '@/features/palette/HousePalette'
 import { GiftStatusProvider } from '@/features/registry/GiftStatusProvider'
 import { RsvpDialog } from '@/features/rsvp/RsvpDialog'
 import { RsvpProvider } from '@/features/rsvp/RsvpProvider'
-import { RsvpSection } from '@/features/rsvp/RsvpSection'
 
 const giftsByRoom = groupGiftsByRoom(rooms, gifts)
 
@@ -29,7 +28,6 @@ export function App() {
         <CartProvider gifts={gifts}>
           <Hero />
           <main>
-            <RsvpSection />
             <HowItWorks />
             <GiftList giftsByRoom={giftsByRoom} onContribute={contribution.open} />
             <FreeContribution />
