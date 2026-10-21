@@ -40,8 +40,9 @@ export function GiftList({ giftsByRoom, onContribute }: GiftListProps) {
           A nossa listinha
         </h2>
         <p className="mt-4 mb-8 max-w-[58ch] text-lg text-ash-600">
-          Separada por cômodo, mais a reforma e um cantinho pra cada um de nós. Os valores são uma
-          referência do quanto cada coisa custa.
+          Separada por cômodo, reforma e um cantinho pra cada um de nós. Os valores são uma
+          referência do quanto cada coisa custa (ou custava na época em que adicionamos aqui no
+          site).
           {hasPooledGifts && ' Os cards cinza são os itens maiores, que vamos juntando aos poucos.'}
         </p>
 

@@ -2,8 +2,8 @@ import { buttonClassName } from '@/components/ui/buttonStyles'
 import { Container } from '@/components/ui/Container'
 import { siteConfig } from '@/config/site'
 import { RsvpCard } from '@/features/rsvp/RsvpCard'
-import { daysUntil, describeDaysLeft } from '@/lib/date/event'
 
+import { Countdown } from './Countdown'
 import { EventDetails } from './EventDetails'
 import { LivingRoomIllustration } from './LivingRoomIllustration'
 
@@ -14,11 +14,7 @@ export function Hero() {
     <header className="overflow-hidden rounded-b-[3rem] bg-rose-100 md:rounded-b-[4rem]">
       <Container className="flex items-center justify-between py-6">
         <p className="font-display text-xl text-ink-800">{coupleNames.join(' & ')}</p>
-        {event.date && (
-          <p className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-rose-700 tabular-nums">
-            {describeDaysLeft(daysUntil(event.date))}
-          </p>
-        )}
+        {event.date && <Countdown date={event.date} />}
       </Container>
 
       <Container className="grid items-center gap-12 pt-6 pb-20 lg:grid-cols-[1.15fr_1fr] lg:pt-12 lg:pb-28">
@@ -28,7 +24,7 @@ export function Hero() {
           </h1>
           <p className="mt-6 max-w-[44ch] text-lg leading-relaxed text-ink-700">
             Fizemos uma listinha com o que ainda falta na casa nova. Você coloca no carrinho o que
-            quiser dar e presenteia com Pix, do jeito que for mais fácil.
+            quiser dar e presenteia com Pix, cartão ou do jeito que for mais fácil!
           </p>
 
           <EventDetails event={event} />
