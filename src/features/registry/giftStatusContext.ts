@@ -7,7 +7,7 @@ export interface GiftStatusContextValue {
   refresh: () => void
 }
 
-export const EMPTY_STATUS: GiftPublicStatus = { pixInCents: 0, purchaseCount: 0 }
+export const EMPTY_STATUS: GiftPublicStatus = { contributedInCents: 0, purchaseCount: 0 }
 
 export const GiftStatusContext = createContext<GiftStatusContextValue>({
   statusOf: () => EMPTY_STATUS,

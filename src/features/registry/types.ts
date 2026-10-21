@@ -1,4 +1,4 @@
-export type GiftMethod = 'pix' | 'purchase'
+export type GiftMethod = 'pix' | 'card' | 'purchase'
 
 export type GiftRecordStatus = 'pending' | 'confirmed' | 'cancelled'
 
@@ -13,6 +13,10 @@ export interface GiftRegistration {
   method: GiftMethod
   items: GiftRecordItemInput[]
   message?: string
+  /** Pix receipt uploaded to storage, see `uploadReceipt`. */
+  receiptPath?: string
+  /** Receipt page from the card checkout. */
+  receiptUrl?: string
 }
 
 export interface GiftRecordItem extends GiftRecordItemInput {
@@ -28,11 +32,14 @@ export interface GiftRecord {
   totalInCents: number
   status: GiftRecordStatus
   items: GiftRecordItem[]
+  receiptPath: string | null
+  receiptUrl: string | null
 }
 
 /** What every guest can see about a gift: totals, never names. */
 export interface GiftPublicStatus {
-  pixInCents: number
+  /** Pix and card together. */
+  contributedInCents: number
   purchaseCount: number
 }
 

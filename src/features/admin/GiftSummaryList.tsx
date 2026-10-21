@@ -20,9 +20,9 @@ export function GiftSummaryList({ summaries }: GiftSummaryListProps) {
         <li key={summary.giftId} className="rounded-[1.5rem] bg-white p-5">
           <div className="flex items-baseline justify-between gap-3">
             <p className="min-w-0 font-bold text-ink-900">{summary.giftName}</p>
-            {summary.pixInCents > 0 && (
+            {summary.moneyInCents > 0 && (
               <p className="shrink-0 font-display text-xl text-rose-700 tabular-nums">
-                {formatCents(summary.pixInCents)}
+                {formatCents(summary.moneyInCents)}
               </p>
             )}
           </div>
@@ -31,9 +31,9 @@ export function GiftSummaryList({ summaries }: GiftSummaryListProps) {
               <span className="font-bold">Vai comprar:</span> {summary.purchasers.join('; ')}
             </p>
           )}
-          {summary.pixGivers.length > 0 && (
+          {summary.moneyGivers.length > 0 && (
             <p className="mt-1 text-sm text-ash-600">
-              <span className="font-bold">Pix de:</span> {summary.pixGivers.join('; ')}
+              <span className="font-bold">Pix ou cartão de:</span> {summary.moneyGivers.join('; ')}
             </p>
           )}
         </li>

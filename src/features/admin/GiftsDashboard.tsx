@@ -60,8 +60,8 @@ export function GiftsDashboard() {
   return (
     <div className="space-y-8">
       <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Stat label="Pix informados" value={formatCents(summary.pixDeclaredInCents)} />
-        <Stat label="Pix confirmados" value={formatCents(summary.pixConfirmedInCents)} />
+        <Stat label="Pix e cartão informados" value={formatCents(summary.moneyDeclaredInCents)} />
+        <Stat label="Pix e cartão confirmados" value={formatCents(summary.moneyConfirmedInCents)} />
         <Stat label="Itens que vão comprar" value={String(summary.purchaseCount)} />
         <Stat
           label="Pra conferir"
@@ -164,8 +164,9 @@ function Filters({ filters, onChange }: FiltersProps) {
         }
         className={selectClass}
       >
-        <option value="all">Pix e compras</option>
+        <option value="all">Todas as formas</option>
         <option value="pix">Só Pix</option>
+        <option value="card">Só cartão</option>
         <option value="purchase">Só compras</option>
       </select>
     </div>

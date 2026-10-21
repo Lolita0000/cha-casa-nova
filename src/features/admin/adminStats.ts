@@ -2,20 +2,25 @@ import { joinNames } from '@/features/registry/giverNames'
 import type { GiftMethod, GiftRecord, GiftRecordStatus } from '@/features/registry/types'
 
 export interface RegistrySummary {
-  pixDeclaredInCents: number
-  pixConfirmedInCents: number
+  moneyDeclaredInCents: number
+  moneyConfirmedInCents: number
   purchaseCount: number
   recordCount: number
   pendingCount: number
 }
 
+/** Pix and card are money towards the gift; a purchase is the item itself. */
+export function givesMoney(method: GiftMethod): boolean {
+  return method !== 'purchase'
+}
+
 /** Cancelled records are left out of every total. */
 export function summarize(records: GiftRecord[]): RegistrySummary {
   const active = records.filter((record) => record.status !== 'cancelled')
-  const pix = active.filter((record) => record.method === 'pix')
+  const money = active.filter((record) => givesMoney(record.method))
   return {
-    pixDeclaredInCents: pix.reduce((sum, record) => sum + record.totalInCents, 0),
-    pixConfirmedInCents: pix
+    moneyDeclaredInCents: money.reduce((sum, record) => sum + record.totalInCents, 0),
+    moneyConfirmedInCents: money
       .filter((record) => record.status === 'confirmed')
       .reduce((sum, record) => sum + record.totalInCents, 0),
     purchaseCount: active.filter((record) => record.method === 'purchase').length,
@@ -27,9 +32,10 @@ export function summarize(records: GiftRecord[]): RegistrySummary {
 export interface GiftSummary {
   giftId: string
   giftName: string
-  pixInCents: number
+  /** Pix and card together. */
+  moneyInCents: number
   purchasers: string[]
-  pixGivers: string[]
+  moneyGivers: string[]
 }
 
 /** One row per gift, with who sent Pix and who will buy it. */
@@ -43,13 +49,13 @@ export function summarizeByGift(records: GiftRecord[]): GiftSummary[] {
       const summary = byId.get(item.giftId) ?? {
         giftId: item.giftId,
         giftName: item.giftName,
-        pixInCents: 0,
+        moneyInCents: 0,
         purchasers: [],
-        pixGivers: [],
+        moneyGivers: [],
       }
-      if (record.method === 'pix') {
-        summary.pixInCents += item.amountInCents
-        summary.pixGivers.push(givers)
+      if (givesMoney(record.method)) {
+        summary.moneyInCents += item.amountInCents
+        summary.moneyGivers.push(givers)
       } else {
         summary.purchasers.push(givers)
       }
@@ -88,7 +94,11 @@ export function filterRecords(records: GiftRecord[], filters: RecordFilters): Gi
   })
 }
 
-const METHOD_LABELS: Record<GiftMethod, string> = { pix: 'Pix', purchase: 'Compra' }
+const METHOD_LABELS: Record<GiftMethod, string> = {
+  pix: 'Pix',
+  card: 'Cartão',
+  purchase: 'Compra',
+}
 const STATUS_LABELS: Record<GiftRecordStatus, string> = {
   pending: 'Pendente',
   confirmed: 'Confirmado',
