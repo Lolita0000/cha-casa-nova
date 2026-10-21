@@ -32,8 +32,8 @@ npm run dev
 Everything personal lives in two files:
 
 - **`src/config/site.ts`**: couple names, party date, time and address, how many days before
-  the party guests can confirm presence, Pix key, WhatsApp number and an optional open-amount
-  card payment link.
+  the party guests can confirm presence, Pix key, WhatsApp number and the InfinitePay handle
+  for card payments.
 - **`src/data/gifts.ts`**: the gift list.
 - **`src/data/palette.ts`** and **`src/data/materials.ts`**: the house colors and the materials
   shown in the food-safe note.
@@ -62,6 +62,21 @@ database isn't configured.
 
 Rooms are defined in `src/data/rooms.ts`.
 
+### Card payments
+
+Card payments go through an [InfinitePay](https://www.infinitepay.io) checkout created for the
+exact amount of the cart. Set `infinitePayHandle` in `src/config/site.ts` to the account's
+InfiniteTag (without `$`) and enable "Checkout externo" in the InfinitePay app. The guest pays on
+InfinitePay's page and comes back to the site, which asks for their names and stores the
+receipt link with the gift. With the handle empty, the card tab is hidden.
+
+### Receipts
+
+When confirming a Pix, guests can attach the receipt (image or PDF, up to 5 MB). Files go to the
+private `receipts` bucket: guests can only upload, and admins open them from the panel.
+Pix and card amounts both count towards the progress bar of shared gifts as soon as they are
+registered; cancelling a record in the admin panel takes its amount out.
+
 ### Presence confirmation
 
 Guests confirm who is coming (one full name per person) until `rsvpDaysBefore` days before
@@ -71,8 +86,8 @@ guest already confirmed.
 ## Database and admin panel
 
 Gifts and presence confirmations are stored in [Supabase](https://supabase.com) (free plan).
-Guests only call database functions (`register_gift`, `add_gift_letter` and `register_rsvp`); reading the data
-requires signing in as an admin. The admin panel lives at `#/admin`, e.g.
+Guests only call database functions (`register_gift`, `add_gift_letter` and `register_rsvp`) and
+upload receipts; reading the data requires signing in as an admin. The admin panel lives at `#/admin`, e.g.
 `https://<user>.github.io/<repo>/#/admin`.
 
 Without the Supabase variables the invitation still works, it just doesn't store anything.
