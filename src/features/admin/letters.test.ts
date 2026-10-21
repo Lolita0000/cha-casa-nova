@@ -13,6 +13,8 @@ const records: GiftRecord[] = [
     method: 'pix',
     totalInCents: 100,
     status: 'pending',
+    receiptPath: null,
+    receiptUrl: null,
     items: [
       { id: 1, giftId: 'a', giftName: 'Toalhas', amountInCents: 50 },
       { id: 2, giftId: 'b', giftName: 'Jarra', amountInCents: 50 },
@@ -27,6 +29,8 @@ const records: GiftRecord[] = [
     totalInCents: 100,
     status: 'cancelled',
     items: [],
+    receiptPath: null,
+    receiptUrl: null,
   },
   {
     id: 'g3',
@@ -37,6 +41,8 @@ const records: GiftRecord[] = [
     totalInCents: 100,
     status: 'pending',
     items: [],
+    receiptPath: null,
+    receiptUrl: null,
   },
 ]
 

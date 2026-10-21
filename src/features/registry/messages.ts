@@ -13,10 +13,11 @@ export function buildNotifyMessage(
 ): string {
   const greeting = `Oi, ${coupleNames}! Aqui é ${joinNames(giverNames)}.`
 
-  if (method === 'pix') {
+  if (method !== 'purchase') {
     const total = items.reduce((sum, item) => sum + item.amountInCents, 0)
     const lines = items.map((item) => `• ${item.giftName} (${formatCents(item.amountInCents)})`)
-    return `${greeting} Mandei um Pix de ${formatCents(total)} pra casa nova:\n${lines.join('\n')}`
+    const how = method === 'pix' ? 'um Pix' : 'um presente no cartão'
+    return `${greeting} Mandei ${how} de ${formatCents(total)} pra casa nova:\n${lines.join('\n')}`
   }
 
   const lines = items.map((item) => `• ${item.giftName}`)

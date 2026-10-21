@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
 import { Dialog } from '@/components/ui/Dialog'
 import { Tabs, type TabItem } from '@/components/ui/Tabs'
-import { siteConfig } from '@/config/site'
-import { CardPayment } from '@/features/payment/CardPayment'
+import { CardCheckout } from '@/features/payment/CardCheckout'
 import { PixPayment } from '@/features/payment/PixPayment'
+import { isCardPaymentEnabled } from '@/features/payment/startCardCheckout'
 import { GiftConfirmation } from '@/features/registry/GiftConfirmation'
 import { useGiftStatus } from '@/features/registry/useGiftStatus'
 
@@ -39,12 +39,12 @@ export function FreeContribution() {
         </>
       ),
     },
-    ...(siteConfig.openAmountCardUrl
+    ...(isCardPaymentEnabled
       ? [
           {
             id: 'card' as const,
             label: 'Cartão',
-            content: <CardPayment url={siteConfig.openAmountCardUrl} />,
+            content: <CardCheckout openAmountFor={FREE_CONTRIBUTION} />,
           },
         ]
       : []),

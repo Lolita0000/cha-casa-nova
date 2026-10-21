@@ -12,11 +12,12 @@ import { RsvpForm } from '@/features/rsvp/RsvpForm'
 import { useRsvp } from '@/features/rsvp/useRsvp'
 import { formatShortDate, isOnOrBefore } from '@/lib/date/event'
 
-import { addGiftLetter, registerGift } from './api'
+import { addGiftLetter, registerGift, uploadReceipt } from './api'
 import { cleanGiverNames, joinNames, validateGiverNames } from './giverNames'
 import { buildNotifyMessage } from './messages'
 import { LetterField } from './LetterField'
 import { NameListInput } from './NameListInput'
+import { ReceiptField } from './ReceiptField'
 import { loadRememberedNames, rememberNames } from './rememberedNames'
 import type { GiftMethod, GiftRecordItemInput } from './types'
 
@@ -27,6 +28,8 @@ interface GiftConfirmationProps {
   allowPurchase?: boolean
   /** Asks for the amount, for contributions without a fixed value. */
   customAmountFor?: { giftId: string; giftName: string }
+  /** Receipt page from the card checkout, stored with the record. */
+  receiptUrl?: string
   onBack?: () => void
   onConfirmed?: () => void
 }
@@ -44,11 +47,55 @@ type Step =
 
 const coupleNames = joinNames([...siteConfig.coupleNames])
 
+const SUBMIT_LABELS: Record<GiftMethod, string> = {
+  pix: 'Confirmar que mandei o Pix',
+  card: 'Registrar meu presente',
+  purchase: 'Confirmar que vou comprar',
+}
+
+const THANKS_TEXT: Record<GiftMethod, string> = {
+  pix: `Seu Pix ficou registrado e ${coupleNames} já ficam sabendo por aqui.`,
+  card: `Seu presente no cartão ficou registrado e ${coupleNames} já ficam sabendo por aqui.`,
+  purchase: `Esses itens ficaram reservados e ${coupleNames} já ficam sabendo por aqui.`,
+}
+
+/** What is being registered, so the guest sees the amount that will count towards each gift. */
+function ItemsSummary({ items, method }: { items: GiftRecordItemInput[]; method: GiftMethod }) {
+  const showAmounts = method !== 'purchase'
+  const total = items.reduce((sum, item) => sum + item.amountInCents, 0)
+  return (
+    <div className="rounded-2xl bg-ash-50 p-4">
+      <p className="text-sm font-bold text-ink-900">
+        {items.length === 1 ? 'Seu presente' : 'Seus presentes'}
+      </p>
+      <ul className="mt-2 space-y-1 text-sm">
+        {items.map((item) => (
+          <li key={item.giftId} className="flex justify-between gap-3">
+            <span className="min-w-0 text-ink-800">{item.giftName}</span>
+            {showAmounts && (
+              <span className="shrink-0 font-semibold text-ink-900 tabular-nums">
+                {formatCents(item.amountInCents)}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+      {showAmounts && items.length > 1 && (
+        <p className="mt-2 flex justify-between border-t border-ash-200 pt-2 text-sm font-bold text-ink-900">
+          <span>Total</span>
+          <span className="tabular-nums">{formatCents(total)}</span>
+        </p>
+      )}
+    </div>
+  )
+}
+
 export function GiftConfirmation({
   items,
   defaultMethod,
   allowPurchase = true,
   customAmountFor,
+  receiptUrl,
   onBack,
   onConfirmed,
 }: GiftConfirmationProps) {
@@ -60,6 +107,8 @@ export function GiftConfirmation({
   })
   const [message, setMessage] = useState('')
   const [customAmount, setCustomAmount] = useState('')
+  const [receipt, setReceipt] = useState<File | null>(null)
+  const [receiptError, setReceiptError] = useState<string | null>(null)
   const [namesError, setNamesError] = useState<string | null>(null)
   const [amountError, setAmountError] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -88,9 +137,18 @@ export function GiftConfirmation({
     setIsSubmitting(true)
     setSubmitError(null)
     try {
-      const recordId = isBackendConfigured
-        ? await registerGift({ giverNames, method, items: finalItems, message })
-        : null
+      let recordId: string | null = null
+      if (isBackendConfigured) {
+        const receiptPath = method === 'pix' && receipt ? await uploadReceipt(receipt) : undefined
+        recordId = await registerGift({
+          giverNames,
+          method,
+          items: finalItems,
+          message,
+          receiptPath,
+          receiptUrl: method === 'card' ? receiptUrl : undefined,
+        })
+      }
       rememberNames(giverNames)
       setStep({
         name: 'done',
@@ -131,6 +189,8 @@ export function GiftConfirmation({
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-6">
+      {!customAmountFor && <ItemsSummary items={items} method={method} />}
+
       {allowPurchase && (
         <fieldset>
           <legend className="font-bold text-ink-900">Como você presenteou?</legend>
@@ -178,6 +238,22 @@ export function GiftConfirmation({
 
       <NameListInput names={names} onChange={setNames} error={namesError} />
 
+      {method === 'pix' && isBackendConfigured && (
+        <ReceiptField
+          file={receipt}
+          onChange={setReceipt}
+          error={receiptError}
+          onError={setReceiptError}
+        />
+      )}
+
+      {method === 'card' && receiptUrl && (
+        <p className="rounded-2xl bg-rose-50 p-4 text-sm text-ink-800">
+          <span className="font-bold">Pagamento no cartão recebido.</span> O comprovante já vai
+          junto com o seu presente.
+        </p>
+      )}
+
       <LetterField value={message} onChange={setMessage} />
 
       {submitError && (
@@ -188,11 +264,7 @@ export function GiftConfirmation({
 
       <div className="flex flex-col gap-3">
         <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting
-            ? 'Registrando...'
-            : method === 'pix'
-              ? 'Confirmar que mandei o Pix'
-              : 'Confirmar que vou comprar'}
+          {isSubmitting ? 'Registrando...' : SUBMIT_LABELS[method]}
         </Button>
         {onBack && (
           <button
@@ -253,9 +325,7 @@ function GiftThanks({ names, method, items, recordId, hasLetter }: GiftThanksPro
       </span>
       <p className="mt-4 font-display text-2xl text-ink-900">Obrigado, {joinNames(names)}!</p>
       <p className="mt-2 text-ash-600">
-        {method === 'pix'
-          ? `Seu Pix ficou registrado e ${coupleNames} já ficam sabendo por aqui.`
-          : `Esses itens ficaram reservados e ${coupleNames} já ficam sabendo por aqui.`}
+        {THANKS_TEXT[method]}
         {hasLetter && ' Sua cartinha foi entregue também.'}
       </p>
 

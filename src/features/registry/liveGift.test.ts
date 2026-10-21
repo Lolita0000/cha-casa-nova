@@ -24,14 +24,14 @@ const towels: SimpleGift = {
 
 describe('applyPublicStatus', () => {
   it('adds registered pix to what was already raised', () => {
-    const live = applyPublicStatus(fridge, { pixInCents: 15000, purchaseCount: 0 })
+    const live = applyPublicStatus(fridge, { contributedInCents: 15000, purchaseCount: 0 })
     expect(live.raisedInCents).toBe(35000)
     expect(live.purchasedByGuest).toBe(false)
   })
 
   it('marks gifts a guest will buy', () => {
-    expect(applyPublicStatus(towels, { pixInCents: 0, purchaseCount: 1 }).purchasedByGuest).toBe(
-      true,
-    )
+    expect(
+      applyPublicStatus(towels, { contributedInCents: 0, purchaseCount: 1 }).purchasedByGuest,
+    ).toBe(true)
   })
 })

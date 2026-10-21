@@ -19,7 +19,12 @@ export interface SiteConfig {
     receiverCity: string
   }
   whatsappNumber: string
-  openAmountCardUrl?: string
+  /**
+   * InfiniteTag (without the `$`) of the InfinitePay account that receives card
+   * payments. Leave empty to hide the card option. "Checkout externo" must be
+   * enabled in the InfinitePay app.
+   */
+  infinitePayHandle: string
 }
 
 /**
@@ -55,5 +60,5 @@ export const siteConfig: SiteConfig = {
   whatsappNumber: '5561900000000',
 
   /** Card payment link with an open amount, used by the free contribution section. */
-  openAmountCardUrl: '',
+  infinitePayHandle: '',
 }
