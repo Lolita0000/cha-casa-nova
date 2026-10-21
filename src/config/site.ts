@@ -57,7 +57,7 @@ export const siteConfig: SiteConfig = {
   },
 
   /** Number used for "I'll buy this one" messages, digits only with country code. */
-  whatsappNumber: '5561900000000',
+  whatsappNumber: '5538998853849',
 
   /** Card payment link with an open amount, used by the free contribution section. */
   infinitePayHandle: '',
