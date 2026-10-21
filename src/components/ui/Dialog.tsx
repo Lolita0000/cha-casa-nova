@@ -5,13 +5,24 @@ interface DialogProps {
   onClose: () => void
   title: string
   children: ReactNode
+  /** While locked, Escape, the backdrop and the close button don't close it. */
+  locked?: boolean
+  /** Called instead of closing when the guest tries to leave a locked dialog. */
+  onCloseBlocked?: () => void
 }
 
 /**
  * Thin wrapper around the native <dialog> element, which gives us focus
  * trapping, Escape to close and the top layer for free.
  */
-export function Dialog({ open, onClose, title, children }: DialogProps) {
+export function Dialog({
+  open,
+  onClose,
+  title,
+  children,
+  locked = false,
+  onCloseBlocked,
+}: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const titleId = useId()
 
@@ -23,8 +34,19 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
     if (!open && dialog.open) dialog.close()
   }, [open])
 
+  function requestClose() {
+    if (locked) onCloseBlocked?.()
+    else onClose()
+  }
+
   function handleBackdropClick(event: React.MouseEvent<HTMLDialogElement>) {
-    if (event.target === event.currentTarget) onClose()
+    if (event.target === event.currentTarget) requestClose()
+  }
+
+  // Escape fires "cancel" before closing the native dialog.
+  function handleCancel(event: React.SyntheticEvent<HTMLDialogElement>) {
+    event.preventDefault()
+    requestClose()
   }
 
   return (
@@ -32,6 +54,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
       ref={dialogRef}
       aria-labelledby={titleId}
       onClose={onClose}
+      onCancel={handleCancel}
       onClick={handleBackdropClick}
       className="m-auto max-h-[calc(100svh-2rem)] w-[min(34rem,calc(100%-2rem))] overflow-y-auto overscroll-contain rounded-[2rem] bg-white p-0 text-ink-800 shadow-[0_30px_80px_-30px] shadow-ink-900/40 backdrop:bg-ash-700/50 backdrop:backdrop-blur-[2px] open:animate-[dialog-in_200ms_ease-out]"
     >
@@ -42,7 +65,7 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
           </h2>
           <button
             type="button"
-            onClick={onClose}
+            onClick={requestClose}
             aria-label="Fechar"
             className="-m-1 grid size-10 shrink-0 place-items-center rounded-full bg-ash-100 text-ash-600 hover:bg-rose-100 hover:text-ink-900"
           >
