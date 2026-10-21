@@ -14,9 +14,14 @@ import type { OpenContribution } from './types'
 interface PooledGiftCardProps {
   gift: PooledGift
   onContribute: OpenContribution
+  className?: string
 }
 
-export function PooledGiftCard({ gift: listedGift, onContribute }: PooledGiftCardProps) {
+export function PooledGiftCard({
+  gift: listedGift,
+  onContribute,
+  className = '',
+}: PooledGiftCardProps) {
   const gift = useLiveGift(listedGift)
   const { add, remove, open, amountFor } = useCart()
   const amountInCart = amountFor(gift.id)
@@ -25,7 +30,9 @@ export function PooledGiftCard({ gift: listedGift, onContribute }: PooledGiftCar
   const isDone = Boolean(gift.reservedBy) || gift.purchasedByGuest || funded
 
   return (
-    <li className="grid gap-2.5 rounded-[1.75rem] bg-ash-600 p-2.5 text-white sm:col-span-2 sm:grid-cols-[2fr_3fr]">
+    <li
+      className={`col-span-2 grid gap-2.5 rounded-[1.75rem] bg-ash-600 p-2.5 text-white sm:grid-cols-[2fr_3fr] ${className}`}
+    >
       <GiftImage
         src={gift.imageUrl}
         className="aspect-[4/3] w-full rounded-[1.35rem] sm:aspect-auto sm:h-full"

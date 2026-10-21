@@ -31,6 +31,7 @@ export const siteConfig: SiteConfig = {
 
   event: {
     date: '2026-11-21',
+    time: '12:00',
     addressLine: 'QN 508, Samambaia, Brasília - DF, 72312-200',
     addressDetail: 'Residencial Sienna',
     mapsUrl: 'https://maps.app.goo.gl/N5FMducxH5i5w4Q56',

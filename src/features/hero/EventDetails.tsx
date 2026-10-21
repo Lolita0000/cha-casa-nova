@@ -1,6 +1,6 @@
 import { CalendarIcon, ExternalIcon, PinIcon } from '@/components/icons/icons'
 import type { SiteConfig } from '@/config/site'
-import { formatEventDate, formatEventTime } from '@/lib/date/event'
+import { describeEventTime, formatEventDate } from '@/lib/date/event'
 
 interface EventDetailsProps {
   event: SiteConfig['event']
@@ -18,7 +18,7 @@ export function EventDetails({ event }: EventDetailsProps) {
           <span>
             <span className="block font-bold text-ink-900">{formatEventDate(event.date)}</span>
             <span className="block text-sm text-ash-600">
-              {event.time ? `às ${formatEventTime(event.time)}` : 'Horário a confirmar'}
+              {event.time ? describeEventTime(event.time) : 'Horário a confirmar'}
             </span>
           </span>
         </li>
