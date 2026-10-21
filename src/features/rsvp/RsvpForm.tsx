@@ -11,6 +11,7 @@ import { NameListInput } from '@/features/registry/NameListInput'
 import { loadRememberedNames, rememberNames } from '@/features/registry/rememberedNames'
 import { describeEventTime, formatEventDate, formatShortDate, isOnOrBefore } from '@/lib/date/event'
 import { isBackendConfigured } from '@/lib/supabase/client'
+import { byCount } from '@/lib/text/plural'
 import { buildWhatsAppUrl } from '@/lib/whatsapp'
 
 import { useRsvp } from './useRsvp'
@@ -35,6 +36,7 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDone, setIsDone] = useState(false)
   const messageId = useId()
+  const peopleCount = cleanGiverNames(names).length
 
   if (rsvpDeadline && !isOnOrBefore(rsvpDeadline) && !isDone) {
     return (
@@ -47,6 +49,7 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
   }
 
   if (isDone && confirmed) {
+    const count = confirmed.guestNames.length
     return (
       <div className="text-center">
         <span className="mx-auto grid size-14 place-items-center rounded-full bg-rose-100 text-rose-500">
@@ -54,11 +57,18 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
         </span>
         {confirmed.attending ? (
           <>
-            <p className="mt-4 font-display text-2xl text-ink-900">Presença confirmada!</p>
+            <p className="mt-4 font-display text-2xl text-ink-900">
+              {byCount(count, 'Presença confirmada!', 'Presenças confirmadas!')}
+            </p>
             <p className="mt-2 text-ash-600">
-              {joinNames(confirmed.guestNames)}, vamos deixar o nome de vocês com o porteiro.
+              {joinNames(confirmed.guestNames)},{' '}
+              {byCount(
+                count,
+                'vamos deixar o seu nome com o porteiro.',
+                'vamos deixar o nome de vocês com o porteiro.',
+              )}
               {siteConfig.event.date &&
-                ` Te esperamos ${formatEventDate(siteConfig.event.date).toLowerCase()}${
+                ` ${byCount(count, 'Te esperamos', 'Esperamos vocês')} ${formatEventDate(siteConfig.event.date).toLowerCase()}${
                   siteConfig.event.time
                     ? `, ${describeEventTime(siteConfig.event.time).toLowerCase()}`
                     : ''
@@ -78,7 +88,10 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
         ) : (
           <>
             <p className="mt-4 font-display text-2xl text-ink-900">Obrigado por avisar</p>
-            <p className="mt-2 text-ash-600">Vamos sentir sua falta! Fica o carinho de sempre.</p>
+            <p className="mt-2 text-ash-600">
+              {byCount(count, 'Vamos sentir sua falta!', 'Vamos sentir a falta de vocês!')} Fica o
+              carinho de sempre.
+            </p>
           </>
         )}
         {!isBackendConfigured && (
@@ -86,8 +99,8 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
             href={buildWhatsAppUrl(
               siteConfig.whatsappNumber,
               confirmed.attending
-                ? `Oi, ${coupleNames}! Confirmo presença no chá: ${joinNames(confirmed.guestNames)}.`
-                : `Oi, ${coupleNames}! Infelizmente não vou conseguir ir no chá. ${joinNames(confirmed.guestNames)}.`,
+                ? `Oi, ${coupleNames}! ${byCount(count, 'Confirmo', 'Confirmamos')} presença no chá: ${joinNames(confirmed.guestNames)}.`
+                : `Oi, ${coupleNames}! Infelizmente ${byCount(count, 'não vou', 'não vamos')} conseguir ir no chá. ${joinNames(confirmed.guestNames)}.`,
             )}
             target="_blank"
             rel="noreferrer"
@@ -183,7 +196,15 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
       )}
 
       <Button type="submit" disabled={isSubmitting} className="w-full">
-        {isSubmitting ? 'Enviando...' : attending ? 'Confirmar presença' : 'Avisar que não vou'}
+        {isSubmitting
+          ? 'Enviando...'
+          : attending
+            ? byCount(
+                peopleCount,
+                'Confirmar presença',
+                `Confirmar a presença de ${peopleCount} pessoas`,
+              )
+            : byCount(peopleCount, 'Avisar que não vou', 'Avisar que não vamos')}
       </Button>
     </form>
   )
