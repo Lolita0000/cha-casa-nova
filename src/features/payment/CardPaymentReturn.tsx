@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Dialog } from '@/components/ui/Dialog'
 import { useCart } from '@/features/cart/useCart'
 import { GiftConfirmation } from '@/features/registry/GiftConfirmation'
+import { useConfirmationLock } from '@/features/registry/useConfirmationLock'
 import { useGiftStatus } from '@/features/registry/useGiftStatus'
 import { CHECKOUT_RETURN_PARAMS, readCheckoutReturn } from '@/lib/infinitepay/checkout'
 
@@ -39,13 +40,20 @@ export function CardPaymentReturn() {
   const [payment, setPayment] = useState(readReturnedPayment)
   const { clear } = useCart()
   const { refresh } = useGiftStatus()
+  const confirmation = useConfirmationLock(true)
 
   useEffect(cleanAddressBar, [])
 
   if (!payment) return null
 
   return (
-    <Dialog open onClose={() => setPayment(null)} title="Pagamento feito!">
+    <Dialog
+      open
+      onClose={() => setPayment(null)}
+      title="Pagamento feito!"
+      locked={confirmation.isLocked}
+      onCloseBlocked={confirmation.registerCloseAttempt}
+    >
       <p className="-mt-2 mb-6 text-ash-600">
         Obrigado! Agora é só deixar seu nome pra gente saber de quem veio.
       </p>
@@ -54,7 +62,9 @@ export function CardPaymentReturn() {
         defaultMethod="card"
         allowPurchase={false}
         receiptUrl={payment.receiptUrl}
+        closeAttempts={confirmation.closeAttempts}
         onConfirmed={() => {
+          confirmation.unlock()
           clearPendingCardPayment()
           if (payment.pending.fromCart) clear()
           refresh()

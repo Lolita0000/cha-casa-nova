@@ -8,6 +8,7 @@ import { CardCheckout } from '@/features/payment/CardCheckout'
 import { PixPayment } from '@/features/payment/PixPayment'
 import { isCardPaymentEnabled } from '@/features/payment/startCardCheckout'
 import { GiftConfirmation } from '@/features/registry/GiftConfirmation'
+import { useConfirmationLock } from '@/features/registry/useConfirmationLock'
 import { useGiftStatus } from '@/features/registry/useGiftStatus'
 
 type FreeTab = 'pix' | 'card'
@@ -20,6 +21,7 @@ export function FreeContribution() {
   const [activeTab, setActiveTab] = useState<FreeTab>('pix')
   const [isConfirming, setIsConfirming] = useState(false)
   const { refresh } = useGiftStatus()
+  const confirmation = useConfirmationLock()
 
   function close() {
     setIsOpen(false)
@@ -33,7 +35,14 @@ export function FreeContribution() {
       content: (
         <>
           <PixPayment description="Cha de casa nova" />
-          <Button variant="soft" onClick={() => setIsConfirming(true)} className="mt-5 w-full">
+          <Button
+            variant="soft"
+            onClick={() => {
+              setIsConfirming(true)
+              confirmation.lock()
+            }}
+            className="mt-5 w-full"
+          >
             Já fiz o Pix
           </Button>
         </>
@@ -75,6 +84,8 @@ export function FreeContribution() {
       <Dialog
         open={isOpen}
         onClose={close}
+        locked={confirmation.isLocked}
+        onCloseBlocked={confirmation.registerCloseAttempt}
         title={isConfirming ? 'Confirmar pixzinho' : 'Um pixzinho pra casa'}
       >
         {isConfirming ? (
@@ -83,8 +94,11 @@ export function FreeContribution() {
             defaultMethod="pix"
             allowPurchase={false}
             customAmountFor={FREE_CONTRIBUTION}
-            onBack={() => setIsConfirming(false)}
-            onConfirmed={refresh}
+            closeAttempts={confirmation.closeAttempts}
+            onConfirmed={() => {
+              confirmation.unlock()
+              refresh()
+            }}
           />
         ) : tabs.length > 1 ? (
           <Tabs

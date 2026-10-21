@@ -1,10 +1,12 @@
-export type ButtonVariant = 'primary' | 'soft' | 'outline' | 'link'
+export type ButtonVariant = 'primary' | 'soft' | 'outline' | 'link' | 'muted'
 export type ButtonSize = 'sm' | 'md'
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary: 'bg-ink-800 text-white hover:bg-ink-700 disabled:bg-ash-200 disabled:text-ash-600',
   soft: 'bg-rose-200 text-ink-900 hover:bg-rose-300',
   outline: 'border-2 border-ink-800 text-ink-800 hover:bg-white',
+  /** Looks disabled but still clickable, to explain what is missing. */
+  muted: 'cursor-not-allowed bg-ash-200 text-ash-600',
   link: 'text-ink-800 underline decoration-rose-400 decoration-2 underline-offset-4 hover:decoration-rose-500',
 }
 
