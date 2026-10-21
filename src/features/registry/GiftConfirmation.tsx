@@ -1,4 +1,4 @@
-import { useId, useState, type FormEvent } from 'react'
+import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 
 import { HeartIcon } from '@/components/icons/icons'
 import { Button } from '@/components/ui/Button'
@@ -30,7 +30,11 @@ interface GiftConfirmationProps {
   customAmountFor?: { giftId: string; giftName: string }
   /** Receipt page from the card checkout, stored with the record. */
   receiptUrl?: string
-  onBack?: () => void
+  /**
+   * Goes up every time the guest tries to close the dialog before confirming,
+   * so the form can explain what is missing.
+   */
+  closeAttempts?: number
   onConfirmed?: () => void
 }
 
@@ -96,7 +100,7 @@ export function GiftConfirmation({
   allowPurchase = true,
   customAmountFor,
   receiptUrl,
-  onBack,
+  closeAttempts = 0,
   onConfirmed,
 }: GiftConfirmationProps) {
   const [step, setStep] = useState<Step>({ name: 'form' })
@@ -110,6 +114,16 @@ export function GiftConfirmation({
   const [receipt, setReceipt] = useState<File | null>(null)
   const [receiptError, setReceiptError] = useState<string | null>(null)
   const [namesError, setNamesError] = useState<string | null>(null)
+  const [triedWithoutName, setTriedWithoutName] = useState(false)
+  const nudgeRef = useRef<HTMLDivElement>(null)
+  const hasName = names.some((name) => name.trim() !== '')
+  const showNudge = (triedWithoutName || closeAttempts > 0) && !hasName
+  const showFinishHint = closeAttempts > 0 && hasName
+
+  // Bring the hint into view when the guest tries to leave or send too early.
+  useEffect(() => {
+    if (closeAttempts > 0) nudgeRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }, [closeAttempts])
   const [amountError, setAmountError] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -128,6 +142,11 @@ export function GiftConfirmation({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (!hasName) {
+      setTriedWithoutName(true)
+      nudgeRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      return
+    }
     const nameProblem = validateGiverNames(names)
     setNamesError(nameProblem)
     const finalItems = resolveItems()
@@ -262,19 +281,30 @@ export function GiftConfirmation({
         </p>
       )}
 
-      <div className="flex flex-col gap-3">
-        <Button type="submit" disabled={isSubmitting} className="w-full">
+      <div ref={nudgeRef} className="flex scroll-mt-6 flex-col gap-3">
+        {showNudge && (
+          <div role="alert" className="rounded-2xl border-2 border-rose-300 bg-rose-50 p-4">
+            <p className="font-bold text-ink-900">Falta o seu nome!</p>
+            <p className="mt-1 text-sm text-ink-800">
+              Coloca pelo menos um nome pra {coupleNames} saberem de quem veio o presente. E se
+              quiser, aproveita e escreve uma cartinha pra eles, eles vão amar.
+            </p>
+          </div>
+        )}
+        {showFinishHint && (
+          <p role="alert" className="rounded-2xl bg-rose-50 p-4 text-sm font-semibold text-ink-800">
+            Quase lá! Clica no botão abaixo pra terminar.
+          </p>
+        )}
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          aria-disabled={!hasName || undefined}
+          variant={hasName ? 'primary' : 'muted'}
+          className="w-full"
+        >
           {isSubmitting ? 'Registrando...' : SUBMIT_LABELS[method]}
         </Button>
-        {onBack && (
-          <button
-            type="button"
-            onClick={onBack}
-            className="text-sm font-semibold text-ash-600 underline underline-offset-4 hover:text-ink-800"
-          >
-            Voltar
-          </button>
-        )}
       </div>
     </form>
   )

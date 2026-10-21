@@ -9,6 +9,7 @@ import { isCardPaymentEnabled } from '@/features/payment/startCardCheckout'
 import { GiftConfirmation } from '@/features/registry/GiftConfirmation'
 import { buildPixDescription } from '@/features/registry/messages'
 import type { GiftMethod, GiftRecordItemInput } from '@/features/registry/types'
+import { useConfirmationLock } from '@/features/registry/useConfirmationLock'
 import { useGiftStatus } from '@/features/registry/useGiftStatus'
 import { formatCents } from '@/lib/format/currency'
 
@@ -34,6 +35,7 @@ export function CartDialog() {
   const { items, totalInCents, isOpen, close, remove, clear } = useCart()
   const { refresh } = useGiftStatus()
   const [step, setStep] = useState<Step>({ name: 'checkout' })
+  const confirmation = useConfirmationLock()
 
   function handleClose() {
     close()
@@ -43,18 +45,26 @@ export function CartDialog() {
   function startConfirmation(method: GiftMethod) {
     // Snapshot the cart: it is cleared once the gift is registered.
     setStep({ name: 'confirm', method, items: toRecordItems(items) })
+    confirmation.lock()
   }
 
   const title = step.name === 'confirm' ? 'Confirmar presente' : 'Seu carrinho'
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} title={title}>
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      title={title}
+      locked={confirmation.isLocked}
+      onCloseBlocked={confirmation.registerCloseAttempt}
+    >
       {step.name === 'confirm' ? (
         <GiftConfirmation
           items={step.items}
           defaultMethod={step.method}
-          onBack={() => setStep({ name: 'checkout' })}
+          closeAttempts={confirmation.closeAttempts}
           onConfirmed={() => {
+            confirmation.unlock()
             clear()
             refresh()
           }}
