@@ -16,6 +16,17 @@ export class BackendUnavailableError extends Error {
   }
 }
 
+const NETWORK_FAILURE = /failed to fetch|networkerror|load failed|network request failed/i
+
+/** Turns browser network errors into something a guest can act on. */
+export function toFriendlyError(message: string): Error {
+  return new Error(
+    NETWORK_FAILURE.test(message)
+      ? 'o site não conseguiu falar com o nosso banco. Confere sua internet e tenta de novo daqui a alguns minutinhos.'
+      : message,
+  )
+}
+
 function requireClient() {
   if (!supabase) throw new BackendUnavailableError()
   return supabase
@@ -34,7 +45,7 @@ export async function registerGift(registration: GiftRegistration): Promise<stri
     p_receipt_path: registration.receiptPath ?? null,
     p_receipt_url: registration.receiptUrl ?? null,
   })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
   return data as string
 }
 
@@ -65,7 +76,7 @@ export async function uploadReceipt(file: File): Promise<string> {
   const { error } = await requireClient()
     .storage.from(RECEIPTS_BUCKET)
     .upload(path, file, { contentType: file.type, upsert: false })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
   return path
 }
 
@@ -79,7 +90,7 @@ export async function addGiftLetter(recordId: string, message: string): Promise<
     p_record_id: recordId,
     p_message: message,
   })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
 }
 
 interface PublicStatusRow {
@@ -90,7 +101,7 @@ interface PublicStatusRow {
 
 export async function fetchPublicStatus(): Promise<Map<string, GiftPublicStatus>> {
   const { data, error } = await requireClient().rpc('gift_public_status')
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
   return new Map(
     ((data ?? []) as PublicStatusRow[]).map((row) => [
       row.gift_id,
@@ -139,13 +150,13 @@ function toRecord(row: RecordRow): GiftRecord {
 
 export async function checkAdminKey(key: string): Promise<boolean> {
   const { data, error } = await requireClient().rpc('admin_check', { p_key: key })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
   return data === true
 }
 
 export async function fetchRecords(key: string): Promise<GiftRecord[]> {
   const { data, error } = await requireClient().rpc('admin_records', { p_key: key })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
   return ((data ?? []) as RecordRow[]).map(toRecord)
 }
 
@@ -159,12 +170,12 @@ export async function updateRecordStatus(
     p_id: id,
     p_status: status,
   })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
 }
 
 export async function deleteRecord(key: string, id: string): Promise<void> {
   const { error } = await requireClient().rpc('admin_delete_record', { p_key: key, p_id: id })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
 }
 
 export async function registerRsvp(registration: RsvpRegistration): Promise<string> {
@@ -173,7 +184,7 @@ export async function registerRsvp(registration: RsvpRegistration): Promise<stri
     p_attending: registration.attending,
     p_message: registration.message ?? null,
   })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
   return data as string
 }
 
@@ -187,7 +198,7 @@ interface RsvpRow {
 
 export async function fetchRsvps(key: string): Promise<Rsvp[]> {
   const { data, error } = await requireClient().rpc('admin_rsvps', { p_key: key })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
   return ((data ?? []) as RsvpRow[]).map((row) => ({
     id: row.id,
     createdAt: row.created_at,
@@ -199,5 +210,5 @@ export async function fetchRsvps(key: string): Promise<Rsvp[]> {
 
 export async function deleteRsvp(key: string, id: string): Promise<void> {
   const { error } = await requireClient().rpc('admin_delete_rsvp', { p_key: key, p_id: id })
-  if (error) throw new Error(error.message)
+  if (error) throw toFriendlyError(error.message)
 }

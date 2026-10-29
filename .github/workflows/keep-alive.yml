@@ -1,0 +1,25 @@
+name: Keep database awake
+
+# Free Supabase projects pause after a week without requests, and then guests
+# can't sign gifts or confirm presence. A small daily read keeps it awake.
+on:
+  schedule:
+    - cron: '17 11 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    if: vars.VITE_SUPABASE_URL != ''
+    steps:
+      - name: Read the public gift status
+        env:
+          SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          curl --fail --silent --show-error --retry 3 --retry-delay 20 \
+            -X POST "$SUPABASE_URL/rest/v1/rpc/gift_public_status" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}' > /dev/null

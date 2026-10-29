@@ -107,7 +107,9 @@ Without the Supabase variables the invitation still works, it just doesn't store
    create `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` with those values.
 7. Push to `main`. For local development, copy `.env.example` to `.env.local`.
 
-Free Supabase projects pause after a week without any requests; open the dashboard to resume.
+Free Supabase projects pause after a week without any requests. `.github/workflows/keep-alive.yml`
+reads the public gift status once a day so that doesn't happen; if it ever pauses anyway, resume it
+from the dashboard.
 
 ### Database tests
 
