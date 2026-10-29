@@ -690,5 +690,13 @@ export const gifts: Gift[] = [
     imageUrl: '/gifts/telescope.webp',
     productUrl:
       'https://fotonastro.com.br/produto/svbony-sv520-telescopio-refrator-conjunto-completo-90mm-f-8-9/',
+  },  {
+    id: 'omnitrix',
+    kind: 'simple',
+    roomId: 'gabriel',
+    name: 'Omnitrix Real 100% Atualizado Livre de Vírus Todos Os Aliens',
+    description: 'Original, versão completa, com todos os aliens desbloqueados',
+    priceInCents: 101000,
+    imageUrl: '/gifts/omnitrix.webp',
   },
 ]
