@@ -18,13 +18,36 @@ export class BackendUnavailableError extends Error {
 
 const NETWORK_FAILURE = /failed to fetch|networkerror|load failed|network request failed/i
 
+/** The request never reached the database: no internet, or a network blocking it. */
+export class NetworkError extends Error {
+  constructor() {
+    super(
+      'o site não conseguiu falar com o nosso banco. Pode ser a sua internet ou a rede bloqueando o site.',
+    )
+  }
+}
+
 /** Turns browser network errors into something a guest can act on. */
 export function toFriendlyError(message: string): Error {
-  return new Error(
-    NETWORK_FAILURE.test(message)
-      ? 'o site não conseguiu falar com o nosso banco. Confere sua internet e tenta de novo daqui a alguns minutinhos.'
-      : message,
-  )
+  return NETWORK_FAILURE.test(message) ? new NetworkError() : new Error(message)
+}
+
+const RETRY_DELAYS_MS = [800, 2000]
+
+/** Tries again a couple of times when the connection drops, which is common on phones. */
+export async function retryOnNetworkError<T>(
+  run: () => Promise<T>,
+  delays: number[] = RETRY_DELAYS_MS,
+): Promise<T> {
+  for (const delay of delays) {
+    try {
+      return await run()
+    } catch (error) {
+      if (!(error instanceof NetworkError)) throw error
+      await new Promise((resolve) => setTimeout(resolve, delay))
+    }
+  }
+  return run()
 }
 
 function requireClient() {
@@ -33,6 +56,10 @@ function requireClient() {
 }
 
 export async function registerGift(registration: GiftRegistration): Promise<string> {
+  return retryOnNetworkError(() => sendGift(registration))
+}
+
+async function sendGift(registration: GiftRegistration): Promise<string> {
   const { data, error } = await requireClient().rpc('register_gift', {
     p_giver_names: registration.giverNames,
     p_method: registration.method,
@@ -179,6 +206,10 @@ export async function deleteRecord(key: string, id: string): Promise<void> {
 }
 
 export async function registerRsvp(registration: RsvpRegistration): Promise<string> {
+  return retryOnNetworkError(() => sendRsvp(registration))
+}
+
+async function sendRsvp(registration: RsvpRegistration): Promise<string> {
   const { data, error } = await requireClient().rpc('register_rsvp', {
     p_guest_names: registration.guestNames,
     p_attending: registration.attending,

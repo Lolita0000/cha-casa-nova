@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { buttonClassName } from '@/components/ui/buttonStyles'
 import { rsvpDeadline } from '@/config/event'
 import { siteConfig } from '@/config/site'
-import { registerRsvp } from '@/features/registry/api'
+import { NetworkError, registerRsvp } from '@/features/registry/api'
 import { cleanGiverNames, joinNames, validateGiverNames } from '@/features/registry/giverNames'
 import { NameListInput } from '@/features/registry/NameListInput'
 import { loadRememberedNames, rememberNames } from '@/features/registry/rememberedNames'
@@ -33,6 +33,7 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
   const [message, setMessage] = useState('')
   const [namesError, setNamesError] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [fallbackUrl, setFallbackUrl] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDone, setIsDone] = useState(false)
   const messageId = useId()
@@ -98,9 +99,7 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
           <a
             href={buildWhatsAppUrl(
               siteConfig.whatsappNumber,
-              confirmed.attending
-                ? `Oi, ${coupleNames}! ${byCount(count, 'Confirmo', 'Confirmamos')} presença no chá: ${joinNames(confirmed.guestNames)}.`
-                : `Oi, ${coupleNames}! Infelizmente ${byCount(count, 'não vou', 'não vamos')} conseguir ir no chá. ${joinNames(confirmed.guestNames)}.`,
+              rsvpWhatsAppText(confirmed.guestNames, confirmed.attending),
             )}
             target="_blank"
             rel="noreferrer"
@@ -122,6 +121,7 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
     const guestNames = cleanGiverNames(names)
     setIsSubmitting(true)
     setSubmitError(null)
+    setFallbackUrl(null)
     try {
       if (isBackendConfigured) {
         await registerRsvp({ guestNames, attending, message })
@@ -130,6 +130,12 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
       markConfirmed({ guestNames, attending })
       setIsDone(true)
     } catch (error) {
+      // Some networks block the database; WhatsApp still gets the names to us.
+      if (error instanceof NetworkError) {
+        setFallbackUrl(
+          buildWhatsAppUrl(siteConfig.whatsappNumber, rsvpWhatsAppText(guestNames, attending)),
+        )
+      }
       setSubmitError(
         error instanceof Error && error.message
           ? `Não conseguimos confirmar agora: ${error.message}`
@@ -190,9 +196,25 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
       </div>
 
       {submitError && (
-        <p role="alert" className="rounded-2xl bg-rose-50 p-4 text-sm font-semibold text-rose-700">
-          {submitError}
-        </p>
+        <div role="alert" className="rounded-2xl bg-rose-50 p-4 text-sm">
+          <p className="font-semibold text-rose-700">{submitError}</p>
+          {fallbackUrl && (
+            <>
+              <p className="mt-2 text-ink-800">
+                Sem problema: manda sua confirmação pelo WhatsApp que a gente coloca seu nome na
+                lista do porteiro.
+              </p>
+              <a
+                href={fallbackUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={buttonClassName({ className: 'mt-3 w-full' })}
+              >
+                Confirmar pelo WhatsApp
+              </a>
+            </>
+          )}
+        </div>
       )}
 
       <Button type="submit" disabled={isSubmitting} className="w-full">
@@ -233,4 +255,11 @@ function AnswerOption({ checked, onSelect, title }: AnswerOptionProps) {
       {title}
     </label>
   )
+}
+
+function rsvpWhatsAppText(guestNames: string[], attending: boolean): string {
+  const count = guestNames.length
+  return attending
+    ? `Oi, ${coupleNames}! ${byCount(count, 'Confirmo', 'Confirmamos')} presença no chá: ${joinNames(guestNames)}.`
+    : `Oi, ${coupleNames}! Infelizmente ${byCount(count, 'não vou', 'não vamos')} conseguir ir no chá. ${joinNames(guestNames)}.`
 }

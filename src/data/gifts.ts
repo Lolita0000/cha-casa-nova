@@ -690,7 +690,8 @@ export const gifts: Gift[] = [
     imageUrl: '/gifts/telescope.webp',
     productUrl:
       'https://fotonastro.com.br/produto/svbony-sv520-telescopio-refrator-conjunto-completo-90mm-f-8-9/',
-  },  {
+  },
+  {
     id: 'omnitrix',
     kind: 'pooled',
     roomId: 'gabriel',
