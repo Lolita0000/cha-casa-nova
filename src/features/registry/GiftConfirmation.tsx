@@ -13,7 +13,7 @@ import { RsvpForm } from '@/features/rsvp/RsvpForm'
 import { useRsvp } from '@/features/rsvp/useRsvp'
 import { formatShortDate, isOnOrBefore } from '@/lib/date/event'
 
-import { addGiftLetter, registerGift, uploadReceipt } from './api'
+import { addGiftLetter, NetworkError, registerGift, uploadReceipt } from './api'
 import { cleanGiverNames, joinNames, validateGiverNames } from './giverNames'
 import { buildNotifyMessage } from './messages'
 import { LetterField } from './LetterField'
@@ -134,6 +134,7 @@ export function GiftConfirmation({
   }, [closeAttempts])
   const [amountError, setAmountError] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isOffline, setIsOffline] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const amountId = useId()
 
@@ -146,6 +147,28 @@ export function GiftConfirmation({
     }
     setAmountError(null)
     return [{ ...customAmountFor, amountInCents: reaisToCents(reais) }]
+  }
+
+  /** Same as resolveItems, without touching the form state, for the WhatsApp text. */
+  function resolvedItemsForMessage(): GiftRecordItemInput[] {
+    if (!customAmountFor) return items
+    const reais = Number(customAmount.replace(',', '.'))
+    return [{ ...customAmountFor, amountInCents: reais > 0 ? reaisToCents(reais) : 0 }]
+  }
+
+  /** The guest told us on WhatsApp instead, so the dialog can let them go. */
+  function finishByWhatsApp() {
+    const giverNames = cleanGiverNames(names)
+    rememberNames(giverNames)
+    setStep({
+      name: 'done',
+      names: giverNames,
+      method,
+      items: resolvedItemsForMessage(),
+      recordId: null,
+      hasLetter: false,
+    })
+    onConfirmed?.()
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -163,6 +186,7 @@ export function GiftConfirmation({
     const giverNames = cleanGiverNames(names)
     setIsSubmitting(true)
     setSubmitError(null)
+    setIsOffline(false)
     try {
       let recordId: string | null = null
       if (isBackendConfigured) {
@@ -187,6 +211,7 @@ export function GiftConfirmation({
       })
       onConfirmed?.()
     } catch (error) {
+      setIsOffline(error instanceof NetworkError)
       setSubmitError(
         error instanceof Error && error.message
           ? `Não conseguimos registrar agora: ${error.message}`
@@ -284,9 +309,30 @@ export function GiftConfirmation({
       <LetterField value={message} onChange={setMessage} />
 
       {submitError && (
-        <p role="alert" className="rounded-2xl bg-rose-50 p-4 text-sm font-semibold text-rose-700">
-          {submitError}
-        </p>
+        <div role="alert" className="rounded-2xl bg-rose-50 p-4 text-sm">
+          <p className="font-semibold text-rose-700">{submitError}</p>
+          {isOffline && (
+            <>
+              <p className="mt-2 text-ink-800">
+                Sem problema: avisa a gente pelo WhatsApp que a gente registra seu presente por lá.
+              </p>
+              <a
+                href={buildWhatsAppUrl(
+                  siteConfig.whatsappNumber,
+                  `${buildNotifyMessage(method, cleanGiverNames(names), resolvedItemsForMessage())}${
+                    message.trim() ? `\n\nCartinha: ${message.trim()}` : ''
+                  }`,
+                )}
+                target="_blank"
+                rel="noreferrer"
+                onClick={finishByWhatsApp}
+                className={buttonClassName({ className: 'mt-3 w-full' })}
+              >
+                Avisar pelo WhatsApp
+              </a>
+            </>
+          )}
+        </div>
       )}
 
       <div ref={nudgeRef} className="flex scroll-mt-6 flex-col gap-3">
