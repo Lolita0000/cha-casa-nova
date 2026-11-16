@@ -1,11 +1,11 @@
 import { CheckIcon } from '@/components/icons/icons'
 import { Button } from '@/components/ui/Button'
-import { rsvpDeadline } from '@/config/event'
 import { joinNames } from '@/features/registry/giverNames'
-import { formatShortDate, isOnOrBefore } from '@/lib/date/event'
 import { byCount } from '@/lib/text/plural'
 
+import { RsvpClosedNote } from './RsvpClosedNote'
 import { useRsvp } from './useRsvp'
+import { useRsvpOpen } from './useRsvpOpen'
 
 interface RsvpCardProps {
   className?: string
@@ -14,7 +14,7 @@ interface RsvpCardProps {
 /** "Você vem?": asks guests to confirm presence so their names can go to the doorman. */
 export function RsvpCard({ className = '' }: RsvpCardProps) {
   const { confirmed, open } = useRsvp()
-  const isOpenForRsvp = !rsvpDeadline || isOnOrBefore(rsvpDeadline)
+  const isOpenForRsvp = useRsvpOpen()
 
   return (
     <section
@@ -25,20 +25,19 @@ export function RsvpCard({ className = '' }: RsvpCardProps) {
       <h2 id="rsvp-title" className="font-display text-3xl leading-tight sm:text-4xl">
         Você vem?
       </h2>
-      <p className="mt-3 max-w-[52ch] leading-relaxed text-ash-100">
-        A entrada no condomínio é liberada pelo nome, então precisamos passar a lista pro porteiro.{' '}
-        {rsvpDeadline ? (
-          <>
-            Por favor, confirme sua presença até{' '}
-            <strong className="text-white">{formatShortDate(rsvpDeadline)}</strong>.
-          </>
-        ) : (
-          'Por favor, confirme sua presença.'
-        )}
-      </p>
-      <p className="mt-2 text-sm text-rose-200">
-        Se você já confirmou, não precisa confirmar de novo.
-      </p>
+      {isOpenForRsvp ? (
+        <>
+          <p className="mt-3 max-w-[52ch] leading-relaxed text-ash-100">
+            A entrada no condomínio é liberada pelo nome, então precisamos passar a lista pro
+            porteiro. Por favor, confirme sua presença.
+          </p>
+          <p className="mt-2 text-sm text-rose-200">
+            Se você já confirmou, não precisa confirmar de novo.
+          </p>
+        </>
+      ) : (
+        <RsvpClosedNote className="mt-3 max-w-[52ch] leading-relaxed text-ash-100" />
+      )}
 
       <div className="mt-6">
         {confirmed ? (
@@ -69,9 +68,11 @@ export function RsvpCard({ className = '' }: RsvpCardProps) {
             )}
           </div>
         ) : (
-          <Button onClick={open} variant="soft" className="w-full sm:w-auto">
-            {isOpenForRsvp ? 'Confirmar presença' : 'Ver como confirmar'}
-          </Button>
+          isOpenForRsvp && (
+            <Button onClick={open} variant="soft" className="w-full sm:w-auto">
+              Confirmar presença
+            </Button>
+          )
         )}
       </div>
     </section>

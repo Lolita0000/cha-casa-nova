@@ -80,8 +80,8 @@ registered; cancelling a record in the admin panel takes its amount out.
 ### Presence confirmation
 
 Guests confirm who is coming (one full name per person), so the list can go to the doorman.
-Set `rsvpDaysBefore` to close confirmations that many days before `event.date`; leave it out to keep
-them open. The page remembers on each device that the guest already confirmed.
+Set `rsvpClosesAt` (date and time with the time zone offset) to close confirmations at that moment;
+leave it out to keep them open. The page remembers on each device that the guest already confirmed.
 
 ## Database and admin panel
 

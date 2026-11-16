@@ -1,11 +1,13 @@
-import { addDays } from '@/lib/date/event'
-
 import { siteConfig } from './site'
 
-const { event } = siteConfig
+/** When presence confirmation closes, or undefined while it stays open. */
+export const rsvpClosesAt = siteConfig.event.rsvpClosesAt
+  ? new Date(siteConfig.event.rsvpClosesAt)
+  : undefined
 
-/** Last day guests can confirm presence, or undefined while the party has no date. */
-export const rsvpDeadline =
-  event.date && event.rsvpDaysBefore !== undefined
-    ? addDays(event.date, -event.rsvpDaysBefore)
-    : undefined
+export function isRsvpOpen(
+  now: Date = new Date(),
+  closesAt: Date | null | undefined = rsvpClosesAt,
+): boolean {
+  return !closesAt || now.getTime() < closesAt.getTime()
+}

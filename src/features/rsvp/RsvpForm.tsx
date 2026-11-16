@@ -3,18 +3,20 @@ import { useId, useState, type FormEvent } from 'react'
 import { HeartIcon } from '@/components/icons/icons'
 import { Button } from '@/components/ui/Button'
 import { buttonClassName } from '@/components/ui/buttonStyles'
-import { rsvpDeadline } from '@/config/event'
+import { isRsvpOpen } from '@/config/event'
 import { siteConfig } from '@/config/site'
 import { NetworkError, registerRsvp } from '@/features/registry/api'
 import { cleanGiverNames, joinNames, validateGiverNames } from '@/features/registry/giverNames'
 import { NameListInput } from '@/features/registry/NameListInput'
 import { loadRememberedNames, rememberNames } from '@/features/registry/rememberedNames'
-import { describeEventTime, formatEventDate, formatShortDate, isOnOrBefore } from '@/lib/date/event'
+import { describeEventTime, formatEventDate } from '@/lib/date/event'
 import { isBackendConfigured } from '@/lib/supabase/client'
 import { byCount } from '@/lib/text/plural'
 import { buildWhatsAppUrl } from '@/lib/whatsapp'
 
+import { RsvpClosedNote } from './RsvpClosedNote'
 import { useRsvp } from './useRsvp'
+import { useRsvpOpen } from './useRsvpOpen'
 
 interface RsvpFormProps {
   /** Pre-fills the names, e.g. with the people who just gave a gift. */
@@ -38,15 +40,10 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
   const [isDone, setIsDone] = useState(false)
   const messageId = useId()
   const peopleCount = cleanGiverNames(names).length
+  const isOpen = useRsvpOpen()
 
-  if (rsvpDeadline && !isOnOrBefore(rsvpDeadline) && !isDone) {
-    return (
-      <p className="rounded-2xl bg-rose-50 p-4 text-ink-800">
-        O prazo pra confirmar presença acabou no dia {formatShortDate(rsvpDeadline)}, porque já
-        passamos a lista pro porteiro. Se você ainda quiser vir, fala direto com a gente que a gente
-        dá um jeitinho.
-      </p>
-    )
+  if (!isOpen && !isDone) {
+    return <RsvpClosedNote className="rounded-2xl bg-rose-50 p-4 text-ink-800" />
   }
 
   if (isDone && confirmed) {
@@ -117,6 +114,14 @@ export function RsvpForm({ initialNames }: RsvpFormProps) {
     const problem = validateGiverNames(names)
     setNamesError(problem)
     if (problem) return
+
+    // The page may have stayed open past the closing time.
+    if (!isRsvpOpen()) {
+      setSubmitError(
+        'As confirmações já foram encerradas. Muito obrigado pelo carinho e pela compreensão!',
+      )
+      return
+    }
 
     const guestNames = cleanGiverNames(names)
     setIsSubmitting(true)

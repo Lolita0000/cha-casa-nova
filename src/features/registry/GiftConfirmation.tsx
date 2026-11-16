@@ -8,10 +8,9 @@ import { formatCents, reaisToCents } from '@/lib/format/currency'
 import { isBackendConfigured } from '@/lib/supabase/client'
 import { byCount } from '@/lib/text/plural'
 import { buildWhatsAppUrl } from '@/lib/whatsapp'
-import { rsvpDeadline } from '@/config/event'
 import { RsvpForm } from '@/features/rsvp/RsvpForm'
 import { useRsvp } from '@/features/rsvp/useRsvp'
-import { formatShortDate, isOnOrBefore } from '@/lib/date/event'
+import { useRsvpOpen } from '@/features/rsvp/useRsvpOpen'
 
 import { addGiftLetter, NetworkError, registerGift, uploadReceipt } from './api'
 import { cleanGiverNames, joinNames, validateGiverNames } from './giverNames'
@@ -495,8 +494,9 @@ function LaterLetter({ recordId }: { recordId: string }) {
 function RsvpPrompt({ names }: { names: string[] }) {
   const { confirmed } = useRsvp()
   const [isOpen, setIsOpen] = useState(false)
+  const isRsvpOpen = useRsvpOpen()
 
-  if (rsvpDeadline && !isOnOrBefore(rsvpDeadline)) return null
+  if (!isRsvpOpen) return null
 
   if (isOpen) {
     return (
@@ -520,7 +520,6 @@ function RsvpPrompt({ names }: { names: string[] }) {
   }
 
   const count = names.length
-  const deadline = rsvpDeadline ? ` até ${formatShortDate(rsvpDeadline)}` : ''
 
   return (
     <div className="mt-8 rounded-3xl bg-rose-50 p-5 text-left">
@@ -530,8 +529,8 @@ function RsvpPrompt({ names }: { names: string[] }) {
       <p className="mt-1 text-sm text-ash-600">
         {byCount(
           count,
-          `Confirme sua presença${deadline}, pra gente passar seu nome pro porteiro.`,
-          `Confirmem a presença${deadline}, pra gente passar o nome de vocês pro porteiro.`,
+          'Confirme sua presença, pra gente passar seu nome pro porteiro.',
+          'Confirmem a presença, pra gente passar o nome de vocês pro porteiro.',
         )}
       </p>
       <Button variant="soft" size="sm" onClick={() => setIsOpen(true)} className="mt-4">
