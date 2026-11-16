@@ -5,4 +5,7 @@ import { siteConfig } from './site'
 const { event } = siteConfig
 
 /** Last day guests can confirm presence, or undefined while the party has no date. */
-export const rsvpDeadline = event.date ? addDays(event.date, -event.rsvpDaysBefore) : undefined
+export const rsvpDeadline =
+  event.date && event.rsvpDaysBefore !== undefined
+    ? addDays(event.date, -event.rsvpDaysBefore)
+    : undefined

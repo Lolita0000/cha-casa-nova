@@ -27,11 +27,13 @@ export function RsvpCard({ className = '' }: RsvpCardProps) {
       </h2>
       <p className="mt-3 max-w-[52ch] leading-relaxed text-ash-100">
         A entrada no condomínio é liberada pelo nome, então precisamos passar a lista pro porteiro.{' '}
-        {rsvpDeadline && (
+        {rsvpDeadline ? (
           <>
             Por favor, confirme sua presença até{' '}
             <strong className="text-white">{formatShortDate(rsvpDeadline)}</strong>.
           </>
+        ) : (
+          'Por favor, confirme sua presença.'
         )}
       </p>
       <p className="mt-2 text-sm text-rose-200">
