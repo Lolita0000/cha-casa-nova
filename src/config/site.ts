@@ -11,7 +11,8 @@ export interface SiteConfig {
     addressDetail?: string
     mapsUrl?: string
     /** Guests confirm presence up to this many days before the party. */
-    rsvpDaysBefore: number
+    /** Days before the party when presence confirmation closes. Leave out to keep it open. */
+    rsvpDaysBefore?: number
   }
   pix: {
     key: string
@@ -40,7 +41,6 @@ export const siteConfig: SiteConfig = {
     addressLine: 'QN 508, Samambaia, Brasília - DF, 72312-200',
     addressDetail: 'Residencial Sienna',
     mapsUrl: 'https://maps.app.goo.gl/N5FMducxH5i5w4Q56',
-    rsvpDaysBefore: 7,
   },
 
   pix: {
