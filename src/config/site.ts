@@ -10,9 +10,11 @@ export interface SiteConfig {
     /** Second address line, e.g. the building name. */
     addressDetail?: string
     mapsUrl?: string
-    /** Guests confirm presence up to this many days before the party. */
-    /** Days before the party when presence confirmation closes. Leave out to keep it open. */
-    rsvpDaysBefore?: number
+    /**
+     * When presence confirmation closes, with the time zone offset
+     * (e.g. '2026-11-20T12:00:00-03:00'). Leave out to keep it open.
+     */
+    rsvpClosesAt?: string
   }
   pix: {
     key: string
@@ -41,6 +43,7 @@ export const siteConfig: SiteConfig = {
     addressLine: 'QN 508, Samambaia, Brasília - DF, 72312-200',
     addressDetail: 'Residencial Sienna',
     mapsUrl: 'https://maps.app.goo.gl/N5FMducxH5i5w4Q56',
+    rsvpClosesAt: '2026-11-20T12:00:00-03:00',
   },
 
   pix: {

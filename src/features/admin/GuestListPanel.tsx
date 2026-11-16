@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
 
-import { rsvpDeadline } from '@/config/event'
+import { rsvpClosesAt } from '@/config/event'
 import { joinNames } from '@/features/registry/giverNames'
-import { formatShortDate } from '@/lib/date/event'
 
 import { downloadCsv } from './download'
 import { doormanList, doormanText, rsvpsToCsv, summarizeGuests } from './guestList'
@@ -44,11 +43,11 @@ export function GuestListPanel() {
         <Stat label="Respostas" value={summary.responseCount} />
       </dl>
 
-      {rsvpDeadline && (
+      {rsvpClosesAt && (
         <p className="text-ash-600">
-          Prazo pros convidados:{' '}
-          <strong className="text-ink-900">{formatShortDate(rsvpDeadline)}</strong>. Depois disso, o
-          site avisa que a lista foi fechada.
+          A confirmação fecha em{' '}
+          <strong className="text-ink-900">{formatClosingTime(rsvpClosesAt)}</strong>. Depois disso,
+          o site avisa que as confirmações foram encerradas.
         </p>
       )}
 
@@ -196,4 +195,15 @@ function Stat({
       <dd className="mt-1 font-display text-3xl text-ink-900 tabular-nums">{value}</dd>
     </div>
   )
+}
+
+function formatClosingTime(date: Date): string {
+  return new Intl.DateTimeFormat('pt-BR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'America/Sao_Paulo',
+  }).format(date)
 }
