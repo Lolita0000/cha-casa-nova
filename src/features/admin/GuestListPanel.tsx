@@ -4,6 +4,7 @@ import { rsvpClosesAt } from '@/config/event'
 import { joinNames } from '@/features/registry/giverNames'
 
 import { downloadCsv } from './download'
+import { printDoormanList } from './doormanPrint'
 import { doormanList, doormanText, rsvpsToCsv, summarizeGuests } from './guestList'
 import { useRsvps } from './useRsvps'
 
@@ -22,6 +23,7 @@ export function GuestListPanel() {
   const { rsvps, isLoading, error, reload, remove } = useRsvps()
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle')
   const [pendingDelete, setPendingDelete] = useState<string | null>(null)
+  const [printBlocked, setPrintBlocked] = useState(false)
 
   const summary = useMemo(() => summarizeGuests(rsvps), [rsvps])
   const names = useMemo(() => doormanList(rsvps), [rsvps])
@@ -63,12 +65,33 @@ export function GuestListPanel() {
         >
           Baixar planilha
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (!printDoormanList(names)) {
+              setPrintBlocked(true)
+            }
+          }}
+          disabled={names.length === 0}
+          className={secondaryButton}
+        >
+          PDF pro porteiro
+        </button>
         {error && (
           <p role="alert" className="text-sm font-semibold text-rose-700">
             {error}
           </p>
         )}
+        {printBlocked && (
+          <p role="alert" className="text-sm font-semibold text-rose-700">
+            O navegador bloqueou a nova aba. Libere pop-ups pra este site e tente de novo.
+          </p>
+        )}
       </div>
+      <p className="-mt-5 text-sm text-ash-600">
+        No "PDF pro porteiro", escolha <strong>Salvar como PDF</strong> na janela de impressão, ou
+        imprima direto.
+      </p>
 
       <section aria-labelledby="doorman-title" className="rounded-[1.5rem] bg-white p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
